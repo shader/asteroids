@@ -6,19 +6,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include "shader.h"
+#include "geometry.h"
 
 using namespace glm;
 using namespace std;
-
-typedef struct {
-	GLfloat x, y, z;
-} Vector3;
-
-typedef Vector3 Color;
-
-typedef struct {
-	GLuint a, b, c;
-} Triangle;
 
 class Model
 {
