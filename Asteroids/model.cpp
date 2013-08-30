@@ -1,0 +1,86 @@
+#include "headers.h"
+using namespace glm;
+
+Model::Model() {
+	position = vec3(0.0f, 0.0f, 0.0f);	
+	orientation = quat();
+	draw_mode = GL_TRIANGLES;
+}
+
+Model::~Model() {
+	glDeleteBuffers(1, &verticesID);
+	glDeleteBuffers(1, &colorsID);
+	glDeleteBuffers(1, &indicesID);
+	glDeleteVertexArrays(1, &vertex_array);
+}
+
+void Model::Init() {	
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers (1, &verticesID);
+	glGenBuffers (1, &colorsID);
+	glGenBuffers (1, &indicesID);
+}
+
+void Model::Bind(Shader* shader) {
+	Bind(shader, draw_mode);
+}
+
+void Model::Bind(Shader* shader, GLenum mode) {
+	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
+	indices.empty();
+	draw_mode = mode;
+	switch (mode) {
+	case(GL_TRIANGLES):
+		for (GLuint i=0;i<triangles.size();i++) {
+			indices.push_back(triangles[i].a);
+			indices.push_back(triangles[i].b);
+			indices.push_back(triangles[i].c);
+		}
+		break;
+	case(GL_POINTS):
+		for (GLuint i=0;i<vertices.size();i++)
+			indices.push_back(i);
+		break;
+	case(GL_LINES):		
+		for (GLuint i=0;i<triangles.size();i++) {			
+			indices.push_back(triangles[i].a); indices.push_back(triangles[i].b);
+			indices.push_back(triangles[i].b); indices.push_back(triangles[i].c);
+			indices.push_back(triangles[i].c); indices.push_back(triangles[i].a); 
+		}
+		break;
+	};
+
+	glBindVertexArray(vertex_array);	 
+	shader->Begin();
+		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*vertices.size(), &vertices[0], GL_STATIC_DRAW);		
+		glEnableVertexAttribArray((*shader)["vertex"]);
+		glVertexAttribPointer ((*shader)["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		if (colors.size() > 0) {
+			glBindBuffer (GL_ARRAY_BUFFER, colorsID);
+			glBufferData (GL_ARRAY_BUFFER, sizeof(Color)*colors.size(), &colors[0], GL_STATIC_DRAW);		
+			glEnableVertexAttribArray((*shader)["color"]);
+			glVertexAttribPointer ((*shader)["color"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
+	shader->End();
+	glBindVertexArray(0);
+}
+
+void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
+	mat4 world = translation(position) * mat4_cast(orientation);
+	mat4 MVP = ViewProjection * world;
+	glBindVertexArray(vertex_array);
+	shader->Begin();
+		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &MVP[0][0]);
+		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, 0);
+	shader->End();
+	glBindVertexArray(0);
+}
+
+void Model::Draw(Shader* shader, mat4 view_projection) {
+	Draw(shader, view_projection, draw_mode);
+}
