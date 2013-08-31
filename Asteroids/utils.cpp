@@ -1,7 +1,25 @@
 #pragma once
-#include "headers.h"
-
+#include "utils.h"
 using namespace glm;
+
+bool operator<(const vec3 &lhs, const vec3 &rhs) {
+	return lhs.x < rhs.x ||
+		(lhs.x == rhs.x && (lhs.y < rhs.y ||
+			(lhs.y == rhs.y && lhs.z < rhs.z)));
+}
+
+vec3 operator*(const vec3 &lhs, const float &rhs) {
+	return vec3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+}
+vec3 operator*(const float &lhs, const vec3 &rhs) {
+	return rhs * lhs;
+}
+vec3 operator*(const vec3 &lhs, const double &rhs) {
+	return vec3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+}
+vec3 operator*(const double &lhs, const vec3 &rhs) {
+	return rhs * lhs;
+}
 
 mat4 translation(vec4 position) {
 	mat4 trans = mat4(1.0);

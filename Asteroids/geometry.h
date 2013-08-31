@@ -31,6 +31,10 @@ public:
 	friend bool operator<(const Edge &lhs, const Edge &rhs);
 	friend bool operator==(const Edge &lhs, const Edge &rhs);
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
+
+	void attach(Edge* edge);
+
+	vec3 midpoint() const;
 };
 
 class Face {
@@ -43,6 +47,8 @@ public:
 	friend bool operator<(const Face &lhs, const Face &rhs);
 	friend bool operator==(const Face &lhs, const Face &rhs);
 	friend bool operator!=(const Face &lhs, const Face &rhs);
+
+	vec3 midpoint() const;
 };
 
 class Mesh {

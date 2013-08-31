@@ -1,61 +1,9 @@
 #include "geometry.h"
 using namespace glm;
 
-bool operator<(const Vertex &lhs, const Vertex &rhs) {
-	return lhs.position.x < rhs.position.x ||
-		(lhs.position.x == rhs.position.x && lhs.position.y < rhs.position.y) ||
-		(lhs.position.x == rhs.position.x && lhs.position.y == rhs.position.y && lhs.position.z < rhs.position.z);
-}
-bool operator==(const Vertex &lhs, const Vertex &rhs) {
-	return lhs.position == rhs.position;
-}
-bool operator!=(const Vertex &lhs, const Vertex &rhs) {
-	return !(lhs == rhs);
-}
-
-bool operator<(const Edge &lhs, const Edge &rhs) {
-	return *(lhs.head) < *(rhs.head) ||
-		(*(lhs.head) == *(rhs.head) && *(lhs.tail) < *(rhs.tail));
-}
-bool operator==(const Edge &lhs, const Edge &rhs) {
-	return *(lhs.head) == (*rhs.head) && *(lhs.tail) == (*rhs.tail);
-}
-bool operator!=(const Edge &lhs, const Edge &rhs) {
-	return !(lhs == rhs);
-}
-
-bool operator<(const Face &lhs, const Face &rhs) {
-	return *(lhs.first) < *(rhs.first) ||
-		(*(lhs.first) == *(rhs.first) && *(lhs.first->next) < *(rhs.first->next));
-}
-bool operator==(const Face &lhs, const Face &rhs) {
-	return *(lhs.first) == (*rhs.first) &&
-		*(lhs.first->next) == (*rhs.first->next);
-}
-bool operator!=(const Face &lhs, const Face &rhs) {
-	return !(lhs == rhs);
-}
-
 bool vertexcmp(Vertex* lhs, Vertex* rhs) {	return *lhs < *rhs; }
 bool edgecmp(Edge* lhs, Edge* rhs) { return *lhs < *rhs; }
 bool facecmp(Face* lhs, Face* rhs) { return *lhs < *rhs; }
-
-Vertex::Vertex(vec3 position) {
-	this->position = position;
-}
-Vertex::Vertex(vec3 position, GLuint index) {
-	this->position = position;
-	this->index = index;
-}
-
-Edge::Edge(Vertex* tail, Vertex* head) {
-	this->tail = tail;
-	this->head = head;
-}
-
-Face::Face(Edge* first) {
-	this->first = first;
-}
 
 Mesh::Mesh() {
 	bool(*vert_pt)(Vertex*,Vertex*) = vertexcmp;
@@ -88,6 +36,7 @@ Edge* Mesh::AddEdge(vec3 a, vec3 b) {
 			if (other->twin == NULL) { //new twin
 				other->twin = edge;
 				edge->twin = other;
+				return edge; //return new edge, even though it wasn't saved in the edges set
 			}
 			else delete edge; //equivalent, but twin already exists
 		}
@@ -99,9 +48,9 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 	Edge *edge1 = this->AddEdge(a, b);
 	Edge *edge2 = this->AddEdge(b, c);
 	Edge *edge3 = this->AddEdge(c, a);
-	edge1->next = edge2;
-	edge2->next = edge3;
-	edge3->next = edge1;
+	edge1->attach(edge2);
+	edge2->attach(edge3);
+	edge3->attach(edge1);
 	pair<set<Face*>::iterator, bool> ret = this->faces.insert(new Face(edge1));
 	return *(ret.first); //pointer to face, or equivalent face if it already exists
 }

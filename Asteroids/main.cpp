@@ -76,7 +76,7 @@ int main( int argc, char *argv[] )
 		
 	model = Icosahedron();
 	model.Init();
-	model.Bind(shader, GL_LINES);
+	model.Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
