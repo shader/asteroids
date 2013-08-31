@@ -22,3 +22,11 @@ Vertex::Vertex(vec3 position, GLuint index) {
 	this->position = position;
 	this->index = index;
 }
+
+vector<Vertex*> Vertex::neighbors() {
+	vector<Vertex*> n;
+	for (int i =0; i<edges.size(); i++) {
+		n.push_back(edges[i]->head);
+	}
+	return n;
+}
