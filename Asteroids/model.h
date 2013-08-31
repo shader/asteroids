@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <map>
+#include <string>
 #include "shader.h"
 #include "geometry.h"
 
@@ -26,12 +28,11 @@ public:
 	void Draw(Shader* shader, mat4 ViewProjection);
 	void Draw(Shader* shader, mat4 ViewProjection, GLenum mode);
 
-	vector<vec3> vertices;
+	Mesh mesh;
 	vector<Color> colors;
-	vector<Triangle> triangles;
-	vector<GLuint> indices;
 
 private:
 	GLuint verticesID, indicesID, colorsID, vertex_array;
 	GLenum draw_mode;
+	vector<GLuint> indices;
 };

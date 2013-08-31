@@ -59,8 +59,8 @@ void Initialize() {
 		cerr << "Error: " << glewGetErrorString(err) << endl;
 	}
 	
-	glEnable(GL_DEPTH);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	glEnable( GL_DEPTH_TEST );
 
 	LoadMenu();
 }
@@ -76,8 +76,7 @@ int main( int argc, char *argv[] )
 		
 	model = Icosahedron();
 	model.Init();
-	for (int i=0;i<model.vertices.size();i++) destructive_perturb(&model.vertices[i], 0.5);
-	model.Bind(shader, GL_LINES);
+	model.Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
