@@ -54,3 +54,7 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 	pair<set<Face*>::iterator, bool> ret = this->faces.insert(new Face(edge1));
 	return *(ret.first); //pointer to face, or equivalent face if it already exists
 }
+
+void Mesh::split(Edge* edge) {
+	if (edge->next->twin->next->twin == edge);
+}

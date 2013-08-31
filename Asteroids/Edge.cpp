@@ -18,6 +18,8 @@ bool operator!=(const Edge &lhs, const Edge &rhs) {
 Edge::Edge(Vertex* tail, Vertex* head) {
 	this->tail = tail;
 	this->head = head;
+	tail->edges.push_back(this);
+	head->edges.push_back(this);
 	twin = next = prev = NULL;
 	left = right = NULL;
 }

@@ -14,8 +14,10 @@ public:
 	Vertex(vec3 position, GLuint index);
 	vec3 position;
 	GLuint index;
+	vector<class Edge*> edges;
 
 	vector<Vertex*> neighbors();
+
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator!=(const Vertex &lhs, const Vertex &rhs);
@@ -61,4 +63,6 @@ public:
 	Vertex* AddVertex(vec3 position);
 	Edge* AddEdge(vec3 a, vec3 b);
 	Face* AddFace(vec3 a, vec3 b, vec3 c);
+
+	void split(Edge* edge);
 };
