@@ -9,13 +9,19 @@ bool operator<(const Vertex &lhs, const Vertex &rhs) {
 bool operator==(const Vertex &lhs, const Vertex &rhs) {
 	return lhs.position == rhs.position;
 }
+bool operator!=(const Vertex &lhs, const Vertex &rhs) {
+	return !(lhs == rhs);
+}
 
 bool operator<(const Edge &lhs, const Edge &rhs) {
 	return *(lhs.head) < *(rhs.head) ||
 		(*(lhs.head) == *(rhs.head) && *(lhs.tail) < *(rhs.tail));
 }
 bool operator==(const Edge &lhs, const Edge &rhs) {
-	return *(lhs.head) == (*rhs.head) && *(lhs.tail) == (*rhs.tail) ;
+	return *(lhs.head) == (*rhs.head) && *(lhs.tail) == (*rhs.tail);
+}
+bool operator!=(const Edge &lhs, const Edge &rhs) {
+	return !(lhs == rhs);
 }
 
 bool operator<(const Face &lhs, const Face &rhs) {
@@ -25,6 +31,9 @@ bool operator<(const Face &lhs, const Face &rhs) {
 bool operator==(const Face &lhs, const Face &rhs) {
 	return *(lhs.first) == (*rhs.first) &&
 		*(lhs.first->next) == (*rhs.first->next);
+}
+bool operator!=(const Face &lhs, const Face &rhs) {
+	return !(lhs == rhs);
 }
 
 bool vertexcmp(Vertex* lhs, Vertex* rhs) {	return *lhs < *rhs; }
@@ -60,7 +69,9 @@ Mesh::Mesh() {
 //Add vertex using set insertion, so that vertices are not created twice
 Vertex* Mesh::AddVertex(vec3 position) {
 	GLuint i = this->vertices.size();
-	pair<set<Vertex*>::iterator, bool> ret = this->vertices.insert(new Vertex(position, i));
+	Vertex* vert = new Vertex(position, i);
+	pair<set<Vertex*>::iterator, bool> ret = this->vertices.insert(vert);
+	if (!ret.second) delete vert; //delete duplicate vertex
 	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
 }
 
@@ -68,7 +79,19 @@ Vertex* Mesh::AddVertex(vec3 position) {
 Edge* Mesh::AddEdge(vec3 a, vec3 b) {
 	Vertex *vert_a = this->AddVertex(a);
 	Vertex *vert_b = this->AddVertex(b);
-	pair<set<Edge*>::iterator, bool> ret = this->edges.insert(new Edge(vert_a, vert_b));
+	Edge* edge = new Edge(vert_a, vert_b);
+	pair<set<Edge*>::iterator, bool> ret = this->edges.insert(edge);
+	if (!ret.second) {
+		//duplicate or twin edge
+		Edge* other = *(ret.first);
+		if (*other != *edge) { //not identical edges, must be twin
+			if (other->twin == NULL) { //new twin
+				other->twin = edge;
+				edge->twin = other;
+			}
+			else delete edge; //equivalent, but twin already exists
+		}
+	}
 	return *(ret.first); //pointer to edge, or equivalent edge if it already exists
 }
 
