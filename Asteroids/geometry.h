@@ -14,7 +14,7 @@ public:
 	Vertex(vec3 position, GLuint index);
 	vec3 position;
 	GLuint index;
-	vector<class Edge*> edges;
+	set<class Edge*> edges;
 
 	vector<Vertex*> neighbors();
 

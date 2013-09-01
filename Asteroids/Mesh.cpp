@@ -36,6 +36,7 @@ Edge* Mesh::AddEdge(vec3 a, vec3 b) {
 			if (other->twin == NULL) { //new twin
 				other->twin = edge;
 				edge->twin = other;
+				edge->right = other->left; // adjacent faces
 				return edge; //return new edge, even though it wasn't saved in the edges set
 			}
 			else delete edge; //equivalent, but twin already exists
@@ -56,5 +57,12 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 }
 
 void Mesh::split(Edge* edge) {
-	if (edge->next->twin->next->twin == edge);
+	if (edge->next->twin->next->twin == edge) return; //already split this edge
+	Vertex* mid = AddVertex(edge->midpoint());
+	Edge* new_edge = new Edge(mid, edge->head);
+	edge->head = mid;
+	edge->attach(new_edge);
+	new_edge->head->edges.erase(edge);
+
+	split(edge->twin);
 }

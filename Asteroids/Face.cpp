@@ -18,6 +18,12 @@ bool operator!=(const Face &lhs, const Face &rhs) {
 
 Face::Face(Edge* first) {
 	this->first = first;
+	Edge* e = first;
+	do {
+		e->left = this;
+		if (e->twin != NULL) e->twin->right = this;
+		e=e->next;
+	} while (e != first);
 }
 
 vec3 Face::midpoint() const {

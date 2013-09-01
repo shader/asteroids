@@ -25,8 +25,8 @@ Vertex::Vertex(vec3 position, GLuint index) {
 
 vector<Vertex*> Vertex::neighbors() {
 	vector<Vertex*> n;
-	for (int i =0; i<edges.size(); i++) {
-		n.push_back(edges[i]->head);
+	for (set<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
+		n.push_back((*e)->head);
 	}
 	return n;
 }
