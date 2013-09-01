@@ -31,3 +31,6 @@ void Edge::attach(Edge *edge) {
 vec3 Edge::midpoint() const {
 	return (this->head->position + this->tail->position) * 0.5;
 }
+
+pair<Edge*, Edge*> Edge::split() {
+}

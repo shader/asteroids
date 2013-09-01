@@ -35,6 +35,7 @@ public:
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
 
 	void attach(Edge* edge);
+	pair<Edge*, Edge*> split();
 
 	vec3 midpoint() const;
 };

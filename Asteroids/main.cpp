@@ -76,7 +76,13 @@ int main( int argc, char *argv[] )
 		
 	model = Icosahedron();
 	model.Init();
-	model.Bind(shader, GL_TRIANGLES);
+
+	//vector<Edge*> edges(model.mesh.edges.size());
+	//copy(model.mesh.edges.begin(), model.mesh.edges.end(), edges.begin());
+	//for (vector<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
+	//	model.mesh.split(*e);
+	//}
+	model.Bind(shader, GL_POINTS);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
