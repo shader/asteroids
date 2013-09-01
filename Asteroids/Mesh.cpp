@@ -16,9 +16,9 @@ Mesh::Mesh() {
 
 //Add vertex using set insertion, so that vertices are not created twice
 Vertex* Mesh::AddVertex(vec3 position) {
-	GLuint i = this->vertices.size();
+	GLuint i = vertices.size();
 	Vertex* vert = new Vertex(position, i);
-	pair<set<Vertex*>::iterator, bool> ret = this->vertices.insert(vert);
+	pair<set<Vertex*>::iterator, bool> ret = vertices.insert(vert);
 	if (!ret.second) delete vert; //delete duplicate vertex
 	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
 }
@@ -29,7 +29,10 @@ Edge* Mesh::AddEdge(vec3 a, vec3 b) {
 	Vertex *vert_b = this->AddVertex(b);
 	Edge* edge = new Edge(vert_a, vert_b);
 	pair<set<Edge*>::iterator, bool> ret = this->edges.insert(edge);
-	if (!ret.second) {
+	if (ret.second) {
+		//new edge
+		edge->twin = new Edge(vert_b, vert_a);
+	} else {
 		//duplicate or twin edge
 		Edge* other = *(ret.first);
 		if (*other != *edge) { //not identical edges, must be twin
@@ -58,15 +61,47 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 	return *(ret.first); //pointer to face, or equivalent face if it already exists
 }
 
-void Mesh::split(Edge* edge) {
-	if (edge->next->twin->next->twin == edge) return; //already split this edge
-	edges.erase(edge);
-	Vertex* mid = AddVertex(edge->midpoint());
-	Edge* new_edge = new Edge(mid, edge->head);
-	edge->head = mid;
-	edge->attach(new_edge);
-	new_edge->head->edges.erase(edge);
-	edges.insert(edge);
+Vertex* Mesh::add(Vertex *vertex) {
+	pair<set<Vertex*>::iterator, bool> ret = vertices.insert(vertex);
+	if (!ret.second) {
+		delete vertex; //delete duplicate vertex
+	} else {
+		vertex->index = vertices.size()-1; //new vertex gets next index
+	}
+	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
+}
 
-	split(edge->twin);
+Edge* Mesh::add(Edge* edge) {
+	edge->head = this->add(edge->head);
+	edge->tail = this->add(edge->head);
+	pair<set<Edge*>::iterator, bool> ret = edges.insert(edge);
+	return *(ret.first);
+}
+
+Face* Mesh::add(Face* face) {
+	face->first = this->add(face->first);
+	face->first->next = this->add(face->first->next);
+	face->first->next->next = this->add(face->first->next->next);
+	pair<set<Face*>::iterator, bool> ret = faces.insert(face);
+	return *(ret.first);
+}
+
+void Mesh::erase(Vertex *vertex) {
+	vertices.erase(vertex);
+}
+
+void Mesh::erase(Edge *edge) {
+	edges.erase(edge);
+}
+
+void Mesh::erase(Face *face) {
+	faces.erase(face);
+	Edge *e = face->first;
+	do {
+		edges.erase(e);
+		e = e->next;
+	} while (e != face->first);
+}
+
+void Mesh::subdivide(int times) {
 }

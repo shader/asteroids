@@ -36,6 +36,8 @@ public:
 
 	void attach(Edge* edge);
 	pair<Edge*, Edge*> split();
+	friend void twin(Edge* edge, Edge* twin);
+	friend pair<Edge*, Edge*> split(Edge* edge);
 
 	vec3 midpoint() const;
 };
@@ -65,5 +67,15 @@ public:
 	Edge* AddEdge(vec3 a, vec3 b);
 	Face* AddFace(vec3 a, vec3 b, vec3 c);
 
+	Vertex* add(Vertex* vertex);
+	Edge* add(Edge* edge);
+	Face* add(Face* face);
+
+	void erase(Vertex* vert);
+	void erase(Edge* edge);
+	void erase(Face* face);
+
 	void split(Edge* edge);
+	void split_all();
+	void subdivide(int times);
 };
