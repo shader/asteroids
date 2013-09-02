@@ -25,7 +25,9 @@ public:
 
 class Edge {
 public:
-	Edge(Vertex *head, Vertex *tail);
+	Edge(Vertex *tail, Vertex *head);
+	Edge(vec3 tail, vec3 head);
+	~Edge();
 	class Vertex *head, *tail;
 	class Edge *next, *prev, *twin;
 	class Face *left, *right;
@@ -36,15 +38,17 @@ public:
 
 	void attach(Edge* edge);
 	pair<Edge*, Edge*> split();
-	friend void twin(Edge* edge, Edge* twin);
-	friend pair<Edge*, Edge*> split(Edge* edge);
+	friend void tie(Edge* edge, Edge* twin);
 
 	vec3 midpoint() const;
+private:
+	void init(Vertex *tail, Vertex *head);
 };
 
 class Face {
 public:
 	Face(Edge* first);
+	Face(vec3 a, vec3 b, vec3 c);
 	class Edge *first;
 
 	vector<Face*> neighbors();
@@ -54,6 +58,7 @@ public:
 	friend bool operator!=(const Face &lhs, const Face &rhs);
 
 	vec3 midpoint() const;
+	void split();
 };
 
 class Mesh {
@@ -75,7 +80,7 @@ public:
 	void erase(Edge* edge);
 	void erase(Face* face);
 
-	void split(Edge* edge);
-	void split_all();
+	void split();
+
 	void subdivide(int times);
 };

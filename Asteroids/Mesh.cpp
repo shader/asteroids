@@ -31,15 +31,13 @@ Edge* Mesh::AddEdge(vec3 a, vec3 b) {
 	pair<set<Edge*>::iterator, bool> ret = this->edges.insert(edge);
 	if (ret.second) {
 		//new edge
-		edge->twin = new Edge(vert_b, vert_a);
+		tie(edge, new Edge(vert_b, vert_a)); //ensure there's a twin, but not in the set
 	} else {
 		//duplicate or twin edge
 		Edge* other = *(ret.first);
 		if (*other != *edge) { //not identical edges, must be twin
 			if (other->twin == NULL) { //new twin
-				other->twin = edge;
-				edge->twin = other;
-				edge->right = other->left; // adjacent faces
+				tie(other, edge);
 				return edge; //return new edge, even though it wasn't saved in the edges set
 			} else {
 				delete edge; //equivalent, but twin already exists
@@ -64,7 +62,8 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 Vertex* Mesh::add(Vertex *vertex) {
 	pair<set<Vertex*>::iterator, bool> ret = vertices.insert(vertex);
 	if (!ret.second) {
-		delete vertex; //delete duplicate vertex
+		if (*(ret.first) != vertex)
+			delete vertex; //delete duplicate vertex
 	} else {
 		vertex->index = vertices.size()-1; //new vertex gets next index
 	}
@@ -80,8 +79,12 @@ Edge* Mesh::add(Edge* edge) {
 
 Face* Mesh::add(Face* face) {
 	face->first = this->add(face->first);
-	face->first->next = this->add(face->first->next);
-	face->first->next->next = this->add(face->first->next->next);
+	Edge *e = face->first, *next = e->next;
+	do {
+		e->next = this->add(next);
+		e = e->next;
+		next = next->next;
+	} while (e != face->first);
 	pair<set<Face*>::iterator, bool> ret = faces.insert(face);
 	return *(ret.first);
 }
@@ -101,6 +104,16 @@ void Mesh::erase(Face *face) {
 		edges.erase(e);
 		e = e->next;
 	} while (e != face->first);
+}
+
+void Mesh::split() {
+	vector<Face*> new_faces(faces.size());
+	copy(faces.begin(), faces.end(), new_faces.begin());
+	for (vector<Face*>::iterator f = new_faces.begin(); f!=new_faces.end(); f++) {
+		this->erase(*f);
+		(*f)->split();
+		this->add(*f);
+	}
 }
 
 void Mesh::subdivide(int times) {

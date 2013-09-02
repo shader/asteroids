@@ -15,7 +15,7 @@ bool operator!=(const Edge &lhs, const Edge &rhs) {
 	return !(lhs == rhs);
 }
 
-Edge::Edge(Vertex* tail, Vertex* head) {
+void Edge::init(Vertex *tail, Vertex *head) {
 	this->tail = tail;
 	this->head = head;
 	tail->edges.insert(this);
@@ -23,8 +23,22 @@ Edge::Edge(Vertex* tail, Vertex* head) {
 	left = right = NULL;
 }
 
+Edge::Edge(Vertex* tail, Vertex* head) {
+	init(tail, head);
+}
+
+Edge::Edge(vec3 tail, vec3 head) {
+	init(new Vertex(tail), new Vertex(head));
+}
+
+Edge::~Edge() {
+	tail->edges.erase(this);
+}
+
 void Edge::attach(Edge *edge) {
 	this->next = edge;
+	this->next->left = this->left;
+	this->next->right = this->right;
 	edge->prev = this;
 }
 
@@ -32,26 +46,22 @@ vec3 Edge::midpoint() const {
 	return (this->head->position + this->tail->position) * 0.5;
 }
 
-void twin(Edge* edge, Edge* twin) {
+void tie(Edge* edge, Edge* twin) {
 	edge->twin = twin;
 	twin->twin = edge;
 	twin->left = edge->right;
 	twin->right = edge->left;
 }
 
-pair<Edge*, Edge*> split(Edge* edge) {
-	Vertex* mid = new Vertex(edge->midpoint()); //add the midpoint
+pair<Edge*, Edge*> Edge::split() {
+	Vertex* mid = new Vertex(this->midpoint()); //add the midpoint
 	
-	Edge* new_edge = new Edge(mid, edge->head);
-	twin(new_edge, edge->twin);
-	new_edge->twin->head = mid; //the twin of the original edge stays tied to the same point
+	Edge* new_edge = new Edge(mid, this->head);
+	if (this->next != NULL)
+		new_edge->attach(this->next);
 
-	edge->head = mid;
-	Edge* new_twin = new Edge(mid, edge->tail); //make a new twin for the original edge
-	twin(edge, new_twin);
+	this->head = mid;
+	this->attach(new_edge);
 
-	edge->attach(new_edge);
-	new_twin->attach(edge->twin);
-
-	return pair<Edge*,Edge*>(edge, new_edge);
+	return pair<Edge*,Edge*>(this, new_edge);
 }

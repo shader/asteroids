@@ -26,6 +26,24 @@ Face::Face(Edge* first) {
 	} while (e != first);
 }
 
+Face::Face(vec3 a, vec3 b, vec3 c) {
+	first = new Edge(a, b);
+	first->left = this;
+	first->attach(new Edge(b, c));
+	first->next->attach(new Edge(c, a));
+	first->next->next->attach(first);
+}
+
 vec3 Face::midpoint() const {
 	return (1.0/3) * (first->head->position + first->next->head->position + first->next->next->head->position);
+}
+
+void Face::split() {
+	Edge *e = first;
+	do {
+		Edge *next = e->next;
+		e->split();
+		e = next;
+	} while (e != first);
+	first = first->next;
 }
