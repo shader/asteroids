@@ -74,11 +74,19 @@ int main( int argc, char *argv[] )
 
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));		
 		
-	model = Model();
+	Edge *edge = new Edge(vec3(1,0,0), vec3(0,1,0));
+	pair<Edge*,Edge*> edges = split(edge);
+	Face* face = new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0));
+	vector<Face*> faces = split(face);
+
+	//Mesh* mesh = new Mesh();
+	//mesh->add(face);
+	//mesh->split();
+
+	model = Icosahedron();
 	model.Init();
-	model.mesh.AddFace(vec3(0,0,0), vec3(1,0,0), vec3(1,1,1));
 	model.mesh.split();
-	model.Bind(shader, GL_POINTS);
+	model.Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);

@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <set>
 #include <vector>
+#include <list>
 using namespace glm;
 using namespace std;
 
@@ -37,8 +38,9 @@ public:
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
 
 	void attach(Edge* edge);
-	pair<Edge*, Edge*> split();
+	friend pair<Edge*, Edge*> split(Edge *edge);
 	friend void tie(Edge* edge, Edge* twin);
+	friend Edge* twin(Edge *edge);
 
 	vec3 midpoint() const;
 private:
@@ -48,6 +50,7 @@ private:
 class Face {
 public:
 	Face(Edge* first);
+	Face(Edge *a, Edge *b, Edge *c);
 	Face(vec3 a, vec3 b, vec3 c);
 	class Edge *first;
 
@@ -58,7 +61,8 @@ public:
 	friend bool operator!=(const Face &lhs, const Face &rhs);
 
 	vec3 midpoint() const;
-	void split();
+	friend vector<Edge*> split_edges(Face *face);
+	friend vector<Face*> split(Face *face);
 };
 
 class Mesh {

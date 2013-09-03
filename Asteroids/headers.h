@@ -13,6 +13,8 @@
 #include <math.h>
 #include <map>
 #include <vector>
+#include <list>
+#include <algorithm>
 
 // OpenGL
 #include <GL/glew.h>

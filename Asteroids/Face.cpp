@@ -26,6 +26,14 @@ Face::Face(Edge* first) {
 	} while (e != first);
 }
 
+Face::Face(Edge *a, Edge *b, Edge *c) {
+	this->first = a;
+	a->left = this;
+	a->attach(b);
+	b->attach(c);
+	c->attach(a);
+}
+
 Face::Face(vec3 a, vec3 b, vec3 c) {
 	first = new Edge(a, b);
 	first->left = this;
@@ -38,12 +46,33 @@ vec3 Face::midpoint() const {
 	return (1.0/3) * (first->head->position + first->next->head->position + first->next->next->head->position);
 }
 
-void Face::split() {
-	Edge *e = first;
+vector<Edge*> split_edges(Face *face) {
+	Edge *e = face->first;
+	vector<Edge*> edges;
+	edges.reserve(6);
 	do {
 		Edge *next = e->next;
-		e->split();
+		pair<Edge*,Edge*>new_edges = split(e);
+		edges.push_back(new_edges.first);
+		edges.push_back(new_edges.second);
 		e = next;
-	} while (e != first);
-	first = first->next;
+	} while (e != face->first);
+	return edges;
+}
+
+vector<Face*> split(Face *face) {
+	vector<Face*> faces;
+	vector<Edge*> twins;
+	faces.reserve(4);
+	twins.reserve(3);
+	vector<Edge*> edges = split_edges(face);
+	for (int i=1; i<6; i+=2) {
+		Edge *a = edges[i];
+		Edge *b = edges[(i+1)%6];
+		Edge *c = new Edge(b->head, a->tail);
+		twins.push_back(twin(c)); //new edge for fourth triangle
+		faces.push_back(new Face(a, b, c));
+	}
+	faces.push_back(new Face(twins[0], twins[1], twins[2]));
+	return faces;
 }

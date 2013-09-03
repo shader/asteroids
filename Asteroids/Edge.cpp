@@ -53,15 +53,21 @@ void tie(Edge* edge, Edge* twin) {
 	twin->right = edge->left;
 }
 
-pair<Edge*, Edge*> Edge::split() {
-	Vertex* mid = new Vertex(this->midpoint()); //add the midpoint
+Edge* twin(Edge* edge) {
+	if (edge->twin != NULL) return edge->twin;
+	else {
+		Edge* t = new Edge(edge->head, edge->tail);
+		tie(edge, t);
+		return t;
+	}
+}
+
+pair<Edge*, Edge*> split(Edge *edge) {
+	Vertex* mid = new Vertex(edge->midpoint()); //add the midpoint
 	
-	Edge* new_edge = new Edge(mid, this->head);
-	if (this->next != NULL)
-		new_edge->attach(this->next);
+	Edge* a = new Edge(new Vertex(edge->tail->position), mid);
+	Edge* b = new Edge(mid, new Vertex(edge->head->position));
+	a->attach(b);
 
-	this->head = mid;
-	this->attach(new_edge);
-
-	return pair<Edge*,Edge*>(this, new_edge);
+	return pair<Edge*,Edge*>(a, b);
 }
