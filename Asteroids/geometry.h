@@ -68,9 +68,10 @@ public:
 class Mesh {
 public:
 	Mesh();
-	set<Vertex*,bool(*)(Vertex*,Vertex*)> vertices;
-	set<Edge*,bool(*)(Edge*,Edge*)> edges;
-	set<Face*,bool(*)(Face*,Face*)> faces;
+	~Mesh();
+	set<Vertex*,bool(*)(Vertex*,Vertex*)> *vertices;
+	set<Edge*,bool(*)(Edge*,Edge*)> *edges;
+	set<Face*,bool(*)(Face*,Face*)> *faces;
 
 	Vertex* AddVertex(vec3 position);
 	Edge* AddEdge(vec3 a, vec3 b);
@@ -84,7 +85,7 @@ public:
 	void erase(Edge* edge);
 	void erase(Face* face);
 
-	void split();
+	friend Mesh* split(Mesh* mesh);
 
 	void subdivide(int times);
 };

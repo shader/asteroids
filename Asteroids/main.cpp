@@ -79,13 +79,12 @@ int main( int argc, char *argv[] )
 	Face* face = new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0));
 	vector<Face*> faces = split(face);
 
-	//Mesh* mesh = new Mesh();
-	//mesh->add(face);
-	//mesh->split();
+	Mesh* mesh = new Mesh();
+	mesh->add(face);
+	Mesh* new_mesh = split(mesh);
 
 	model = Icosahedron();
 	model.Init();
-	model.mesh.split();
 	model.Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
