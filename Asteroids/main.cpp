@@ -73,11 +73,6 @@ int main( int argc, char *argv[] )
 	LoadShaders();
 
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));		
-		
-	Edge *edge = new Edge(vec3(1,0,0), vec3(0,1,0));
-	pair<Edge*,Edge*> edges = split(edge);
-	Face* face = new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0));
-	vector<Face*> faces = split(face);
 
 	//Mesh* mesh = new Mesh();
 	//mesh->add(face);
@@ -85,7 +80,6 @@ int main( int argc, char *argv[] )
 
 	model = Icosahedron();
 	model.Init();
-	model.mesh.split();
 	model.Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);

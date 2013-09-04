@@ -23,10 +23,12 @@ Vertex::Vertex(vec3 position, GLuint index) {
 	this->index = index;
 }
 
-vector<Vertex*> Vertex::neighbors() {
-	vector<Vertex*> n;
-	for (set<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
-		n.push_back((*e)->head);
+vector<shared_ptr<Vertex>> Vertex::neighbors() {
+	vector<shared_ptr<Vertex>> n;
+	shared_ptr<Edge> edge;
+	for (set<weak_ptr<Edge>>::iterator e = edges.begin(); e!=edges.end(); e++) {
+		edge = e->lock();
+		if(edge) n.push_back(edge->head);
 	}
 	return n;
 }

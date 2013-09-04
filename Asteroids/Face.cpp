@@ -3,56 +3,55 @@
 using namespace glm;
 
 bool operator<(const Face &lhs, const Face &rhs) {
+	shared_ptr<Edge> a1 = lhs.first, b1 = a1->next.lock(), c1 = b1->next.lock();
+	shared_ptr<Edge> a2 = rhs.first, b2 = a2->next.lock(), c2 = b2->next.lock();
 	return lhs.midpoint() < rhs.midpoint() ||
-		(lhs.midpoint() == rhs.midpoint() && (*(lhs.first) < *(rhs.first) ||
-			(*(lhs.first) == *(rhs.first) && (*(lhs.first->next) < *(rhs.first->next) ||
-				(*(lhs.first->next) == *(rhs.first->next) && *(lhs.first->next->next) < *(rhs.first->next->next))))));
+		(lhs.midpoint() == rhs.midpoint() && (*a1 < *a2 ||
+			(*a1 == *a2 && (*b1 < *b2 ||
+				(*b1 == *b2 && *c1 < *c2)))));
 }
 bool operator==(const Face &lhs, const Face &rhs) {
-	return *(lhs.first) == (*rhs.first) &&
-		*(lhs.first->next) == (*rhs.first->next);
+	shared_ptr<Edge> a1 = lhs.first, b1 = a1->next.lock();
+	shared_ptr<Edge> a2 = rhs.first, b2 = a2->next.lock();
+	return *a1 == *a2 && *b1 == *b2;
 }
 bool operator!=(const Face &lhs, const Face &rhs) {
 	return !(lhs == rhs);
 }
 
-Face::Face(Edge* first) {
+Face::Face(shared_ptr<Edge> first) {
 	this->first = first;
-	Edge* e = first;
-	do {
-		e->left = this;
-		if (e->twin != NULL) e->twin->right = this;
-		e=e->next;
-	} while (e != first);
 }
 
-Face::Face(Edge *a, Edge *b, Edge *c) {
+Face::Face(shared_ptr<Edge> a, shared_ptr<Edge> b, shared_ptr<Edge> c) {
 	this->first = a;
-	a->left = this;
-	a->attach(b);
-	b->attach(c);
-	c->attach(a);
+	attach(a, b);
+	attach(b, c);
+	attach(c, a);
 }
 
 Face::Face(vec3 a, vec3 b, vec3 c) {
-	first = new Edge(a, b);
-	first->left = this;
-	first->attach(new Edge(b, c));
-	first->next->attach(new Edge(c, a));
-	first->next->next->attach(first);
+	first = shared_ptr<Edge>(new Edge(a, b));
+	shared_ptr<Edge> second(new Edge(b, c));	
+	shared_ptr<Edge> third(new Edge(c, a));
+	attach(first, second);
+	attach(second, third);
+	attach(third, first);
 }
 
 vec3 Face::midpoint() const {
-	return (1.0/3) * (first->head->position + first->next->head->position + first->next->next->head->position);
+	shared_ptr<Edge> second = first->next.lock(), third = second->next.lock();
+	if (first && second && third)
+		return (1.0/3) * (first->head->position + second->head->position + third->head->position);
 }
 
-vector<Edge*> split_edges(Face *face) {
-	Edge *e = face->first;
-	vector<Edge*> edges;
+vector<shared_ptr<Edge>> split_edges(shared_ptr<Face> face) {
+	shared_ptr<Edge> e = face->first, next;
+	vector<shared_ptr<Edge>> edges;
 	edges.reserve(6);
 	do {
-		Edge *next = e->next;
-		pair<Edge*,Edge*>new_edges = split(e);
+		next = e->next.lock();
+		pair<shared_ptr<Edge>,shared_ptr<Edge>>new_edges = split(e);
 		edges.push_back(new_edges.first);
 		edges.push_back(new_edges.second);
 		e = next;
@@ -60,19 +59,22 @@ vector<Edge*> split_edges(Face *face) {
 	return edges;
 }
 
-vector<Face*> split(Face *face) {
-	vector<Face*> faces;
-	vector<Edge*> twins;
+vector<shared_ptr<Face>> split(shared_ptr<Face> face) {
+	vector<shared_ptr<Face>> faces;
+	vector<shared_ptr<Edge>> twins;
 	faces.reserve(4);
 	twins.reserve(3);
-	vector<Edge*> edges = split_edges(face);
+	vector<shared_ptr<Edge>> edges = split_edges(face);
+	shared_ptr<Edge> a, b, c;
 	for (int i=1; i<6; i+=2) {
-		Edge *a = edges[i];
-		Edge *b = edges[(i+1)%6];
-		Edge *c = new Edge(b->head, a->tail);
+		a = edges[i];
+		b = edges[(i+1)%6];
+		c = shared_ptr<Edge>(new Edge(b->head, a->tail));
 		twins.push_back(twin(c)); //new edge for fourth triangle
-		faces.push_back(new Face(a, b, c));
+		shared_ptr<Face> new_face(new Face(a, b, c));
+		faces.push_back(new_face);
 	}
-	faces.push_back(new Face(twins[0], twins[1], twins[2]));
+	shared_ptr<Face> new_face(new Face(twins[0], twins[1], twins[2]));
+	faces.push_back(new_face);
 	return faces;
 }

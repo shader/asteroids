@@ -15,59 +15,58 @@ bool operator!=(const Edge &lhs, const Edge &rhs) {
 	return !(lhs == rhs);
 }
 
-void Edge::init(Vertex *tail, Vertex *head) {
+void Edge::init(shared_ptr<Vertex> tail, shared_ptr<Vertex> head) {
 	this->tail = tail;
 	this->head = head;
-	tail->edges.insert(this);
-	twin = next = prev = NULL;
-	left = right = NULL;
 }
 
-Edge::Edge(Vertex* tail, Vertex* head) {
+Edge::Edge(shared_ptr<Vertex> tail, shared_ptr<Vertex> head) {
 	init(tail, head);
 }
 
 Edge::Edge(vec3 tail, vec3 head) {
-	init(new Vertex(tail), new Vertex(head));
+	shared_ptr<Vertex> a(new Vertex(tail));
+	shared_ptr<Vertex> b(new Vertex(head));
+	init(a, b);
 }
 
 Edge::~Edge() {
-	tail->edges.erase(this);
 }
 
-void Edge::attach(Edge *edge) {
-	this->next = edge;
-	this->next->left = this->left;
-	this->next->right = this->right;
-	edge->prev = this;
+void attach(shared_ptr<Edge> a, shared_ptr<Edge> b) {
+	a->next = b;
+	b->left = a->left;
+	b->right = a->right;
+	b->prev = a;
 }
 
 vec3 Edge::midpoint() const {
 	return (this->head->position + this->tail->position) * 0.5;
 }
 
-void tie(Edge* edge, Edge* twin) {
+void tie(shared_ptr<Edge> edge, shared_ptr<Edge> twin) {
 	edge->twin = twin;
 	twin->twin = edge;
 	twin->left = edge->right;
 	twin->right = edge->left;
 }
 
-Edge* twin(Edge* edge) {
-	if (edge->twin != NULL) return edge->twin;
+shared_ptr<Edge> twin(shared_ptr<Edge> edge) {
+	shared_ptr<Edge> t = edge->twin.lock();
+	if (t) return t;
 	else {
-		Edge* t = new Edge(edge->head, edge->tail);
+		t = shared_ptr<Edge>(new Edge(edge->head, edge->tail));
 		tie(edge, t);
 		return t;
 	}
 }
 
-pair<Edge*, Edge*> split(Edge *edge) {
-	Vertex* mid = new Vertex(edge->midpoint()); //add the midpoint
+pair<shared_ptr<Edge>, shared_ptr<Edge>> split(shared_ptr<Edge> edge) {
+	shared_ptr<Vertex> mid(new Vertex(edge->midpoint())); //add the midpoint
 	
-	Edge* a = new Edge(new Vertex(edge->tail->position), mid);
-	Edge* b = new Edge(mid, new Vertex(edge->head->position));
-	a->attach(b);
+	shared_ptr<Edge> a(new Edge(edge->tail, mid));
+	shared_ptr<Edge> b(new Edge(mid, edge->head));
+	attach(a, b);
 
-	return pair<Edge*,Edge*>(a, b);
+	return pair<shared_ptr<Edge>,shared_ptr<Edge>>(a, b);
 }
