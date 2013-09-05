@@ -30,6 +30,8 @@ public:
 
 	Mesh* mesh;
 	vector<Color> colors;
+	void Subdivide(int times);
+	void Perturb(float min, float max);
 
 private:
 	GLuint verticesID, indicesID, colorsID, vertex_array;

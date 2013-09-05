@@ -74,21 +74,22 @@ int main( int argc, char *argv[] )
 
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));		
 		
-	Edge *edge = new Edge(vec3(1,0,0), vec3(0,1,0));
-	pair<Edge*,Edge*> edges = split(edge);
-	Face* face = new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0));
-	vector<Face*> faces = split(face);
+	Edge edge1(vec3(-0.489031851, -0.421120375, -0.311237276), vec3(-0.580974221, -0.221912414, -0.359061837));
+	Edge edge2(vec3(-0.489031881, 0.421120375, 0.311237276), vec3(-0.580974281, 0.221912414, 0.359061837));
+	bool test = edge1 < edge2;
+	bool test2 = edge2 < edge1;
 
 	Mesh mesh = Mesh();
 	mesh.add(new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0)));
+	mesh.AddFace(vec3(0,1,0), vec3(1,0,0), vec3(1,1,0));
 	Mesh* new_mesh = split(&mesh);
 
+	
+
 	model = new Icosahedron();
-	Mesh* tmp = split(model->mesh);
-	delete model->mesh;
-	model->mesh = tmp;
+	model->Subdivide(1);
 	model->Init();
-	model->Bind(shader, GL_POINTS);
+	model->Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);

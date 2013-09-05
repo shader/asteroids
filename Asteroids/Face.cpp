@@ -76,3 +76,17 @@ vector<Face*> split(Face *face) {
 	faces.push_back(new Face(twins[0], twins[1], twins[2]));
 	return faces;
 }
+
+Face* average(Face *face) {
+	Edge *a = average(face->first);
+	Edge *b = average(face->first->next);
+	Edge *c = average(face->first->next->next);
+	return new Face(a, b, c);
+}
+
+Face* perturb(Face *face, float max_radius) {
+	Edge *a = perturb(face->first, max_radius);
+	Edge *b = perturb(face->first->next, max_radius);
+	Edge *c = perturb(face->first->next->next, max_radius);
+	return new Face(a, b, c);
+}

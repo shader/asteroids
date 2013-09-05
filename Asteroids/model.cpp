@@ -93,3 +93,12 @@ void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
 void Model::Draw(Shader* shader, mat4 view_projection) {
 	Draw(shader, view_projection, draw_mode);
 }
+
+void Model::Subdivide(int times) {
+	Mesh* new_mesh;
+	for (int i=0; i<times; i++) {
+		new_mesh = subdivide(mesh);
+		delete mesh;
+		mesh = new_mesh;
+	}
+}

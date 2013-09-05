@@ -3,10 +3,10 @@
 using namespace glm;
 
 bool operator<(const Edge &lhs, const Edge &rhs) {
-	return lhs.midpoint() < rhs.midpoint() ||
+	return lhs.midpoint() < rhs.midpoint() || (lhs.midpoint() < rhs.midpoint() &&
 		(*(lhs.head) < *(rhs.head) &&
 		 *(lhs.tail) < *(rhs.tail) &&
-		 lhs.tail->position != rhs.head->position);
+		 lhs.tail->position != rhs.head->position));
 }
 bool operator==(const Edge &lhs, const Edge &rhs) {
 	return *(lhs.head) == (*rhs.head) && *(lhs.tail) == (*rhs.tail);
@@ -70,4 +70,16 @@ pair<Edge*, Edge*> split(Edge *edge) {
 	a->attach(b);
 
 	return pair<Edge*,Edge*>(a, b);
+}
+
+Edge* average(Edge *edge) {
+	Vertex* a = average(edge->tail);
+	Vertex* b = average(edge->head);
+	return new Edge(a, b);
+}
+
+Edge* perturb(Edge *edge, float max_radius) {
+	Vertex* a = perturb(edge->tail, max_radius);
+	Vertex* b = perturb(edge->head, max_radius);
+	return new Edge(a, b);
 }

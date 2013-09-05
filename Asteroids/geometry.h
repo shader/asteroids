@@ -4,6 +4,8 @@
 #include <set>
 #include <vector>
 #include <list>
+#define _USE_MATH_DEFINES
+#include <math.h>
 using namespace glm;
 using namespace std;
 
@@ -18,6 +20,8 @@ public:
 	set<class Edge*> edges;
 
 	vector<Vertex*> neighbors();
+	friend Vertex* average(Vertex *vertex);
+	friend Vertex *perturb(Vertex *vertex, float max_radius);
 
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
@@ -41,6 +45,8 @@ public:
 	friend pair<Edge*, Edge*> split(Edge *edge);
 	friend void tie(Edge* edge, Edge* twin);
 	friend Edge* twin(Edge *edge);
+	friend Edge* average(Edge *edge);
+	friend Edge* perturb(Edge *edge, float max_radius);
 
 	vec3 midpoint() const;
 private:
@@ -63,6 +69,9 @@ public:
 	vec3 midpoint() const;
 	friend vector<Edge*> split_edges(Face *face);
 	friend vector<Face*> split(Face *face);
+	friend Face* average(Face *face);
+	friend Face* perturb(Face *face, float max_radius);
+
 };
 
 class Mesh {
@@ -86,6 +95,11 @@ public:
 	void erase(Face* face);
 
 	friend Mesh* split(Mesh* mesh);
-
-	void subdivide(int times);
+	friend Mesh* average(Mesh* mesh);
+	friend Mesh* perturb(Mesh* mesh, float max_radius);
+	friend Mesh* subdivide(Mesh *mesh);
 };
+
+//loop averaging functions
+GLfloat alpha(GLuint n);
+GLfloat beta(GLuint n);

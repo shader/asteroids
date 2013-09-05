@@ -57,8 +57,14 @@ Vertex* Mesh::add(Vertex *vertex) {
 	if (ret.second) {
 		vertex->index = vertices->size()-1; //new vertex gets next index
 	} else {
-		if (**(ret.first) == *vertex && *(ret.first) != vertex) {
+		Vertex* other = *(ret.first);
+		if (*other == *vertex && other != vertex) {
 			//same vertex, different pointers
+			for(auto e = vertex->edges.begin(); e != vertex->edges.end(); e++) {
+				(*e)->tail = other;
+				other->edges.insert(*e);
+				(*e)->prev->head = other;
+			}
 			delete vertex;
 		}
 	}
@@ -135,5 +141,31 @@ Mesh* split(Mesh *mesh) {
 	return new_mesh;
 }
 
-void Mesh::subdivide(int times) {
+Mesh* average(Mesh *mesh) {
+	Mesh* new_mesh = new Mesh();
+	for (auto f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
+		Face* new_face = average(*f);
+		new_mesh->add(new_face);
+	}
+	return new_mesh;
 }
+
+Mesh* subdivide(Mesh *mesh) {
+	Mesh* tmp = split(mesh);
+	Mesh* new_mesh = average(tmp);
+	delete tmp;
+	return new_mesh;
+}
+
+//Mesh* subdivide(Mesh *mesh) {
+//	Mesh* new_mesh = new Mesh();
+//	for (auto f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
+//		vector<Face*> tmp = split(*f);
+//		for (int i=0; i<4; i++) {
+//			Face* new_face = average(tmp[i]);
+//			new_mesh->add(new_face);
+//			delete tmp[i];
+//		}
+//	}
+//	return new_mesh;
+//}

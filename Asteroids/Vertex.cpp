@@ -30,3 +30,19 @@ vector<Vertex*> Vertex::neighbors() {
 	}
 	return n;
 }
+
+Vertex* average(Vertex* vertex) {
+	vector<Vertex*> neighbors = vertex->neighbors();
+	int n = neighbors.size();
+	Vertex* new_vertex = new Vertex(vertex->position * alpha(n));
+	for (int i = 0; i < n; i++) {
+		new_vertex->position += neighbors[i]->position;
+	}
+	new_vertex->position /= (alpha(n) + n);
+	return new_vertex;
+}
+
+Vertex *perturb(Vertex *vertex, float max_radius) {
+	vec3 pos = perturb(vertex->position, max_radius);
+	return new Vertex(pos);
+}
