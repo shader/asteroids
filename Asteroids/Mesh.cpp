@@ -103,7 +103,7 @@ Face* Mesh::add(Face* face) {
 		e = e->next;
 		next = next->next;
 	} while (e != face->first);
-	pair<set<Face*>::iterator, bool> ret = faces->insert(face);
+	auto ret = faces->insert(face);
 	return *(ret.first);
 }
 

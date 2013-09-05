@@ -28,7 +28,7 @@ public:
 	void Draw(Shader* shader, mat4 ViewProjection);
 	void Draw(Shader* shader, mat4 ViewProjection, GLenum mode);
 
-	Mesh mesh;
+	Mesh* mesh;
 	vector<Color> colors;
 
 private:

@@ -12,7 +12,7 @@ void Initialize();
 void Cleanup();
 
 Shader* shader;
-Model model;
+Model* model;
 mat4 Projection, View;
 int frameCount, currentTime, previousTime;
 string fps;
@@ -28,13 +28,13 @@ void LoadShaders() {
 float t = 0;
 void Update() {
 	t+=0.001f;
-	model.orientation = quat(vec3(0, t, t));
+	model->orientation = quat(vec3(0, t, t));
 	glutPostRedisplay();
 }
 
 void Render() {
 	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-	model.Draw(shader, Projection * View);
+	model->Draw(shader, Projection * View);
 	glutSwapBuffers();
 }
 
@@ -79,13 +79,16 @@ int main( int argc, char *argv[] )
 	Face* face = new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0));
 	vector<Face*> faces = split(face);
 
-	Mesh* mesh = new Mesh();
-	mesh->add(new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0)));
-	Mesh* new_mesh = split(mesh);
+	Mesh mesh = Mesh();
+	mesh.add(new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0)));
+	Mesh* new_mesh = split(&mesh);
 
-	model = Icosahedron();
-	model.Init();
-	model.Bind(shader, GL_TRIANGLES);
+	model = new Icosahedron();
+	Mesh* tmp = split(model->mesh);
+	delete model->mesh;
+	model->mesh = tmp;
+	model->Init();
+	model->Bind(shader, GL_POINTS);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
