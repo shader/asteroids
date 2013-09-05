@@ -80,7 +80,7 @@ int main( int argc, char *argv[] )
 	vector<Face*> faces = split(face);
 
 	Mesh* mesh = new Mesh();
-	mesh->add(face);
+	mesh->add(new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0)));
 	Mesh* new_mesh = split(mesh);
 
 	model = Icosahedron();

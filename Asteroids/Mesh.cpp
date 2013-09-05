@@ -53,9 +53,14 @@ Face* Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
 }
 
 Vertex* Mesh::add(Vertex *vertex) {
-	pair<set<Vertex*>::iterator, bool> ret = vertices->insert(vertex);
+	auto ret = vertices->insert(vertex);
 	if (ret.second) {
 		vertex->index = vertices->size()-1; //new vertex gets next index
+	} else {
+		if (**(ret.first) == *vertex && *(ret.first) != vertex) {
+			//same vertex, different pointers
+			delete vertex;
+		}
 	}
 	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
 }
@@ -71,10 +76,20 @@ Edge* Mesh::add(Edge* edge) {
 			if (other->twin == NULL) { //new twin
 				tie(other, edge);
 				return edge; //return new edge, even though it wasn't saved in the edges set
-			} else {
+			} else if (other->twin != edge) {
+				//same edge, different instance
+				edge->prev->next = other->twin; //patch hole in loop
+				edge->next->prev = other->twin;
 				delete edge; //equivalent, but twin already exists
 				return other->twin;
+			} else { //identical, return twin
+				return edge;
 			}
+		} else if (other != edge) {
+			//same edge, different pointers
+			edge->prev->next = other;
+			edge->next->prev = other;
+			delete edge;
 		}
 	}
 	return *(ret.first); //pointer to edge, or equivalent edge if it already exists
@@ -111,7 +126,7 @@ void Mesh::erase(Face *face) {
 
 Mesh* split(Mesh *mesh) {
 	Mesh* new_mesh = new Mesh();
-	for (set<Face*>::iterator f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
+	for (auto f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
 		vector<Face*> new_faces = split(*f);
 		for (int i=0; i<4; i++) {
 			new_mesh->add(new_faces[i]);

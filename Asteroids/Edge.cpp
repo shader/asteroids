@@ -49,7 +49,7 @@ vec3 Edge::midpoint() const {
 void tie(Edge* edge, Edge* twin) {
 	edge->twin = twin;
 	twin->twin = edge;
-	twin->left = edge->right;
+	edge->right = twin->left;
 	twin->right = edge->left;
 }
 

@@ -5,6 +5,7 @@ Model::Model() {
 	position = vec3(0.0f, 0.0f, 0.0f);	
 	orientation = quat();
 	draw_mode = GL_TRIANGLES;
+	mesh = Mesh();
 }
 
 Model::~Model() {
