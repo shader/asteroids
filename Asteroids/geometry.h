@@ -93,6 +93,7 @@ public:
 	void erase(Vertex* vert);
 	void erase(Edge* edge);
 	void erase(Face* face);
+	void Perturb(float max_radius);
 
 	friend Mesh* split(Mesh* mesh);
 	friend Mesh* average(Mesh* mesh);

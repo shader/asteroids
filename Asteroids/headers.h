@@ -15,6 +15,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <time.h>
 
 // OpenGL
 #include <GL/glew.h>

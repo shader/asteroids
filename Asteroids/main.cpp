@@ -46,6 +46,7 @@ void Resize(int w, int h)
 }
 
 void Initialize() {
+	srand(time(0));
 	//Initialize GLUT
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );		
 	glutInitContextVersion (3, 3);
@@ -73,22 +74,13 @@ int main( int argc, char *argv[] )
 	LoadShaders();
 
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));		
-		
-	Edge edge1(vec3(-0.489031851, -0.421120375, -0.311237276), vec3(-0.580974221, -0.221912414, -0.359061837));
-	Edge edge2(vec3(-0.489031881, 0.421120375, 0.311237276), vec3(-0.580974281, 0.221912414, 0.359061837));
-	bool test = edge1 < edge2;
-	bool test2 = edge2 < edge1;
-
-	Mesh mesh = Mesh();
-	mesh.add(new Face(vec3(1,0,0), vec3(0,1,0), vec3(-1,0,0)));
-	mesh.AddFace(vec3(0,1,0), vec3(1,0,0), vec3(1,1,0));
-	Mesh* new_mesh = split(&mesh);
-
-	
 
 	model = new Icosahedron();
-	model->Subdivide(1);
 	model->Init();
+	model->Perturb(0.5f);
+	model->Subdivide();
+	model->Perturb(0.25f);
+	model->Subdivide();
 	model->Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);

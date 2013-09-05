@@ -102,3 +102,7 @@ void Model::Subdivide(int times) {
 		mesh = new_mesh;
 	}
 }
+
+void Model::Perturb(float max_radius) {
+	mesh->Perturb(max_radius);
+}

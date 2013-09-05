@@ -1,4 +1,5 @@
 #include "geometry.h"
+#include "utils.h"
 using namespace glm;
 
 bool vertexcmp(Vertex* lhs, Vertex* rhs) {	return *lhs < *rhs; }
@@ -155,6 +156,16 @@ Mesh* subdivide(Mesh *mesh) {
 	Mesh* new_mesh = average(tmp);
 	delete tmp;
 	return new_mesh;
+}
+
+void Mesh::Perturb(float max_radius) {
+	vector<Vertex*> tmp(vertices->size());
+	copy(vertices->begin(), vertices->end(), tmp.begin());
+	for (auto v = tmp.begin(); v!=tmp.end(); v++) {
+		vertices->erase(*v);
+		(*v)->position = perturb((*v)->position, max_radius);
+		vertices->insert(*v);
+	}
 }
 
 //Mesh* subdivide(Mesh *mesh) {
