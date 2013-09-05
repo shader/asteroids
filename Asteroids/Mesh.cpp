@@ -24,7 +24,7 @@ Mesh::~Mesh() {
 shared_ptr<Vertex> Mesh::AddVertex(vec3 position) {
 	GLuint i = vertices->size();
 	shared_ptr<Vertex> vert(new Vertex(position, i));
-	pair<set<shared_ptr<Vertex>>::iterator, bool> ret = vertices->insert(vert);
+	auto ret = vertices->insert(vert);
 	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
 }
 
@@ -33,16 +33,30 @@ shared_ptr<Edge> Mesh::AddEdge(vec3 a, vec3 b) {
 	shared_ptr<Vertex> vert_a = this->AddVertex(a);
 	shared_ptr<Vertex> vert_b = this->AddVertex(b);
 	shared_ptr<Edge> edge(new Edge(vert_a, vert_b));
-	return this->add(edge);
+	auto ret = edges->insert(edge);
+	if (ret.second) {
+		vert_a->edges.insert(weak_ptr<Edge>(*(ret.first)));
+	}
+	return *(ret.first);
 }
 
 shared_ptr<Face> Mesh::AddFace(vec3 a, vec3 b, vec3 c) {
-	shared_ptr<Face> face(new Face(a, b, c));
-	return this->add(face);
+	shared_ptr<Edge> e1, e2, e3;
+	e1 = this->AddEdge(a, b);
+	e2 = this->AddEdge(b, c);
+	e3 = this->AddEdge(c, a);
+	shared_ptr<Face> face(new Face(e1, e2, e3));
+	auto ret = faces->insert(face);
+	if (ret.second) {
+		e1->left = face;
+		attach(e1, e2);
+		attach(e2, e3);
+		attach(e3, e1);
+	}
 }
 
 shared_ptr<Vertex> Mesh::add(shared_ptr<Vertex> vertex) {
-	pair<set<shared_ptr<Vertex>>::iterator, bool> ret = vertices->insert(vertex);
+	auto ret = vertices->insert(vertex);
 	if (ret.second) {
 		vertex->index = vertices->size()-1; //new vertex gets next index
 	}
@@ -50,11 +64,11 @@ shared_ptr<Vertex> Mesh::add(shared_ptr<Vertex> vertex) {
 }
 
 shared_ptr<Edge> Mesh::add(shared_ptr<Edge> edge) {
-	edge->head = this->add(edge->head);
-	edge->tail = this->add(edge->tail);
-	pair<set<shared_ptr<Edge>>::iterator, bool> ret = edges->insert(edge);
+	auto ret = edges->insert(edge);
 	if (ret.second) {
 		//new edge
+		edge->head = this->add(edge->head);
+		edge->tail = this->add(edge->tail);
 		shared_ptr<Edge> twin(new Edge(edge->head, edge->tail));
 		tie(edge, twin); //ensure there's a twin, but not in the set
 	} else {
@@ -74,14 +88,16 @@ shared_ptr<Edge> Mesh::add(shared_ptr<Edge> edge) {
 }
 
 shared_ptr<Face> Mesh::add(shared_ptr<Face> face) {
-	shared_ptr<Edge> next = face->first->next.lock();
-	shared_ptr<Edge> e = face->first = this->add(face->first);
-	do {
-		e->next = this->add(next);
-		e = e->next.lock();
-		next = next->next.lock();
-	} while (e != face->first);
-	pair<set<shared_ptr<Face>>::iterator, bool> ret = faces->insert(face);
+	auto ret = faces->insert(face);
+	if (ret.second) { //new face
+		shared_ptr<Edge> next = face->first->next.lock();
+		shared_ptr<Edge> e = face->first = this->add(face->first);
+		do {
+			e->next = this->add(next);
+			e = e->next.lock();
+			next = next->next.lock();
+		} while (e != face->first);
+	}
 	return *(ret.first);
 }
 
