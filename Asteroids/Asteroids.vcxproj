@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="asteroid.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="icosahedron.cpp" />
@@ -94,6 +95,7 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="asteroid.h" />
     <ClInclude Include="geometry.h" />
     <ClInclude Include="headers.h" />
     <ClInclude Include="icosahedron.h" />

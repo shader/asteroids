@@ -35,3 +35,4 @@
 #include "menu.h"
 #include "geometry.h"
 #include "icosahedron.h"
+#include "asteroid.h"
