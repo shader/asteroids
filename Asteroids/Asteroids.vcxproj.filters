@@ -54,6 +54,9 @@
     <ClCompile Include="asteroid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers.h">
@@ -78,6 +81,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="asteroid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

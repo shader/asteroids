@@ -17,6 +17,8 @@ mat4 Projection, View;
 int frameCount, currentTime, previousTime;
 string fps;
 ostringstream buf;
+Timer timer;
+bool quit;
 
 void LoadShaders() {
 	shader = new Shader();
@@ -25,11 +27,9 @@ void LoadShaders() {
 	shader->Create();
 }
 
-float t = 0;
-void Update() {
-	t+=0.001f;
+void Update(Time time) {
+	double t = time.Total().Seconds();
 	model->orientation = quat(vec3(0, t, t));
-	glutPostRedisplay();
 }
 
 void Render() {
@@ -45,6 +45,10 @@ void Resize(int w, int h)
 	Projection = perspective(45.0f, (GLfloat)w/h, 1.f, 1000.f);
 }
 
+void Close() {
+	quit = true;
+}
+
 void Initialize() {
 	srand(time(0));
 	//Initialize GLUT
@@ -52,7 +56,7 @@ void Initialize() {
 	glutInitContextVersion (3, 3);
 	glutInitContextFlags (GLUT_CORE_PROFILE | GLUT_DEBUG);	
 	glutInitWindowSize(800,600);
-	glutCreateWindow( "Asteroids - Samuel Christie" );
+	glutCreateWindow( "Asteroids - Samuel Christie" ); 
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -73,7 +77,7 @@ int main( int argc, char *argv[] )
 
 	LoadShaders();
 
-	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));		
+	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));
 
 	model = new Asteroid(5, 0.5f, 2.0f);
 	model->Init();
@@ -81,8 +85,13 @@ int main( int argc, char *argv[] )
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
-	glutIdleFunc(Update);
-	glutMainLoop();
+	glutCloseFunc(Close);
+
+	while(!quit) {
+		Update(timer.GetTime());
+		Render();
+		glutMainLoopEvent();
+	}
 	Cleanup();
 	return 0;
 }

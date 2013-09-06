@@ -30,6 +30,7 @@
 
 //local
 #include "utils.h"
+#include "timer.h"
 #include "shader.h"
 #include "model.h"
 #include "menu.h"
