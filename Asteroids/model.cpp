@@ -4,8 +4,13 @@ using namespace glm;
 Model::Model() {
 	position = vec3(0.0f, 0.0f, 0.0f);	
 	orientation = quat();
+	scale = 0;
 	draw_mode = GL_TRIANGLES;
 	mesh = new Mesh();
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers (1, &verticesID);
+	glGenBuffers (1, &colorsID);
+	glGenBuffers (1, &indicesID);
 }
 
 Model::~Model() {
@@ -14,13 +19,6 @@ Model::~Model() {
 	glDeleteBuffers(1, &indicesID);
 	glDeleteVertexArrays(1, &vertex_array);
 	delete mesh;
-}
-
-void Model::Init() {	
-	glGenVertexArrays(1, &vertex_array);
-	glGenBuffers (1, &verticesID);
-	glGenBuffers (1, &colorsID);
-	glGenBuffers (1, &indicesID);
 }
 
 void Model::Bind(Shader* shader) {

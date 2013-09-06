@@ -1,6 +1,6 @@
 #include "headers.h"
 
-Icosahedron::Icosahedron() : Model() {
+Icosahedron::Icosahedron() : Mesh() {
 	static float x = .525731112119133606;
 	static float z = .850650808352039932;
 
@@ -18,7 +18,7 @@ Icosahedron::Icosahedron() : Model() {
 	};
 
 	for (int i = 0; i<20; i++)
-		mesh->AddFace(
+		this->AddFace(
 			points[triangles[i][0]],
 			points[triangles[i][1]],
 			points[triangles[i][2]]);

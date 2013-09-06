@@ -1,6 +1,9 @@
 #include "asteroid.h"
 
-Asteroid::Asteroid(int levels, float start, float rate) : Icosahedron() {
+Asteroid::Asteroid(int levels, float start, float rate) : Model() {
+	delete mesh;
+	mesh = new Icosahedron();
+
 	float max_radius = start;
 	for (int i=0; i<levels; i++) {
 		if (i%2 == 0) {
