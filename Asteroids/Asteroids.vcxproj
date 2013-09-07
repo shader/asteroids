@@ -93,6 +93,7 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="model.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="scene.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="ship.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="icosahedron.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="object.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="ship.h" />

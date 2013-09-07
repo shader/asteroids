@@ -3,9 +3,8 @@
 
 class Object {
 public:
-	vec3 position;
+	vec3 position, size;
 	quat orientation;
-	float scale;
 	vector<Model> models;
 
 	Object();

@@ -2,9 +2,8 @@
 using namespace glm;
 
 Model::Model() {
-	position = vec3(0.0f, 0.0f, 0.0f);	
-	orientation = quat();
-	scale = 0;
+	position = vec3(0.0f, 0.0f, 0.0f);
+	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
 	mesh = new Mesh();
 	shader = new Shader();

@@ -32,6 +32,7 @@
 #include "utils.h"
 #include "timer.h"
 #include "shader.h"
+#include "scene.h"
 #include "model.h"
 #include "menu.h"
 #include "geometry.h"
