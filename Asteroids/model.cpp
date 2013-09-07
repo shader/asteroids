@@ -4,7 +4,7 @@ using namespace glm;
 Model::Model() {
 	position = vec3(0.0f, 0.0f, 0.0f);	
 	orientation = quat();
-	scale = 0;
+	size = vec3(1,1,1);
 	draw_mode = GL_TRIANGLES;
 	mesh = new Mesh();
 	glGenVertexArrays(1, &vertex_array);
@@ -78,7 +78,7 @@ void Model::Bind(Shader* shader, GLenum mode) {
 }
 
 void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
-	mat4 world = translation(position) * mat4_cast(orientation);
+	mat4 world = translation(position) * mat4_cast(orientation) * glm::scale(mat4(1.0), size);
 	mat4 MVP = ViewProjection * world;
 	glBindVertexArray(vertex_array);
 	shader->Begin();

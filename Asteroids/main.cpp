@@ -12,7 +12,7 @@ void Initialize();
 void Cleanup();
 
 Shader* shader;
-Model* model;
+Model* model, *little, *medium, *big, *alien;
 mat4 Projection, View;
 int frameCount, currentTime, previousTime;
 string fps;
@@ -29,12 +29,21 @@ void LoadShaders() {
 
 void Update(Time time) {
 	double t = time.Total().Seconds();
-	model->orientation = quat(vec3(0, t, t));
+	quat rot(vec3(t, 0, 0));
+	model->orientation = rot;
+	little->orientation = rot;
+	medium->orientation = rot;
+	big->orientation = rot;
+	alien->orientation = rot;
 }
 
 void Render() {
 	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 	model->Draw(shader, Projection * View);
+	little->Draw(shader, Projection * View);
+	medium->Draw(shader, Projection * View);
+	big->Draw(shader, Projection * View);
+	alien->Draw(shader, Projection * View);
 	glutSwapBuffers();
 }
 
@@ -77,11 +86,33 @@ int main( int argc, char *argv[] )
 
 	LoadShaders();
 
-	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));
+	View = lookAt(vec3(0,0,10), vec3(0,0,0), vec3(0,1,0));
+
+	little = new Asteroid(5, 0.5, 2);
+	little->Bind(shader, GL_LINES);
+	little->position = vec3(-4,0,0);
+	little->size = vec3(0.25, 0.25, 0.25);
+
+	medium = new Asteroid(5, 0.5, 2);
+	medium->Bind(shader, GL_LINES);
+	medium->position = vec3(-2,0,0);
+	medium->size = vec3(0.5, 0.5, 0.5);
+
+	big = new Asteroid(5, 0.5, 2);
+	big->Bind(shader, GL_LINES);
+	big->position = vec3(0,0,0);
 
 	model = new Ship();
 	model->mesh->Normalize();
-	model->Bind(shader, GL_TRIANGLES);
+	model->Bind(shader, GL_LINES);
+	model->position = vec3(2,0,0);
+
+	alien = new Ship();
+	alien->Subdivide();
+	alien->mesh->Normalize();
+	alien->Bind(shader, GL_LINES);
+	alien->position = vec3(4,0,0);
+	alien->size = vec3(0.5,1,0.5);
 
 	glutDisplayFunc(Render);
 	glutReshapeFunc(Resize);
@@ -99,4 +130,7 @@ int main( int argc, char *argv[] )
 void Cleanup() {
 	delete shader;
 	delete model;
+	delete little;
+	delete medium;
+	delete big;
 }

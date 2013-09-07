@@ -21,7 +21,7 @@ public:
 
 	vec3 position;
 	quat orientation;
-	float scale;
+	vec3 size;
 	
 	void Init();
 	void Bind(Shader* shader);
