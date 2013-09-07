@@ -94,6 +94,7 @@ public:
 	void erase(Edge* edge);
 	void erase(Face* face);
 	void Perturb(float max_radius);
+	void Normalize();
 
 	friend Mesh* split(Mesh* mesh);
 	friend Mesh* average(Mesh* mesh);

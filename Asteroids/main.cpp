@@ -79,7 +79,8 @@ int main( int argc, char *argv[] )
 
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));
 
-	model = new Asteroid(5, 0.5f, 2.0f);
+	model = new Ship();
+	model->mesh->Normalize();
 	model->Bind(shader, GL_TRIANGLES);
 
 	glutDisplayFunc(Render);
@@ -97,4 +98,5 @@ int main( int argc, char *argv[] )
 
 void Cleanup() {
 	delete shader;
+	delete model;
 }

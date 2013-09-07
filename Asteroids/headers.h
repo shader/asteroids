@@ -37,3 +37,4 @@
 #include "geometry.h"
 #include "icosahedron.h"
 #include "asteroid.h"
+#include "ship.h"

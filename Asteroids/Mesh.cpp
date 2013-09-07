@@ -168,6 +168,26 @@ void Mesh::Perturb(float max_radius) {
 	}
 }
 
+void Mesh::Normalize() {
+	vector<Vertex*> tmp(vertices->size());
+	vec3 min_corner, max_corner, center, max_deviation;
+	min_corner = max_corner = vec3(0,0,0);
+
+	copy(vertices->begin(), vertices->end(), tmp.begin());
+	for (auto v = tmp.begin(); v!=tmp.end(); v++) {
+		min_corner = min(min_corner, (*v)->position);
+		max_corner = max(max_corner, (*v)->position);
+	}
+	center = (min_corner + max_corner) / 2.0f;
+	max_deviation = max(abs(min_corner - center), abs(max_corner - center));
+	float scale = glm::max(max_deviation.x, glm::max(max_deviation.y, max_deviation.z));
+	for (auto v = tmp.begin(); v!=tmp.end(); v++) {
+		vertices->erase(*v);
+		(*v)->position = ((*v)->position - center) / scale;
+		vertices->insert(*v);
+	}
+}
+
 //Mesh* subdivide(Mesh *mesh) {
 //	Mesh* new_mesh = new Mesh();
 //	for (auto f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
