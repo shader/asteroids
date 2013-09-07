@@ -8,7 +8,7 @@ public:
 	~Scene();
 	
 	mat4 Projection, View;
-	vector<Object> objects;
+	vector<Object*> objects;
 
 	void Initialize();
 	void Update(Time time);
@@ -19,6 +19,7 @@ public:
 };
 
 class DefaultScene : public Scene {
+public:
 	void Initialize();
 	void Update(Time time);
 };

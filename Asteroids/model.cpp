@@ -26,6 +26,13 @@ void Model::LoadShader(GLenum type, string path) {
 	shader->Load(type, path);
 }
 
+
+void Model::LoadShaders(string vertex, string fragment) {
+	shader->Load(GL_VERTEX_SHADER, vertex);
+	shader->Load(GL_FRAGMENT_SHADER, fragment);
+	shader->Create();
+}
+
 void Model::Bind() {
 	Bind(shader, draw_mode);
 }

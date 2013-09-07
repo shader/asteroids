@@ -5,12 +5,17 @@ Scene::Scene() {
 	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));
 }
 
+Scene::~Scene() {
+	for (auto o = objects.begin(); o!=objects.end(); o++) {
+		delete (*o);
+	}
+}
+
 void Scene::Initialize()
 {	
-	glutDisplayFunc(this->Draw);
-	glutReshapeFunc(this->Resize);
-	glutKeyboardFunc(this->Keyboard);
-	glutMouseFunc(this->Mouse);
+	for (auto o = objects.begin(); o!= objects.end(); o++) {
+		(*o)->Initialize();
+	}
 }
 
 void Scene::Update(Time time) {}
@@ -21,7 +26,7 @@ void Scene::Draw()
 
 	mat4 vp = Projection * View;
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
-		(*o).Draw(vp);
+		(*o)->Draw(vp);
 	}
 
 	glutSwapBuffers();

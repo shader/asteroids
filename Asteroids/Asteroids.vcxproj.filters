@@ -16,6 +16,15 @@
     <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{7c09f406-98ff-43c2-810b-cc555ac201a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\models">
+      <UniqueIdentifier>{efefd4ab-7834-4d5e-af20-669d778b7093}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes">
+      <UniqueIdentifier>{db9c0027-63c4-459d-ae2c-256c7c0304af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\objects">
+      <UniqueIdentifier>{06520cf9-72d7-4f1c-b5bd-433c238d6a51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,16 +33,10 @@
     <ClCompile Include="shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="icosahedron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
@@ -52,16 +55,28 @@
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
     <ClCompile Include="asteroid.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\models</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="icosahedron.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="ship.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="default_scene.cpp">
+      <Filter>Source Files\scenes</Filter>
     </ClCompile>
     <ClCompile Include="object.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="destroyer.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

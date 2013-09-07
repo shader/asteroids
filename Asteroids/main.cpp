@@ -5,27 +5,50 @@ using namespace std;
 using namespace glm;
 
 void LoadShaders();
-void Update();
-void Render();
-void Resize();
+void Resize(int w, int h);
 void Initialize();
 void Cleanup();
 
 Timer timer;
 bool quit;
-Scene scene;
-
-void Update(Time time) {
-	double t = time.Total().Seconds();
-	model->orientation = quat(vec3(0, t, t));
-}
-
-	shader->Load(GL_VERTEX_SHADER, "shader.vert");
-	shader->Load(GL_FRAGMENT_SHADER, "shader.frag");
-	shader->Create();
+DefaultScene scene;
+Asteroid *little, *medium, *big;
+Ship *ship;
+mat4 Projection, View;
 
 void Close() {
 	quit = true;
+}
+
+void Resize(int w, int h) {
+	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
+	Projection = perspective(45.0f, (GLfloat)w/h, 1.f, 1000.f);
+}
+
+void Mouse(int button, int state, int x, int y) {
+	scene.Mouse(button, state, x, y);
+}
+
+void Keyboard(unsigned char key, int x, int y) {
+	scene.Keyboard(key, x, y);
+}
+
+void Update(Time time) {	
+	double t = time.Total().Seconds();
+	quat rot(vec3(0, t, t));
+	little->orientation = rot;
+	medium->orientation = rot;
+	big->orientation = rot;
+	ship->orientation = rot;
+}
+
+void Draw() {
+	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+	little->Draw(Projection * View);
+	medium->Draw(Projection * View);
+	big->Draw(Projection * View);
+	ship->Draw(Projection * View);
+	glutSwapBuffers();
 }
 
 void Initialize() {
@@ -47,25 +70,55 @@ void Initialize() {
 	glEnable( GL_DEPTH_TEST );
 
 	LoadMenu();
+
+	View = lookAt(vec3(0,0,5), vec3(0,0,0), vec3(0,1,0));
+
+	little = new Asteroid(5, 0.5, 2);
+	little->LoadShaders("shader.vert", "shader.frag");
+	little->Bind();
+	little->position = vec3(-3,0,0);
+	little->size = vec3(0.25, 0.25, 0.25);
+
+	medium = new Asteroid(5, 0.5, 2);
+	medium->LoadShaders("shader.vert", "shader.frag");
+	medium->Bind();
+	medium->position = vec3(-1,0,0);
+	medium->size = vec3(0.5, 0.5, 0.5);
+
+	big = new Asteroid(5, 0.5, 2);
+	big->LoadShaders("shader.vert", "shader.frag");
+	big->Bind();
+	big->position = vec3(1,0,0);
+
+	ship = new Ship();
+	ship->LoadShaders("shader.vert", "shader.frag");
+	ship->Bind();
+	ship->position = vec3(1,0,0);
+	ship->mesh->Normalize();
 }
 
 int main( int argc, char *argv[] )
 {	
 	glutInit( &argc, argv );
 	Initialize();
-
-	scene = DefaultScene();
-	scene.Initialize();
-
+	
+	glutMouseFunc(Mouse);
+	glutKeyboardFunc(Keyboard);
+	glutReshapeFunc(Resize);
 	glutCloseFunc(Close);
 
 	while(!quit) {
-		scene.Update(timer.GetTime());
-		Render();
+		Update(timer.GetTime());
+		Draw();
 		glutMainLoopEvent();
 	}
 	Cleanup();
 	return 0;
 }
 
-void Cleanup() {}
+void Cleanup() {
+	delete little;
+	delete medium;
+	delete big;
+	delete ship;
+}

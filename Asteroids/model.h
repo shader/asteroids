@@ -21,9 +21,11 @@ public:
 
 	vec3 position, size;
 	quat orientation;
+	Shader* shader;
 	
 	void Init();
 	void LoadShader(GLenum type, string path);
+	void LoadShaders(string vertex, string fragment);
 	void Bind();
 	void Bind(Shader* shader);
 	void Bind(Shader* shader, GLenum mode);
@@ -39,6 +41,5 @@ public:
 private:
 	GLuint verticesID, indicesID, colorsID, vertex_array;
 	GLenum draw_mode;
-	Shader* shader;
 	vector<GLuint> indices;
 };
