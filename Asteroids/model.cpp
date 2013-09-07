@@ -7,6 +7,7 @@ Model::Model() {
 	scale = 0;
 	draw_mode = GL_TRIANGLES;
 	mesh = new Mesh();
+	shader = new Shader();
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &colorsID);
@@ -19,6 +20,15 @@ Model::~Model() {
 	glDeleteBuffers(1, &indicesID);
 	glDeleteVertexArrays(1, &vertex_array);
 	delete mesh;
+	delete shader;
+}
+
+void Model::LoadShader(GLenum type, string path) {
+	shader->Load(type, path);
+}
+
+void Model::Bind() {
+	Bind(shader, draw_mode);
 }
 
 void Model::Bind(Shader* shader) {
@@ -89,6 +99,10 @@ void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
 }
 
 void Model::Draw(Shader* shader, mat4 view_projection) {
+	Draw(shader, view_projection, draw_mode);
+}
+
+void Model::Draw(mat4 view_projection) {
 	Draw(shader, view_projection, draw_mode);
 }
 

@@ -24,8 +24,11 @@ public:
 	float scale;
 	
 	void Init();
+	void LoadShader(GLenum type, string path);
+	void Bind();
 	void Bind(Shader* shader);
 	void Bind(Shader* shader, GLenum mode);
+	void Draw(mat4 ViewProjection);
 	void Draw(Shader* shader, mat4 ViewProjection);
 	void Draw(Shader* shader, mat4 ViewProjection, GLenum mode);
 
@@ -37,5 +40,6 @@ public:
 private:
 	GLuint verticesID, indicesID, colorsID, vertex_array;
 	GLenum draw_mode;
+	Shader* shader;
 	vector<GLuint> indices;
 };
