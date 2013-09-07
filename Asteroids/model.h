@@ -19,9 +19,8 @@ public:
 	Model();
 	~Model();
 
-	vec3 position;
+	vec3 position, size;
 	quat orientation;
-	float scale;
 	
 	void Init();
 	void LoadShader(GLenum type, string path);

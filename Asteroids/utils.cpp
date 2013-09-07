@@ -31,6 +31,11 @@ mat4 translation(vec3 position) {
 	return translation(vec4(position.x, position.y, position.z, 1.0));
 }
 
+mat4 scale(vec3 size) {
+	return glm::scale(mat4(1.0), size);
+
+}
+
 float rand(float min, float max) {
 	return min + (max - min)*rand() / (float)RAND_MAX;
 }

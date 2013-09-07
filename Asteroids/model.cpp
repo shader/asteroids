@@ -88,8 +88,8 @@ void Model::Bind(Shader* shader, GLenum mode) {
 }
 
 void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
-	mat4 world = translation(position) * mat4_cast(orientation);
-	mat4 MVP = ViewProjection * world;
+	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
+	mat4 MVP = ViewProjection * model;
 	glBindVertexArray(vertex_array);
 	shader->Begin();
 		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &MVP[0][0]);

@@ -10,6 +10,7 @@ public:
 
 	Object();
 	~Object();
+	void Initialize();
 	void Draw(mat4 view_projection);
 	void Update(Time time);
 };

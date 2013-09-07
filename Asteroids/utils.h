@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace glm;
 
@@ -12,6 +13,7 @@ vec3 operator*(const double &lhs, const vec3 &rhs);
 
 mat4 translation(vec3 position);
 mat4 translation(vec4 position);
+mat4 scale(vec3 size);
 float rand(float min, float max);
 vec3 rand_vec3();
 
