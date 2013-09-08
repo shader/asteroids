@@ -12,4 +12,5 @@ void DefaultScene::Update(Time time) {
 	for (auto o = objects.begin(); o!=objects.end(); o++) {
 		(*o)->orientation = rot;
 	}
+	Scene::Update(time);
 }

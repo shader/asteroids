@@ -18,7 +18,12 @@ void Scene::Initialize()
 	}
 }
 
-void Scene::Update(Time time) {}
+void Scene::Update(Time time)
+{
+	for (auto o = objects.begin(); o!= objects.end(); o++) {
+		(*o)->Update(time);
+	}
+}
 
 void Scene::Draw() 
 {	

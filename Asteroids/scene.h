@@ -5,17 +5,17 @@
 class Scene {
 public:
 	Scene();
-	~Scene();
+	virtual ~Scene();
 	
 	mat4 Projection, View;
 	vector<Object*> objects;
 
-	void Initialize();
-	void Update(Time time);
-	void Draw();
-	void Mouse(int button, int state, int x, int y);
-	void Keyboard(unsigned char key, int x, int y);
-	void Resize(int w, int h);
+	virtual void Initialize();
+	virtual void Update(Time time);
+	virtual void Draw();
+	virtual void Mouse(int button, int state, int x, int y);
+	virtual void Keyboard(unsigned char key, int x, int y);
+	virtual void Resize(int w, int h);
 };
 
 class DefaultScene : public Scene {

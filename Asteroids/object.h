@@ -10,10 +10,10 @@ public:
 	vector<Model*> models;
 
 	Object();
-	~Object();
-	void Initialize();
-	void Draw(mat4 view_projection);
-	void Update(Time time);
+	virtual ~Object();
+	virtual void Initialize();
+	virtual void Draw(mat4 view_projection);
+	virtual void Update(Time time);
 };
 
 class Destroyer : public Object {
