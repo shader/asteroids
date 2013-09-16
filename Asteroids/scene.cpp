@@ -24,7 +24,7 @@ void Scene::Remove(Object *obj) {
 }
 
 void Scene::Initialize()
-{	
+{
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		(*o)->Initialize();
 	}
