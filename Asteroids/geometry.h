@@ -17,6 +17,7 @@ public:
 	Vertex(vec3 position, GLuint index);
 	vec3 position;
 	GLuint index;
+	Vertex *prev, *next; //linked list of vertices
 	set<class Edge*> edges;
 
 	vector<Vertex*> neighbors();
@@ -58,7 +59,9 @@ public:
 	Face(Edge* first);
 	Face(Edge *a, Edge *b, Edge *c);
 	Face(vec3 a, vec3 b, vec3 c);
+
 	class Edge *first;
+	class Face *prev, *next;
 
 	vector<Face*> neighbors();
 
@@ -71,13 +74,13 @@ public:
 	friend vector<Face*> split(Face *face);
 	friend Face* average(Face *face);
 	friend Face* perturb(Face *face, float max_radius);
-
 };
 
 class Mesh {
 public:
 	Mesh();
 	~Mesh();
+	
 	set<Vertex*,bool(*)(Vertex*,Vertex*)> *vertices;
 	set<Edge*,bool(*)(Edge*,Edge*)> *edges;
 	set<Face*,bool(*)(Face*,Face*)> *faces;

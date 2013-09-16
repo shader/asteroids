@@ -12,7 +12,7 @@ Scene::~Scene() {
 }
 
 void Scene::Initialize()
-{	
+{
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		(*o)->Initialize();
 	}
