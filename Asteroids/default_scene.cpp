@@ -16,6 +16,7 @@ void DefaultScene::Initialize() {
 void DefaultScene::Update(Time time) {	
 	double t = time.Total().Seconds();
 
+	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
 		auto p = project((*obj)->position, View, Projection, vec4(0,0,1,1));
 		if (p.x > 1.05 || p.x < -0.05 || p.y > 1.05 || p.y < -0.05) {
@@ -37,10 +38,10 @@ void DefaultScene::Keyboard(int key, int x, int y) {
 		destroyer->orientation = normalize(destroyer->orientation);
 		break;
 	case GLUT_KEY_UP:
-		destroyer->velocity += vec3(0,0.05,0) * destroyer->orientation;
+		destroyer->velocity += destroyer->orientation * vec3(0,0.2,0);
 		break;
 	case GLUT_KEY_DOWN:
-		destroyer->velocity -= (vec3(0,0.05,0) * destroyer->orientation);
+		destroyer->velocity -= destroyer->orientation * vec3(0,0.2,0);
 		break;
 	}
 }
