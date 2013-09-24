@@ -17,9 +17,8 @@ void DefaultScene::Update(Time time) {
 	double t = time.Total().Seconds();
 
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		//project(destroyer->position, View, Projection, vec4(0,0,1,1));
-		auto l = length((*obj)->position);
-		if (length((*obj)->position) > 12) {
+		auto p = project((*obj)->position, View, Projection, vec4(0,0,1,1));
+		if (p.x > 1.05 || p.x < -0.05 || p.y > 1.05 || p.y < -0.05) {
 			(*obj)->position = -(*obj)->position;
 		}
 	}
