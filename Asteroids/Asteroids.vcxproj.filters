@@ -54,9 +54,6 @@
     <ClCompile Include="loop.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="asteroid.cpp">
-      <Filter>Source Files\models</Filter>
-    </ClCompile>
     <ClCompile Include="icosahedron.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
@@ -76,6 +73,12 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="destroyer.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="rock.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
+    <ClCompile Include="asteroid.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,9 +104,6 @@
     <ClInclude Include="geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="asteroid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -114,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

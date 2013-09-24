@@ -14,5 +14,5 @@ void Destroyer::Initialize() {
 }
 
 void Destroyer::Update(Time time) {
-
+	Object::Update(time);
 }

@@ -22,4 +22,8 @@ void Object::Draw(mat4 view_projection) {
 	}
 }
 
-void Object::Update(Time time) {}
+void Object::Update(Time time) {
+	double t = time.Elapsed().Seconds();
+	//velocity -= velocity * .2 * t; //'friction' decay
+	position += velocity * t;
+}

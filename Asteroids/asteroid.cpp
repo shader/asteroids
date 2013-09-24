@@ -1,16 +1,21 @@
-#include "asteroid.h"
+#include "object.h"
+#include "rock.h"
+#include "utils.h"
 
-Asteroid::Asteroid(int levels, float start, float rate) : Model() {
-	delete mesh;
-	mesh = new Icosahedron();
+Asteroid::Asteroid() : Object() {
+	rock = new Rock(5, 0.5, 2);
+	models.push_back(rock);
+	velocity = rand_vec3();
+	position = rand_vec3();
+}
 
-	float max_radius = start;
-	for (int i=0; i<levels; i++) {
-		if (i%2 == 0) {
-			Perturb(max_radius);
-			max_radius /= rate;
-		} else {
-			Subdivide();
-		}
-	}
+void Asteroid::Initialize() {
+	rock->LoadShader(GL_VERTEX_SHADER, "shader.vert");
+	rock->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
+	rock->shader->Create();
+	rock->Bind();
+}
+
+void Asteroid::Update(Time time) {
+
 }

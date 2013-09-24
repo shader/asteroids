@@ -29,6 +29,10 @@ void Keyboard(unsigned char key, int x, int y) {
 	scene->Keyboard(key, x, y);
 }
 
+void Keyboard(int key, int x, int y) {
+	scene->Keyboard(key, x, y);
+}
+
 void Draw() {
 	scene->Draw();
 }
@@ -61,6 +65,7 @@ int main( int argc, char *argv[] )
 	
 	glutMouseFunc(Mouse);
 	glutKeyboardFunc(Keyboard);
+	glutSpecialFunc(Keyboard);
 	glutReshapeFunc(Resize);
 	glutCloseFunc(Close);
 

@@ -37,5 +37,5 @@
 #include "menu.h"
 #include "geometry.h"
 #include "icosahedron.h"
-#include "asteroid.h"
+#include "rock.h"
 #include "ship.h"

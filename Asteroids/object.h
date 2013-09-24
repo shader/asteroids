@@ -2,11 +2,13 @@
 #include "model.h"
 #include "timer.h"
 #include "ship.h"
+#include "rock.h"
+#include "GL\freeglut.h"
 
 class Object {
 public:
-	vec3 position, size;
-	quat orientation;
+	vec3 position, size, velocity;
+	quat orientation, angular_vel;
 	vector<Model*> models;
 
 	Object();
@@ -24,4 +26,14 @@ public:
 
 private:
 	Ship* ship;
+};
+
+class Asteroid : public Object {
+public:
+	Asteroid();
+	void Initialize();
+	void Update(Time time);
+
+private:
+	Rock* rock;
 };
