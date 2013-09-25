@@ -16,6 +16,7 @@ mat4 translation(vec4 position);
 mat4 scale(vec3 size);
 float rand(float min, float max);
 vec3 rand_vec3();
+vec2 rand_vec2();
 
 vec3 perturb(vec3 point, float max_radius);
 void destructive_perturb(vec3* out_point, float max_radius);

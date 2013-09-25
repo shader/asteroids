@@ -42,7 +42,7 @@ float rand(float min, float max) {
 
 const float TAU = 6.283185307179586476925286766559f;
 
-vec3 rand_vec3() {
+vec3 rand_vec3() { //random unit 3d vector
 	float z = rand(-1.0f, 1.0f);
     float a = rand(0.0f, TAU);
 
@@ -52,6 +52,13 @@ vec3 rand_vec3() {
     float y = r * sinf(a);
 
 	return vec3(x,y,z);
+}
+
+vec2 rand_vec2() { // random unit 2d vector
+	float a = rand(0.0f, TAU);
+	float x = cosf(a);
+	float y = sinf(a);
+	return vec2(x,y);
 }
 
 vec3 perturb(vec3 point, float max_radius) {

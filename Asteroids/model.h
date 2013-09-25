@@ -39,7 +39,7 @@ public:
 	void Perturb(float max_radius);
 
 private:
-	GLuint verticesID, indicesID, colorsID, vertex_array;
+	GLuint verticesID, indicesID, colorsID, normalsID, vertex_array;
 	GLenum draw_mode;
 	vector<GLuint> indices;
 };

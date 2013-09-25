@@ -90,3 +90,10 @@ Face* perturb(Face *face, float max_radius) {
 	Edge *c = perturb(face->first->next->next, max_radius);
 	return new Face(a, b, c);
 }
+
+vec3 Face::normal() const {
+	vec3 a = first->head->position - first->tail->position;
+	vec3 b = first->next->head->position - first->next->tail->position;
+	vec3 normal = cross(a, b);
+	return normalize(normal);
+}

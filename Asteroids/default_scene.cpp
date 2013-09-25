@@ -8,10 +8,8 @@ void DefaultScene::Initialize() {
 	objects.push_back(destroyer);
 
 	auto asteroid = new Asteroid();
-	asteroid->position = rand_vec3() * 10.0f;
-	asteroid->position.z = 0;
-	asteroid->velocity = rand_vec3() * 4.0f;
-	asteroid->velocity.z = 0;
+	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
+	asteroid->velocity = normalize(asteroid->position) * -4.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
 	asteroids.push_back(asteroid);
 	objects.push_back(asteroid);
@@ -24,9 +22,14 @@ void DefaultScene::Update(Time time) {
 
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		auto p = project((*obj)->position, View, Projection, vec4(0,0,1,1));
-		if (p.x > 1.05 || p.x < -0.05 || p.y > 1.05 || p.y < -0.05) {
-			(*obj)->position = -(*obj)->position;
+		if (dot((*obj)->velocity, (*obj)->position) > 0) {
+			auto p = project((*obj)->position, View, Projection, vec4(0,0,1,1));
+			if (p.x > 1.05 || p.x < -0.05) {
+				(*obj)->position.x = -(*obj)->position.x;
+			}
+			if (p.y > 1.05 || p.y < -0.05) {
+				(*obj)->position.y = -(*obj)->position.y;
+			}
 		}
 	}
 

@@ -46,3 +46,11 @@ Vertex *perturb(Vertex *vertex, float max_radius) {
 	vec3 pos = perturb(vertex->position, max_radius);
 	return new Vertex(pos);
 }
+
+vec3 Vertex::normal() const {
+	vec3 normal(0);
+	for (set<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
+		normal += (*e)->left->normal();
+	}
+	return normal / (float)edges.size();
+}

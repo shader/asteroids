@@ -9,12 +9,14 @@ Model::Model() {
 	shader = new Shader();
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
+	glGenBuffers (1, &normalsID);
 	glGenBuffers (1, &colorsID);
 	glGenBuffers (1, &indicesID);
 }
 
 Model::~Model() {
 	glDeleteBuffers(1, &verticesID);
+	glDeleteBuffers(1, &normalsID);
 	glDeleteBuffers(1, &colorsID);
 	glDeleteBuffers(1, &indicesID);
 	glDeleteVertexArrays(1, &vertex_array);
@@ -43,12 +45,15 @@ void Model::Bind(Shader* shader) {
 
 void Model::Bind(Shader* shader, GLenum mode) {
 	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
-	vec3* vertices;
+	vec3 *vertices, *normals;
 	indices.empty();
 
 	vertices = new vec3[mesh->vertices->size()];
-	for (set<Vertex*>::iterator i=mesh->vertices->begin(); i!=mesh->vertices->end(); i++)
+	normals = new vec3[mesh->vertices->size()];
+	for (set<Vertex*>::iterator i=mesh->vertices->begin(); i!=mesh->vertices->end(); i++) {
 		vertices[(*i)->index] = ((*i)->position);
+		normals[(*i)->index] = (*i)->normal();
+	}
 
 	draw_mode = mode;
 	switch (mode) {
@@ -74,11 +79,19 @@ void Model::Bind(Shader* shader, GLenum mode) {
 
 	glBindVertexArray(vertex_array);	 
 	shader->Begin();
+		//position
 		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
 		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices->size(), vertices, GL_STATIC_DRAW);		
 		glEnableVertexAttribArray((*shader)["vertex"]);
 		glVertexAttribPointer ((*shader)["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
+		//normal
+		glBindBuffer (GL_ARRAY_BUFFER, normalsID);
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices->size(), normals, GL_STATIC_DRAW);		
+		glEnableVertexAttribArray((*shader)["normal"]);
+		glVertexAttribPointer ((*shader)["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		
+		//color
 		if (colors.size() > 0) {
 			glBindBuffer (GL_ARRAY_BUFFER, colorsID);
 			glBufferData (GL_ARRAY_BUFFER, sizeof(Color)*colors.size(), &colors[0], GL_STATIC_DRAW);		
@@ -86,11 +99,14 @@ void Model::Bind(Shader* shader, GLenum mode) {
 			glVertexAttribPointer ((*shader)["color"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 
+		//index
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
 	shader->End();
 	glBindVertexArray(0);
+
 	delete [] vertices;
+	delete [] normals;
 }
 
 void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {

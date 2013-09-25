@@ -20,6 +20,7 @@ public:
 	set<class Edge*> edges;
 
 	vector<Vertex*> neighbors();
+	vec3 normal() const;
 	friend Vertex* average(Vertex *vertex);
 	friend Vertex *perturb(Vertex *vertex, float max_radius);
 
@@ -67,6 +68,7 @@ public:
 	friend bool operator!=(const Face &lhs, const Face &rhs);
 
 	vec3 midpoint() const;
+	vec3 normal() const;
 	friend vector<Edge*> split_edges(Face *face);
 	friend vector<Face*> split(Face *face);
 	friend Face* average(Face *face);
