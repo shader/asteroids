@@ -17,5 +17,5 @@ void Asteroid::Initialize() {
 }
 
 void Asteroid::Update(Time time) {
-
+	Object::Update(time);
 }

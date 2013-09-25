@@ -85,6 +85,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="asteroid.cpp" />
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="rock.cpp" />
     <ClCompile Include="default_scene.cpp" />
     <ClCompile Include="destroyer.cpp" />

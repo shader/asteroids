@@ -4,6 +4,7 @@
 Object::Object() {
 	position = vec3(0,0,0);
 	size = vec3(1,1,1);
+	angular_vel = vec3(0);
 }
 
 Object::~Object() {
@@ -26,4 +27,5 @@ void Object::Update(Time time) {
 	double t = time.Elapsed().Seconds();
 	//velocity -= velocity * .2 * t; //'friction' decay
 	position += velocity * t;
+	orientation = orientation * quat(angular_vel * t);
 }

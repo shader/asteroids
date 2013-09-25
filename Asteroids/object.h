@@ -7,8 +7,8 @@
 
 class Object {
 public:
-	vec3 position, size, velocity;
-	quat orientation, angular_vel;
+	vec3 position, size, velocity, angular_vel;
+	quat orientation;
 	vector<Model*> models;
 
 	Object();
@@ -36,4 +36,14 @@ public:
 
 private:
 	Rock* rock;
+};
+
+class Bullet : public Object {
+public:
+	Bullet();
+	void Initialize();
+	void Update(Time time);
+
+private:
+	Model* model;
 };

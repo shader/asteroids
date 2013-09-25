@@ -23,6 +23,7 @@ class DefaultScene : public Scene {
 public:
 	void Initialize();
 	void Update(Time time);
+	virtual void Keyboard(unsigned char key, int x, int y);
 	virtual void Keyboard(int key, int x, int y);
 
 private:
