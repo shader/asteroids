@@ -3,13 +3,17 @@
 #include "utils.h"
 
 void DefaultScene::Initialize() {
-	destroyer = new Destroyer();
+	light_dir = vec3(1);
+	light_color = vec3(1);
+
+	destroyer = new Destroyer(this);
 	destroyer->position = vec3(0,0,0);
 	objects.push_back(destroyer);
 
-	auto asteroid = new Asteroid();
+	auto asteroid = new Asteroid(this);
+	asteroid->size = vec3(2);
 	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
-	asteroid->velocity = normalize(asteroid->position) * -4.0f;
+	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -4.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
 	asteroids.push_back(asteroid);
 	objects.push_back(asteroid);
@@ -23,11 +27,11 @@ void DefaultScene::Update(Time time) {
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
 		if (dot((*obj)->velocity, (*obj)->position) > 0) {
-			auto p = project((*obj)->position, View, Projection, vec4(0,0,1,1));
-			if (p.x > 1.05 || p.x < -0.05) {
+			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
+			if (p.x > 1 || p.x < 0) {
 				(*obj)->position.x = -(*obj)->position.x;
 			}
-			if (p.y > 1.05 || p.y < -0.05) {
+			if (p.y > 1 || p.y < 0) {
 				(*obj)->position.y = -(*obj)->position.y;
 			}
 		}
@@ -40,10 +44,10 @@ void DefaultScene::Update(Time time) {
 void DefaultScene::Keyboard(unsigned char key, int x, int y) {
 	switch(key) {
 	case ' ':
-		Bullet *bullet = new Bullet();
+		Bullet *bullet = new Bullet(this);
 		bullet->position = destroyer->position;
 		bullet->orientation = destroyer->orientation;
-		bullet->velocity = destroyer->velocity + normalize(destroyer->velocity + destroyer->orientation*vec3(0,1,0)) * 8.0f;
+		bullet->velocity = destroyer->velocity + destroyer->orientation*vec3(0,8,0);
 		bullet->Initialize();
 		objects.push_back(bullet);
 		break;

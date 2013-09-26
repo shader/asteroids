@@ -1,7 +1,7 @@
 #include "object.h"
 #include "ship.h"
 
-Bullet::Bullet() : Object() {
+Bullet::Bullet(Scene *scene) : Object(scene) {
 	model = new Ship();
 	model->size = vec3(0.25);
 	models.push_back(model);

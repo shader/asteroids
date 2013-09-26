@@ -110,11 +110,16 @@ void Model::Bind(Shader* shader, GLenum mode) {
 }
 
 void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
-	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
+	mat4 rotation = mat4_cast(orientation);
+	mat4 trans = translation(position);
+	mat4 model = trans * rotation * scale(size);
 	mat4 MVP = ViewProjection * model;
+	mat4 normal_matrix = trans * rotation;
 	glBindVertexArray(vertex_array);
 	shader->Begin();
 		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv((*shader)("model"), 1, GL_FALSE, &model[0][0]);
+		glUniformMatrix4fv((*shader)("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
 		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, 0);
 	shader->End();
 	glBindVertexArray(0);

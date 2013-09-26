@@ -1,7 +1,7 @@
 #include "object.h"
 #include "ship.h"
 
-Destroyer::Destroyer() : Object() {
+Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	ship = new Ship();
 	models.push_back(ship);
 }

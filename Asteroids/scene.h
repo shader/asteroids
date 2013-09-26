@@ -7,8 +7,10 @@ public:
 	Scene();
 	virtual ~Scene();
 	
-	mat4 Projection, View;
+	mat4 Projection, View, InvView;
 	vector<Object*> objects;
+
+	vec3 light_dir, light_color;
 
 	virtual void Initialize();
 	virtual void Update(Time time);

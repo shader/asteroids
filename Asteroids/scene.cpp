@@ -3,6 +3,7 @@
 Scene::Scene() {
 	Projection = perspective(45.0f, (GLfloat)800/600, 1.f, 1000.f);
 	View = lookAt(vec3(0,0,20), vec3(0,0,0), vec3(0,1,0));
+	InvView = inverse(View);
 }
 
 Scene::~Scene() {

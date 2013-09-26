@@ -1,10 +1,12 @@
 #include "object.h"
 #include "utils.h"
+#include "scene.h"
 
-Object::Object() {
+Object::Object(Scene *scene) {
 	position = vec3(0,0,0);
 	size = vec3(1,1,1);
 	angular_vel = vec3(0);
+	this->scene = scene;
 }
 
 Object::~Object() {
@@ -19,7 +21,10 @@ void Object::Draw(mat4 view_projection) {
 	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
 	mat4 MVP = view_projection * model;
 	for(auto m = models.begin(); m!=models.end(); m++) {
+		(*m)->shader->Begin();
+		glUniformMatrix4fv((*(*m)->shader)("inv_view"), 1, GL_FALSE, &(scene->InvView[0][0]));
 		(*m)->Draw(MVP);
+		(*m)->shader->End();
 	}
 }
 

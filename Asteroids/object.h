@@ -5,13 +5,15 @@
 #include "rock.h"
 #include "GL\freeglut.h"
 
+class Scene;
 class Object {
 public:
 	vec3 position, size, velocity, angular_vel;
 	quat orientation;
 	vector<Model*> models;
+	Scene *scene;
 
-	Object();
+	Object(Scene *scene);
 	virtual ~Object();
 	virtual void Initialize();
 	virtual void Draw(mat4 view_projection);
@@ -20,7 +22,7 @@ public:
 
 class Destroyer : public Object {
 public:
-	Destroyer();
+	Destroyer(Scene *scene);
 	void Initialize();
 	void Update(Time time);
 
@@ -30,7 +32,7 @@ private:
 
 class Asteroid : public Object {
 public:
-	Asteroid();
+	Asteroid(Scene *scene);
 	void Initialize();
 	void Update(Time time);
 
@@ -40,7 +42,7 @@ private:
 
 class Bullet : public Object {
 public:
-	Bullet();
+	Bullet(Scene *scene);
 	void Initialize();
 	void Update(Time time);
 
