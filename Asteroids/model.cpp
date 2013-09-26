@@ -109,28 +109,29 @@ void Model::Bind(Shader* shader, GLenum mode) {
 	delete [] normals;
 }
 
-void Model::Draw(Shader* shader, mat4 ViewProjection, GLenum mode) {
+void Model::Draw(Shader* shader, mat4 view, mat4 projection, GLenum mode) {
 	mat4 rotation = mat4_cast(orientation);
 	mat4 trans = translation(position);
-	mat4 model = trans * rotation * scale(size);
-	mat4 MVP = ViewProjection * model;
-	mat4 normal_matrix = trans * rotation;
+	mat4 model_view = view * trans * rotation * scale(size);
+	mat4 MVP = projection * model_view;
+	mat3 normal_matrix = mat3(inverse(transpose(view * trans * rotation)));
+	vec3 test;
 	glBindVertexArray(vertex_array);
 	shader->Begin();
 		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &MVP[0][0]);
-		glUniformMatrix4fv((*shader)("model"), 1, GL_FALSE, &model[0][0]);
-		glUniformMatrix4fv((*shader)("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
+		glUniformMatrix4fv((*shader)("model_view"), 1, GL_FALSE, &model_view[0][0]);
+		glUniformMatrix3fv((*shader)("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
 		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, 0);
 	shader->End();
 	glBindVertexArray(0);
 }
 
-void Model::Draw(Shader* shader, mat4 view_projection) {
-	Draw(shader, view_projection, draw_mode);
+void Model::Draw(Shader* shader, mat4 view, mat4 projection) {
+	Draw(shader, view, projection, draw_mode);
 }
 
-void Model::Draw(mat4 view_projection) {
-	Draw(shader, view_projection, draw_mode);
+void Model::Draw(mat4 view, mat4 projection) {
+	Draw(shader, view, projection, draw_mode);
 }
 
 void Model::Subdivide(int times) {

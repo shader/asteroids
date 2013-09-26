@@ -32,7 +32,7 @@ void Scene::Draw()
 
 	mat4 vp = Projection * View;
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
-		(*o)->Draw(vp);
+		(*o)->Draw(View, Projection);
 	}
 
 	glutSwapBuffers();

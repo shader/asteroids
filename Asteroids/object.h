@@ -16,7 +16,7 @@ public:
 	Object(Scene *scene);
 	virtual ~Object();
 	virtual void Initialize();
-	virtual void Draw(mat4 view_projection);
+	virtual void Draw(mat4 view, mat4 projection);
 	virtual void Update(Time time);
 };
 

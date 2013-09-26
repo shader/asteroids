@@ -41,7 +41,7 @@ void Initialize() {
 	srand(time(0));
 	//Initialize GLUT
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );		
-	glutInitContextVersion (3, 3);
+	glutInitContextVersion (4, 1);
 	glutInitContextFlags (GLUT_CORE_PROFILE | GLUT_DEBUG);	
 	glutInitWindowSize(800,600);
 	glutCreateWindow( "Asteroids - Samuel Christie" ); 

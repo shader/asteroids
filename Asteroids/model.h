@@ -29,9 +29,9 @@ public:
 	void Bind();
 	void Bind(Shader* shader);
 	void Bind(Shader* shader, GLenum mode);
-	void Draw(mat4 ViewProjection);
-	void Draw(Shader* shader, mat4 ViewProjection);
-	void Draw(Shader* shader, mat4 ViewProjection, GLenum mode);
+	void Draw(mat4 view, mat4 projection);
+	void Draw(Shader* shader, mat4 view, mat4 projection);
+	void Draw(Shader* shader, mat4 view, mat4 projection, GLenum mode);
 
 	Mesh* mesh;
 	vector<Color> colors;
