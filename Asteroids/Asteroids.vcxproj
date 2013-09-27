@@ -105,6 +105,7 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="event.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="rock.h" />
     <ClInclude Include="geometry.h" />
