@@ -48,4 +48,5 @@ public:
 
 private:
 	Model* model;
+	double age;
 };

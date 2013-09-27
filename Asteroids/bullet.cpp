@@ -15,5 +15,10 @@ void Bullet::Initialize() {
 }
 
 void Bullet::Update(Time time) {
+	age += time.ElapsedSeconds;
+	if (age > 10) {
+		//die
+	}
+	
 	Object::Update(time);
 }
