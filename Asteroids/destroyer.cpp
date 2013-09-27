@@ -1,4 +1,5 @@
 #include "object.h"
+#include "utils.h"
 #include "ship.h"
 
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
@@ -14,5 +15,10 @@ void Destroyer::Initialize() {
 }
 
 void Destroyer::Update(Time time) {
+	double t = time.Elapsed().Seconds();	
+	velocity -= velocity * .3 * t; //'friction' decay
+	float speed = length(velocity);
+	if (speed > 0)
+		velocity = normalize(velocity) * glm::min(speed, 16.0f);
 	Object::Update(time);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "timer.h"
 #include "object.h"
+#include "input.h"
 
 class Scene {
 public:
@@ -13,20 +14,16 @@ public:
 	vec3 light_dir, light_color;
 
 	virtual void Initialize();
-	virtual void Update(Time time);
+	virtual void Update(Time time, const InputState &input);
 	virtual void Draw();
-	virtual void Mouse(int button, int state, int x, int y);
-	virtual void Keyboard(unsigned char key, int x, int y);	
-	virtual void Keyboard(int key, int x, int y);
 	virtual void Resize(int w, int h);
 };
 
 class DefaultScene : public Scene {
 public:
 	void Initialize();
-	void Update(Time time);
-	virtual void Keyboard(unsigned char key, int x, int y);
-	virtual void Keyboard(int key, int x, int y);
+	void Update(Time time, const InputState &input);
+	void Keyboard(const InputState &input);
 
 private:
 	Destroyer *destroyer;

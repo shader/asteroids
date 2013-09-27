@@ -21,8 +21,8 @@ void DefaultScene::Initialize() {
 	Scene::Initialize();
 }
 
-void DefaultScene::Update(Time time) {	
-	double t = time.Total().Seconds();
+void DefaultScene::Update(Time time, const InputState &input) {	
+	double t = time.Elapsed().Seconds();
 
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
@@ -37,38 +37,27 @@ void DefaultScene::Update(Time time) {
 		}
 	}
 
-	Scene::Update(time);
-}
-
-
-void DefaultScene::Keyboard(unsigned char key, int x, int y) {
-	switch(key) {
-	case ' ':
+	//handle keyboard input
+	if (input.keyboard[' '] || input.keyboard['z']) {
 		Bullet *bullet = new Bullet(this);
 		bullet->position = destroyer->position;
 		bullet->orientation = destroyer->orientation;
-		bullet->velocity = destroyer->velocity + destroyer->orientation*vec3(0,8,0);
+		bullet->velocity = destroyer->velocity + destroyer->orientation*vec3(0,16,0);
 		bullet->Initialize();
 		objects.push_back(bullet);
-		break;
 	}
-}
 
-void DefaultScene::Keyboard(int key, int x, int y) {
-	switch(key) {
-	case GLUT_KEY_LEFT:
-		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,0.1));
+	if (input.special_keys[GLUT_KEY_LEFT]) {
+		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,10 * t));
 		destroyer->orientation = normalize(destroyer->orientation);
-		break;
-	case GLUT_KEY_RIGHT:
-		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,-0.1));
-		destroyer->orientation = normalize(destroyer->orientation);
-		break;
-	case GLUT_KEY_UP:
-		destroyer->velocity += destroyer->orientation * vec3(0,0.2,0);
-		break;
-	case GLUT_KEY_DOWN:
-		destroyer->velocity -= destroyer->orientation * vec3(0,0.2,0);
-		break;
 	}
+	if (input.special_keys[GLUT_KEY_RIGHT]) {
+		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,-10 * t));
+		destroyer->orientation = normalize(destroyer->orientation);
+	}
+	if (input.special_keys[GLUT_KEY_UP] || input.keyboard['x']) {
+		destroyer->velocity = destroyer->velocity + destroyer->orientation * vec3(0,50 * t,0);
+	}
+
+	Scene::Update(time, input);
 }

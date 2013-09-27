@@ -19,7 +19,7 @@ void Scene::Initialize()
 	}
 }
 
-void Scene::Update(Time time)
+void Scene::Update(Time time, const InputState &input)
 {
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		(*o)->Update(time);
@@ -37,10 +37,6 @@ void Scene::Draw()
 
 	glutSwapBuffers();
 }
-
-void Scene::Mouse(int button, int state, int x, int y) {}
-void Scene::Keyboard(unsigned char key, int x, int y) {}
-void Scene::Keyboard(int key, int x, int y) {}
 
 //Reset viewport and projection matrix
 void Scene::Resize(int w, int h)

@@ -12,6 +12,7 @@ void Cleanup();
 Timer timer;
 bool quit;
 Scene* scene;
+InputState input;
 
 void Close() {
 	quit = true;
@@ -22,15 +23,33 @@ void Resize(int w, int h) {
 }
 
 void Mouse(int button, int state, int x, int y) {
-	scene->Mouse(button, state, x, y);
+	input.mouse.buttons[button] = (state == GLUT_DOWN);
+	input.mouse.x = x;
+	input.mouse.y = y;
 }
 
-void Keyboard(unsigned char key, int x, int y) {
-	scene->Keyboard(key, x, y);
+void KeyboardDown(unsigned char key, int x, int y) {
+	input.keyboard[key] = true;
+	input.mouse.x = x;
+	input.mouse.y = y;
 }
 
-void Keyboard(int key, int x, int y) {
-	scene->Keyboard(key, x, y);
+void KeyboardUp(unsigned char key, int x, int y) {
+	input.keyboard[key] = false;
+	input.mouse.x = x;
+	input.mouse.y = y;
+}
+
+void KeyboardSpecialDown(int key, int x, int y) {
+	input.special_keys[key] = true;
+	input.mouse.x = x;
+	input.mouse.y = y;
+}
+
+void KeyboardSpecialUp(int key, int x, int y) {
+	input.special_keys[key] = false;
+	input.mouse.x = x;
+	input.mouse.y = y;
 }
 
 void Draw() {
@@ -41,7 +60,7 @@ void Initialize() {
 	srand(time(0));
 	//Initialize GLUT
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);		
-	glutInitContextVersion (4, 1);
+	glutInitContextVersion (4, 0);
 	glutInitContextFlags (GLUT_CORE_PROFILE | GLUT_DEBUG);	
 	glutInitWindowSize(800,600);
 	glutCreateWindow( "Asteroids - Samuel Christie" ); 
@@ -67,8 +86,10 @@ int main( int argc, char *argv[] )
 	Initialize();
 	
 	glutMouseFunc(Mouse);
-	glutKeyboardFunc(Keyboard);
-	glutSpecialFunc(Keyboard);
+	glutKeyboardFunc(KeyboardDown);
+	glutKeyboardUpFunc(KeyboardUp);
+	glutSpecialFunc(KeyboardSpecialDown);
+	glutSpecialUpFunc(KeyboardSpecialUp);
 	glutReshapeFunc(Resize);
 	glutCloseFunc(Close);
 
@@ -76,7 +97,7 @@ int main( int argc, char *argv[] )
 	scene->Initialize();
 
 	while(!quit) {
-		scene->Update(timer.GetTime());
+		scene->Update(timer.GetTime(), input);
 		scene->Draw();
 		glutMainLoopEvent();
 	}

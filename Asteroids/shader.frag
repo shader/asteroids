@@ -1,4 +1,4 @@
-#version 410
+#version 400
 
 smooth in vec3 px_normal;
 smooth in vec4 half_vec;

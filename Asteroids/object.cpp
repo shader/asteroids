@@ -30,7 +30,6 @@ void Object::Draw(mat4 view, mat4 projection) {
 
 void Object::Update(Time time) {
 	double t = time.Elapsed().Seconds();
-	//velocity -= velocity * .2 * t; //'friction' decay
 	position += velocity * t;
 	orientation = orientation * quat(angular_vel * t);
 }

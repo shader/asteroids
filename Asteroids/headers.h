@@ -31,6 +31,7 @@
 //local
 #include "utils.h"
 #include "timer.h"
+#include "input.h"
 #include "shader.h"
 #include "scene.h"
 #include "model.h"
