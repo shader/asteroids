@@ -40,7 +40,7 @@ void Draw() {
 void Initialize() {
 	srand(time(0));
 	//Initialize GLUT
-	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );		
+	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);		
 	glutInitContextVersion (4, 1);
 	glutInitContextFlags (GLUT_CORE_PROFILE | GLUT_DEBUG);	
 	glutInitWindowSize(800,600);
@@ -52,8 +52,11 @@ void Initialize() {
 		cerr << "Error: " << glewGetErrorString(err) << endl;
 	}
 	
-	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable( GL_DEPTH_TEST );
+	glEnable(GL_BLEND);
+	glEnable(GL_POLYGON_SMOOTH);
+	glHint(GL_POLYGON_SMOOTH, GL_NICEST);
 
 	LoadMenu();
 }
