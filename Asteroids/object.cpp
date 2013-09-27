@@ -13,6 +13,7 @@ Object::~Object() {
 	for (auto m = models.begin(); m!=models.end(); m++) {
 		delete (*m);
 	}
+	destroyed(this);
 }
 
 void Object::Initialize() {}

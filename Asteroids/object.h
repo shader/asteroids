@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "ship.h"
 #include "rock.h"
+#include "event.h"
 #include "GL\freeglut.h"
 
 class Scene;
@@ -12,6 +13,7 @@ public:
 	quat orientation;
 	vector<Model*> models;
 	Scene *scene;
+	Event<Object*> destroyed;
 
 	Object(Scene *scene);
 	virtual ~Object();

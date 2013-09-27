@@ -4,12 +4,14 @@
 #include "input.h"
 
 class Scene {
+	function<void(Object*)> remover;
+
 public:
 	Scene();
 	virtual ~Scene();
 	
 	mat4 Projection, View, InvView;
-	vector<Object*> objects;
+	list<Object*> objects;
 
 	vec3 light_dir, light_color;
 
@@ -17,6 +19,9 @@ public:
 	virtual void Update(Time time, const InputState &input);
 	virtual void Draw();
 	virtual void Resize(int w, int h);
+
+	virtual void Add(Object *obj);
+	virtual void Remove(Object *obj);
 };
 
 class DefaultScene : public Scene {
@@ -28,4 +33,5 @@ public:
 private:
 	Destroyer *destroyer;
 	vector<Asteroid*> asteroids;
+	int bullet_count;
 };

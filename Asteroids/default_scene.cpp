@@ -5,10 +5,11 @@
 void DefaultScene::Initialize() {
 	light_dir = vec3(1);
 	light_color = vec3(1);
+	bullet_count = 0;
 
 	destroyer = new Destroyer(this);
 	destroyer->position = vec3(0,0,0);
-	objects.push_back(destroyer);
+	Add(destroyer);
 
 	auto asteroid = new Asteroid(this);
 	asteroid->size = vec3(2);
@@ -16,7 +17,7 @@ void DefaultScene::Initialize() {
 	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -4.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
 	asteroids.push_back(asteroid);
-	objects.push_back(asteroid);
+	Add(asteroid);
 
 	Scene::Initialize();
 }
@@ -38,13 +39,15 @@ void DefaultScene::Update(Time time, const InputState &input) {
 	}
 
 	//handle keyboard input
-	if (input.keyboard[' '] || input.keyboard['z']) {
+	if (bullet_count < 20 && (input.keyboard[' '] || input.keyboard['z'])) {
+ 		bullet_count++;
 		Bullet *bullet = new Bullet(this);
 		bullet->position = destroyer->position;
 		bullet->orientation = destroyer->orientation;
 		bullet->velocity = destroyer->velocity + destroyer->orientation*vec3(0,16,0);
 		bullet->Initialize();
-		objects.push_back(bullet);
+		bullet->destroyed += [&](Object* obj){ bullet_count--; };
+		Add(bullet);
 	}
 
 	if (input.special_keys[GLUT_KEY_LEFT]) {

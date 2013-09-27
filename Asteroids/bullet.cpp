@@ -1,10 +1,12 @@
 #include "object.h"
 #include "ship.h"
+#include "scene.h"
 
 Bullet::Bullet(Scene *scene) : Object(scene) {
 	model = new Ship();
 	model->size = vec3(0.25);
 	models.push_back(model);
+	age = 0;
 }
 
 void Bullet::Initialize() {
@@ -17,8 +19,8 @@ void Bullet::Initialize() {
 void Bullet::Update(Time time) {
 	age += time.ElapsedSeconds;
 	if (age > 10) {
-		//die
+		delete this;
+	} else {	
+		Object::Update(time);
 	}
-	
-	Object::Update(time);
 }
