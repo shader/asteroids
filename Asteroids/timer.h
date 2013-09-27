@@ -22,11 +22,15 @@ public:
 class Time {
 public:
 	LARGE_INTEGER start, prev, now, frequency;
+	double ElapsedSeconds, TotalSeconds;
+
 	Time(LARGE_INTEGER start, LARGE_INTEGER prev, LARGE_INTEGER now, LARGE_INTEGER frequency) {
 		this->start = start;
 		this->prev = prev;
 		this->now = now;
 		this->frequency = frequency;
+		this->ElapsedSeconds = this->Elapsed().Seconds();
+		this->TotalSeconds = this->Total().Seconds();
 	}
 
 	TimeSpan Elapsed() {
