@@ -25,7 +25,7 @@ Vertex::Vertex(vec3 position, GLuint index) {
 
 vector<Vertex*> Vertex::neighbors() {
 	vector<Vertex*> n;
-	for (set<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
+	for (auto e = edges.begin(); e!=edges.end(); e++) {
 		n.push_back((*e)->head);
 	}
 	return n;
@@ -49,7 +49,7 @@ Vertex *perturb(Vertex *vertex, float max_radius) {
 
 vec3 Vertex::normal() const {
 	vec3 normal(0);
-	for (set<Edge*>::iterator e = edges.begin(); e!=edges.end(); e++) {
+	for (auto e = edges.begin(); e!=edges.end(); e++) {
 		normal += (*e)->left->normal();
 	}
 	return normal / (float)edges.size();

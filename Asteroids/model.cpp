@@ -50,7 +50,7 @@ void Model::Bind(Shader* shader, GLenum mode) {
 
 	vertices = new vec3[mesh->vertices->size()];
 	normals = new vec3[mesh->vertices->size()];
-	for (set<Vertex*>::iterator i=mesh->vertices->begin(); i!=mesh->vertices->end(); i++) {
+	for (auto i=mesh->vertices->begin(); i!=mesh->vertices->end(); i++) {
 		vertices[(*i)->index] = ((*i)->position);
 		normals[(*i)->index] = (*i)->normal();
 	}

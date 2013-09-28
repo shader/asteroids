@@ -36,7 +36,7 @@ Mesh::~Mesh() {
 Vertex* Mesh::AddVertex(vec3 position) {
 	GLuint i = vertices->size();
 	Vertex* vert = new Vertex(position, i);
-	pair<set<Vertex*>::iterator, bool> ret = vertices->insert(vert);
+	auto ret = vertices->insert(vert);
 	if (!ret.second) delete vert; //delete duplicate vertex
 	return *(ret.first); //pointer to vertex, or equivalent vertex if it already exists
 }

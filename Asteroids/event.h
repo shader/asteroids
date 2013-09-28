@@ -12,8 +12,8 @@ public:
 	};
 
 	void operator()(Args args) {
-        for(auto& handler : handlers) {
-			handler(args);
+        for(auto handler = begin(handlers); handler != end(handlers); handler++) {
+			(*handler)(args);
 		}
 	};
 };
