@@ -16,6 +16,8 @@ public:
 	Vertex(vec3 position);
 	Vertex(vec3 position, GLuint index);
 	vec3 position;
+	vec2 texture_coord;
+	float temperature;
 	GLuint index;
 	set<class Edge*> edges;
 

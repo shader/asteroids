@@ -37,6 +37,6 @@
 #include "model.h"
 #include "menu.h"
 #include "geometry.h"
-#include "icosahedron.h"
+#include "primitives.h"
 #include "rock.h"
 #include "ship.h"
