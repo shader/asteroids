@@ -68,9 +68,6 @@ void Initialize() {
 	
 	glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable( GL_DEPTH_TEST );
-	glEnable(GL_BLEND);
-	glEnable(GL_POLYGON_SMOOTH);
-	glHint(GL_POLYGON_SMOOTH, GL_NICEST);
 
 	LoadMenu();
 }

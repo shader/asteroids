@@ -52,7 +52,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>C:\Users\samue_000\Documents\Visual Studio 2010\Projects\Asteroids\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FreeImage.lib;freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -61,6 +61,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Users\samue_000\Documents\Visual Studio 2010\Projects\Asteroids\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -68,6 +69,8 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\samue_000\Documents\Visual Studio 2010\Projects\Asteroids\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -88,6 +91,7 @@
     <ClCompile Include="Asteroids\scene.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
     <ClCompile Include="Asteroids\ship.cpp" />
+    <ClCompile Include="Asteroids\texture.cpp" />
     <ClCompile Include="Asteroids\utils.cpp" />
     <ClCompile Include="Asteroids\Vertex.cpp" />
   </ItemGroup>
@@ -104,8 +108,13 @@
     <ClInclude Include="Asteroids\scene.h" />
     <ClInclude Include="Asteroids\shader.h" />
     <ClInclude Include="Asteroids\ship.h" />
+    <ClInclude Include="Asteroids\texture.h" />
     <ClInclude Include="Asteroids\timer.h" />
     <ClInclude Include="Asteroids\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\shader.frag" />
+    <None Include="resources\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

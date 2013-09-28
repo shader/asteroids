@@ -39,7 +39,7 @@ void Shader::LoadString(GLenum type, const string source) {
 }
 
 void Shader::Load(GLenum shader, const string filename){
-	ifstream infile(filename);
+	ifstream infile("resources/"+filename);
 	if(infile) {
 		string data((istreambuf_iterator<char>(infile)), istreambuf_iterator<char>());
 		infile.close();
