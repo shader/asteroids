@@ -5,7 +5,6 @@ using namespace std;
 using namespace glm;
 
 void LoadShaders();
-void Resize(int w, int h);
 void Initialize();
 void Cleanup();
 
@@ -16,10 +15,6 @@ InputState input;
 
 void Close() {
 	quit = true;
-}
-
-void Resize(int w, int h) {
-	scene->Resize(w, h);
 }
 
 void Mouse(int button, int state, int x, int y) {
@@ -90,7 +85,6 @@ int main( int argc, char *argv[] )
 	glutKeyboardUpFunc(KeyboardUp);
 	glutSpecialFunc(KeyboardSpecialDown);
 	glutSpecialUpFunc(KeyboardSpecialUp);
-	glutReshapeFunc(Resize);
 	glutCloseFunc(Close);
 
 	scene = new DefaultScene();

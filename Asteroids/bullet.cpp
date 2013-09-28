@@ -18,7 +18,7 @@ void Bullet::Initialize() {
 
 void Bullet::Update(Time time) {
 	age += time.ElapsedSeconds;
-	if (age > 10) {
+	if (age > 2) {
 		delete this;
 	} else {	
 		Object::Update(time);

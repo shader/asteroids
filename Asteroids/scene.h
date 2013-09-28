@@ -12,6 +12,7 @@ public:
 	
 	mat4 Projection, View, InvView;
 	list<Object*> objects;
+	int width, height;
 
 	vec3 light_dir, light_color;
 
