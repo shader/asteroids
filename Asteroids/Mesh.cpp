@@ -145,7 +145,7 @@ Mesh* split(Mesh *mesh) {
 Mesh* average(Mesh *mesh) {
 	Mesh* new_mesh = new Mesh();
 	for (auto f = mesh->faces->begin(); f!=mesh->faces->end(); f++) {
-		Face* new_face = average(*f);
+		Face* new_face = new Face(average(**f));
 		new_mesh->add(new_face);
 	}
 	return new_mesh;

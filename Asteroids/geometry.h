@@ -49,8 +49,8 @@ public:
 	friend pair<Edge*, Edge*> split(Edge *edge);
 	friend void tie(Edge* edge, Edge* twin);
 	friend Edge* twin(Edge *edge);
-	friend Edge* average(Edge *edge);
-	friend Edge* perturb(Edge *edge, float max_radius);
+	friend Edge average(const Edge &edge);
+	friend Edge perturb(const Edge &edge, float max_radius);
 
 	vec3 midpoint() const;
 private:
@@ -76,14 +76,18 @@ public:
 	vec3 normal() const;
 	friend vector<Edge*> split_edges(Face *face);
 	friend vector<Face*> split(Face *face);
-	friend Face* average(Face *face);
-	friend Face* perturb(Face *face, float max_radius);
+	friend Face average(const Face &face);
+	friend Face perturb(const Face &face, float max_radius);
 };
 
 class Mesh {
 public:
 	Mesh();
 	~Mesh();
+
+	Vertex *first_vertex, *last_vertex;
+	Face *first_face, *last_face;
+	int vertex_count, face_count;
 	
 	set<Vertex*,bool(*)(Vertex*,Vertex*)> *vertices;
 	set<Edge*,bool(*)(Edge*,Edge*)> *edges;

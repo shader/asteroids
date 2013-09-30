@@ -72,14 +72,14 @@ pair<Edge*, Edge*> split(Edge *edge) {
 	return pair<Edge*,Edge*>(a, b);
 }
 
-Edge* average(Edge *edge) {
-	Vertex* a = new Vertex(average(*edge->tail));
-	Vertex* b = new Vertex(average(*edge->head));
-	return new Edge(a, b);
+Edge average(const Edge &edge) {
+	Vertex* a = new Vertex(average(*edge.tail));
+	Vertex* b = new Vertex(average(*edge.head));
+	return Edge(a, b);
 }
 
-Edge* perturb(Edge *edge, float max_radius) {
-	Vertex* a = new Vertex(perturb(*edge->tail, max_radius));
-	Vertex* b = new Vertex(perturb(*edge->head, max_radius));
-	return new Edge(a, b);
+Edge perturb(const Edge &edge, float max_radius) {
+	Vertex* a = new Vertex(perturb(*edge.tail, max_radius));
+	Vertex* b = new Vertex(perturb(*edge.head, max_radius));
+	return Edge(a, b);
 }
