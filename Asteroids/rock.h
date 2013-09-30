@@ -1,6 +1,6 @@
 #pragma once
 #include "geometry.h"
-#include "icosahedron.h"
+#include "primitives.h"
 
 class Rock : public Model {
 public:

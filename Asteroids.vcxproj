@@ -87,6 +87,7 @@
     <ClCompile Include="Asteroids\Mesh.cpp" />
     <ClCompile Include="Asteroids\model.cpp" />
     <ClCompile Include="Asteroids\object.cpp" />
+    <ClCompile Include="Asteroids\quad.cpp" />
     <ClCompile Include="Asteroids\rock.cpp" />
     <ClCompile Include="Asteroids\scene.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
@@ -99,7 +100,7 @@
     <ClInclude Include="Asteroids\event.h" />
     <ClInclude Include="Asteroids\geometry.h" />
     <ClInclude Include="Asteroids\headers.h" />
-    <ClInclude Include="Asteroids\icosahedron.h" />
+    <ClInclude Include="Asteroids\primitives.h" />
     <ClInclude Include="Asteroids\input.h" />
     <ClInclude Include="Asteroids\menu.h" />
     <ClInclude Include="Asteroids\model.h" />

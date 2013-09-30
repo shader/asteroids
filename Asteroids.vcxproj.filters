@@ -22,7 +22,7 @@
     <Filter Include="Source Files\models">
       <UniqueIdentifier>{8f217d60-9a12-4f0a-a03f-e049df3c8d68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\primitive">
+    <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{1a469e79-fe7e-4cdb-83f1-83701719a252}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -55,16 +55,16 @@
       <Filter>Source Files\objects</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\Edge.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\Face.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\loop.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\Mesh.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files\geometry</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\model.cpp">
       <Filter>Source Files\models</Filter>
@@ -82,10 +82,13 @@
       <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\Vertex.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\quad.cpp">
+      <Filter>Source Files\models</Filter>
     </ClCompile>
     <ClCompile Include="Asteroids\texture.cpp">
-      <Filter>Source Files\primitive</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,9 +99,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\headers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroids\icosahedron.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\input.h">
@@ -132,6 +132,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroids\primitives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
