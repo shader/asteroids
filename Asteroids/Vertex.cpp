@@ -23,7 +23,7 @@ Vertex::Vertex(vec3 position, GLuint index) {
 	this->index = index;
 }
 
-vector<Vertex*> Vertex::neighbors() {
+vector<Vertex*> Vertex::neighbors() const {
 	vector<Vertex*> n;
 	for (auto e = edges.begin(); e!=edges.end(); e++) {
 		n.push_back((*e)->head);
@@ -31,20 +31,20 @@ vector<Vertex*> Vertex::neighbors() {
 	return n;
 }
 
-Vertex* average(Vertex* vertex) {
-	vector<Vertex*> neighbors = vertex->neighbors();
+Vertex average(const Vertex &vertex) {
+	vector<Vertex*> neighbors = vertex.neighbors();
 	int n = neighbors.size();
-	Vertex* new_vertex = new Vertex(vertex->position * alpha(n));
+	Vertex new_vertex = Vertex(vertex.position * alpha(n));
 	for (int i = 0; i < n; i++) {
-		new_vertex->position += neighbors[i]->position;
+		new_vertex.position += neighbors[i]->position;
 	}
-	new_vertex->position /= (alpha(n) + n);
+	new_vertex.position /= (alpha(n) + n);
 	return new_vertex;
 }
 
-Vertex *perturb(Vertex *vertex, float max_radius) {
-	vec3 pos = perturb(vertex->position, max_radius);
-	return new Vertex(pos);
+Vertex perturb(Vertex vertex, float max_radius) {
+	vec3 pos = perturb(vertex.position, max_radius);
+	return Vertex(pos);
 }
 
 vec3 Vertex::normal() const {

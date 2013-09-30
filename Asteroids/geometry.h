@@ -15,17 +15,17 @@ class Vertex {
 public:
 	Vertex(vec3 position);
 	Vertex(vec3 position, GLuint index);
-	vec3 position;
+	vec3 position, new_position;
 	vec2 texture_coord;
 	float temperature;
 	GLuint index;
-	Vertex *prev, *next; //linked list of vertices
+	class Vertex *prev, *next; //linked list of vertices
 	set<class Edge*> edges;
 
-	vector<Vertex*> neighbors();
+	vector<Vertex*> neighbors() const;
 	vec3 normal() const;
-	friend Vertex* average(Vertex *vertex);
-	friend Vertex *perturb(Vertex *vertex, float max_radius);
+	friend Vertex average(const Vertex &vertex);
+	friend Vertex perturb(Vertex vertex, float max_radius);
 
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
@@ -64,7 +64,7 @@ public:
 	Face(vec3 a, vec3 b, vec3 c);
 
 	class Edge *first;
-	class Face *prev, *next;
+	class Face *prev, *next; //just to have a list of all faces in a mesh
 
 	vector<Face*> neighbors();
 
@@ -110,5 +110,5 @@ public:
 };
 
 //loop averaging functions
-GLfloat alpha(GLuint n);
-GLfloat beta(GLuint n);
+double alpha(GLuint n);
+double beta(GLuint n);

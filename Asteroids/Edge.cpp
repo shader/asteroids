@@ -73,13 +73,13 @@ pair<Edge*, Edge*> split(Edge *edge) {
 }
 
 Edge* average(Edge *edge) {
-	Vertex* a = average(edge->tail);
-	Vertex* b = average(edge->head);
+	Vertex* a = new Vertex(average(*edge->tail));
+	Vertex* b = new Vertex(average(*edge->head));
 	return new Edge(a, b);
 }
 
 Edge* perturb(Edge *edge, float max_radius) {
-	Vertex* a = perturb(edge->tail, max_radius);
-	Vertex* b = perturb(edge->head, max_radius);
+	Vertex* a = new Vertex(perturb(*edge->tail, max_radius));
+	Vertex* b = new Vertex(perturb(*edge->head, max_radius));
 	return new Edge(a, b);
 }
