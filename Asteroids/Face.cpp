@@ -16,12 +16,15 @@ bool operator!=(const Face &lhs, const Face &rhs) {
 	return !(lhs == rhs);
 }
 
+Face::Face() {}
+
 Face::Face(Edge* first) {
 	this->first = first;
 	Edge* e = first;
 	do {
 		e->left = this;
 		if (e->twin != NULL) e->twin->right = this;
+		else e->twin = twin(e);
 		e=e->next;
 	} while (e != first);
 }
@@ -44,6 +47,58 @@ Face::Face(vec3 a, vec3 b, vec3 c) {
 
 vec3 Face::midpoint() const {
 	return (1.0/3) * (first->head->position + first->next->head->position + first->next->next->head->position);
+}
+
+vec3 Face::normal() const {
+	vec3 a = first->head->position - first->tail->position;
+	vec3 b = first->next->head->position - first->next->tail->position;
+	vec3 normal = cross(a, b);
+	return normalize(normal);
+}
+
+void Face::insert_after(Face *prev) {
+	//insert this face in the linked list of faces after prev
+	this->prev = prev;
+	next = prev->next;
+	prev->next = this;
+	next->prev = this;
+}
+
+Face* new_face(Edge *e, Face* prev) {
+	Face *new_face;
+	e->left = new_face = new Face();
+	new_face->first = e;
+	new_face->insert_after(prev);
+	return new_face;
+}
+
+void Face::split() {
+	Edge *e = first;
+	//split edges
+	do {
+		Edge *next = e->next;
+		e->split();
+		e = next;
+	} while (e != first);
+
+	//add new edges and faces
+	e = first;
+	Face *f = this;
+	do {
+		Edge *next = e->next->next;
+		Edge* new_edge = new Edge(e->head, e->prev->tail);
+		if (e != first) { //new face
+			f = new_face(e, f);
+		}
+		e->attach(new_edge);
+		new_edge->attach(e->prev);
+		twin(new_edge);
+		e = next;
+	} while (e != first);
+
+	//add new face in center
+	e = first->next->twin;
+	new_face(e, f);
 }
 
 vector<Edge*> split_edges(Face *face) {
@@ -89,11 +144,4 @@ Face perturb(const Face &face, float max_radius) {
 	Edge *b = new Edge(perturb(*face.first->next, max_radius));
 	Edge *c = new Edge(perturb(*face.first->next->next, max_radius));
 	return Face(a, b, c);
-}
-
-vec3 Face::normal() const {
-	vec3 a = first->head->position - first->tail->position;
-	vec3 b = first->next->head->position - first->next->tail->position;
-	vec3 normal = cross(a, b);
-	return normalize(normal);
 }

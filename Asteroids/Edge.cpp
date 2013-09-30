@@ -46,6 +46,25 @@ vec3 Edge::midpoint() const {
 	return (this->head->position + this->tail->position) * 0.5;
 }
 
+void split_edge(Edge* edge, Vertex* mid) {	
+	Edge* new_edge = new Edge(mid, edge->head);
+	new_edge->next = edge->next;
+	edge->next->prev = new_edge;
+	edge->head = mid;
+	edge->attach(new_edge);
+}
+
+void Edge::split() {
+	if (next->twin->next->twin == this) return;
+	Vertex* mid = new Vertex(midpoint()); //add the midpoint
+	mid->insert_after(tail);
+	
+	split_edge(this, mid);
+	split_edge(twin, mid);
+
+	tie(this->next, twin->next);
+}
+
 void tie(Edge* edge, Edge* twin) {
 	edge->twin = twin;
 	twin->twin = edge;
