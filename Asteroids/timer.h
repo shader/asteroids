@@ -11,7 +11,7 @@ public:
 		this->frequency = frequency;
 	}
 	
-	long Ticks() {
+	LONGLONG Ticks() {
 		return stop.QuadPart - start.QuadPart;
 	}
 	double Seconds() {
