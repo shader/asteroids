@@ -56,28 +56,19 @@ vec3 Face::normal() const {
 	return normalize(normal);
 }
 
-void Face::insert_after(Face *prev) {
-	//insert this face in the linked list of faces after prev
-	this->prev = prev;
-	next = prev->next;
-	prev->next = this;
-	next->prev = this;
-}
-
-Face* new_face(Edge *e, Face* prev) {
-	Face *new_face;
-	e->left = new_face = new Face();
+Face* new_face(Edge *e, Face* prev, vector<Face> faces) {
+	faces.emplace_back(Face());
+	Face *new_face = &faces.back();
 	new_face->first = e;
-	new_face->insert_after(prev);
 	return new_face;
 }
 
-void Face::split() {
+void Face::split(vector<Face> &faces, vector<Edge> &edges, vector<Vertex> &vertices) {
 	Edge *e = first;
 	//split edges
 	do {
 		Edge *next = e->next;
-		e->split();
+		e->split(edges, vertices);
 		e = next;
 	} while (e != first);
 
@@ -86,9 +77,10 @@ void Face::split() {
 	Face *f = this;
 	do {
 		Edge *next = e->next->next;
-		Edge* new_edge = new Edge(e->head, e->prev->tail);
+		edges.emplace_back(Edge(e->head, e->prev->tail));
+		Edge* new_edge = &edges.back();
 		if (e != first) { //new face
-			f = new_face(e, f);
+			f = new_face(e, f, faces);
 		}
 		e->attach(new_edge);
 		new_edge->attach(e->prev);
@@ -98,7 +90,7 @@ void Face::split() {
 
 	//add new face in center
 	e = first->next->twin;
-	new_face(e, f);
+	new_face(e, f, faces);
 }
 
 vector<Edge*> split_edges(Face *face) {

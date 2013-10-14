@@ -14,6 +14,12 @@ bool operator!=(const Vertex &lhs, const Vertex &rhs) {
 	return !(lhs == rhs);
 }
 
+Vertex::Vertex() {
+	position = vec3(0);
+	temperature = 0;
+	index = 0;
+}
+
 Vertex::Vertex(float x, float y, float z) {
 	this->position.x = x;
 	this->position.y = y;
@@ -27,14 +33,6 @@ Vertex::Vertex(vec3 position) {
 Vertex::Vertex(vec3 position, GLuint index) {
 	this->position = position;
 	this->index = index;
-}
-
-void Vertex::insert_after(Vertex* prev) {
-	//insert this vertex in the linked list of vertices after prev
-	this->prev = prev;
-	next = prev->next;
-	prev->next = this;
-	next->prev = this;
 }
 
 vector<Vertex*> Vertex::neighbors() const {

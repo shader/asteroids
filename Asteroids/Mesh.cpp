@@ -5,49 +5,26 @@ using namespace glm;
 bool edgecmp(Edge* lhs, Edge* rhs) { return *lhs < *rhs; }
 
 Mesh::~Mesh() {
-	Edge* first = first_face->first;
-	Edge *e, *next_edge;
-
-	//linearize all edges and delete faces
-	Face *f, *next_face;
-	e = first->prev;
-	for (f = first_face->next; f!=nullptr; f=next_face) {
-		next_face = f->next;
-		e->next = f->first;
-		e = f->first->prev;
-		delete f;
-	}
-
-	//delete edges
-	for (e = first; e!=nullptr; e=next_edge) {
-		next_edge = e->next;
-		delete e;
-	}
-
-	//delete vertices
-	Vertex *v, *next_vertex;
-	for (v = first_vertex; v!=nullptr; v=next_vertex) {
-		next_vertex = v->next;
-		delete v;
-	}
 }
 
 Mesh* split(Mesh *mesh) {
-	for (auto f = mesh->first_face; f!=nullptr; f=f->next) {
-		split(f);
-	}	
-	mesh->vertex_count *= 2;
-	mesh->face_count *= 4;
+	mesh->vertices.reserve(mesh->vertices.size() * 2);
+	mesh->edges.reserve(mesh->edges.size() * 2);
+	mesh->faces.reserve(mesh->faces.size() * 2);
+	for (auto f = mesh->faces.begin(); f!=mesh->faces.end(); f++) {
+		f->split(mesh->faces, mesh->edges, mesh->vertices);
+	}
 	return mesh;
 }
 
 Mesh* average(Mesh *mesh) {
-	for (auto v = mesh->first_vertex; v!=nullptr; v=v->next) {
+	for (auto v = mesh->vertices.begin(); v!=mesh->vertices.end(); v++) {
 		v->new_position = average(*v).position;
 	}
-	for (auto v = mesh->first_vertex; v!=nullptr; v=v->next) {
+	for (auto v = mesh->vertices.begin(); v!=mesh->vertices.end(); v++) {
 		v->position = v->new_position;
 	}
+	return mesh;
 }
 
 Mesh* subdivide(Mesh *mesh) {
@@ -55,7 +32,7 @@ Mesh* subdivide(Mesh *mesh) {
 }
 
 void Mesh::Perturb(float max_radius) {	
-	for (auto v = first_vertex; v!=nullptr; v=v->next) {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = perturb(v->position, max_radius);
 	}
 }
@@ -64,19 +41,19 @@ void Mesh::Normalize() {
 	vec3 min_corner, max_corner, center, max_deviation;
 	min_corner = max_corner = vec3(0,0,0);
 
-	for (auto v = first_vertex; v!=nullptr; v=v->next) {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		min_corner = min(min_corner, v->position);
 		max_corner = max(max_corner, v->position);
 	}
 	center = (min_corner + max_corner) / 2.0f;
 	max_deviation = max(abs(min_corner - center), abs(max_corner - center));
 	float scale = glm::max(max_deviation.x, glm::max(max_deviation.y, max_deviation.z));
-	for (auto v = first_vertex; v!=nullptr; v=v->next) {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = (v->position - center) / scale;
 	}
 }
 
-Edge* add(Edge* edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
+Edge* add(Edge *edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
 	auto ret = edges.insert(edge);
 	if (!ret.second) {
 		//duplicate or twin edge
@@ -104,22 +81,17 @@ Edge* add(Edge* edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
 	return *(ret.first); //pointer to edge, or equivalent edge if it already exists
 }
 
-void Mesh::LoadTriangles(vector<Vertex*> &vertices, vector<int> &triangles) {
+void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
     bool(*edge_pt)(Edge*,Edge*) = edgecmp;
-    auto edges = new set<Edge*,bool(*)(Edge*,Edge*)>(edge_pt);
+    auto edges = set<Edge*,bool(*)(Edge*,Edge*)>(edge_pt);
+	faces.reserve(faces.size() + triangle_count);
 	
-	Vertex* a,b,c;
+	Vertex *a, *b, *c;
 	Edge *e1, *e2, *e3;
 	
-	//link vertices
-	first_vertex = vertices[0];
-	vertex_count = 1;
-	for (auto v = vertices.begin()++; v!=vertices.end(); v++) {
-		(*v)->insert_after(*(v-1));
-		vertex_count++;
-	}
-
-	for (auto t = triangles.begin(); t!=triangles.end(); t++) {
-		Face* f = new Face();
+	for (auto t = triangles; t< triangles + triangle_count*3; t++) {
+		a = &vertices[t[0]]; b = &vertices[t[1]]; c = &vertices[t[2]];
+		e1 = add(new Edge(a, b), edges); e2 = add(new Edge(b, c), edges); e3 = add(new Edge(c, a), edges);
+		faces.emplace_back(Face(e1, e2, e3));
 	}
 }

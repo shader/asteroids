@@ -13,7 +13,7 @@ typedef vec3 Color;
 
 class Vertex {
 public:	
-	Vertex() {}
+	Vertex();
 	Vertex(float x, float y, float z);
 	Vertex(vec3 position);
 	Vertex(vec3 position, GLuint index);
@@ -21,10 +21,8 @@ public:
 	vec2 texture_coord;
 	float temperature;
 	GLuint index;
-	class Vertex *prev, *next; //linked list of vertices
 	set<class Edge*> edges;
 
-	void insert_after(Vertex*);
 	vector<Vertex*> neighbors() const;
 	vec3 normal() const;
 	friend Vertex average(const Vertex &vertex);
@@ -49,7 +47,7 @@ public:
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
 
 	void attach(Edge* edge);
-	void split();
+	void split(vector<Edge> &edges, vector<Vertex> &vertices);
 	friend pair<Edge*, Edge*> split(Edge *edge);
 	friend void tie(Edge* edge, Edge* twin);
 	friend Edge* twin(Edge *edge);
@@ -69,10 +67,8 @@ public:
 	Face(vec3 a, vec3 b, vec3 c);
 
 	class Edge *first;
-	class Face *prev, *next; //just to have a list of all faces in a mesh
 
 	vector<Face*> neighbors();
-	void insert_after(Face *prev);
 
 	friend bool operator<(const Face &lhs, const Face &rhs);
 	friend bool operator==(const Face &lhs, const Face &rhs);
@@ -80,7 +76,7 @@ public:
 
 	vec3 midpoint() const;
 	vec3 normal() const;
-	void split();
+	void split(vector<Face> &faces, vector<Edge> &edges, vector<Vertex> &vertices);
 	friend vector<Edge*> split_edges(Face *face);
 	friend vector<Face*> split(Face *face);
 	friend Face average(const Face &face);
@@ -89,16 +85,15 @@ public:
 
 class Mesh {
 public:
-	Mesh();
 	~Mesh();
-
-	Vertex *first_vertex;
-	Face *first_face;
-	int vertex_count, face_count;
+	
+	vector<Vertex> vertices;
+	vector<Edge> edges;
+	vector<Face> faces;
 	
 	void Perturb(float max_radius);
 	void Normalize();
-	void LoadTriangles(vector<Vertex*> &points, vector<int> &triangles);
+	void LoadTriangles(uint* triangles, int triangle_count);
 
 	friend Mesh* split(Mesh* mesh);
 	friend Mesh* average(Mesh* mesh);

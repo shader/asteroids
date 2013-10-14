@@ -48,22 +48,21 @@ void Model::Bind(Shader* shader, GLenum mode) {
 	vec3 *vertices, *normals;
 	indices.empty();
 
-	vertices = new vec3[mesh->vertex_count];
-	normals = new vec3[mesh->vertex_count];
-	for (auto v = mesh->first_vertex, int i=0; v!=nullptr; v=v->next, i++) {
-		v->index = i;
-		vertices[i] = v->position;
-		normals[i] = i->normal();
+	vertices = new vec3[mesh->vertices.size()];
+	normals = new vec3[mesh->vertices.size()];
+	for (auto i = 0; i<mesh->vertices.size(); i++) {
+		vertices[i] = mesh->vertices[i].position;
+		normals[i] = mesh->vertices[i].normal();
 	}
 
 	draw_mode = mode;
 	switch (mode) {
 	case(GL_POINTS):
-		for (GLuint i=0; i<mesh->vertex_count; i++)
+		for (GLuint i=0; i < mesh->vertices.size(); i++)
 			indices.push_back(i);
 		break;
 	case(GL_LINES):
-		for (auto f = mesh->first_face; f != nullptr; f=f->next) {
+		for (auto f = mesh->faces.begin(); f != mesh->faces.end(); f++) {
 			Edge *e = f->first;
 			do {
 				indices.push_back(e->tail->index);
@@ -73,7 +72,7 @@ void Model::Bind(Shader* shader, GLenum mode) {
 		}
 		break;
 	case(GL_TRIANGLES):
-		for (auto f = mesh->first_face; f != nullptr; f=f->next) {
+		for (auto f = mesh->faces.begin(); f != mesh->faces.end(); f++) {
 			Edge* e = f->first; //get first edge in face
 			indices.push_back(e->tail->index);
 			indices.push_back(e->head->index);
@@ -86,13 +85,13 @@ void Model::Bind(Shader* shader, GLenum mode) {
 	shader->Begin();
 		//position
 		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertex_count, vertices, GL_STATIC_DRAW);		
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), vertices, GL_STATIC_DRAW);		
 		glEnableVertexAttribArray((*shader)["vertex"]);
 		glVertexAttribPointer ((*shader)["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
 		//normal
 		glBindBuffer (GL_ARRAY_BUFFER, normalsID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertex_count, normals, GL_STATIC_DRAW);		
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), normals, GL_STATIC_DRAW);		
 		glEnableVertexAttribArray((*shader)["normal"]);
 		glVertexAttribPointer ((*shader)["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
