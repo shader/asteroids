@@ -53,7 +53,7 @@ void Mesh::Normalize() {
 	}
 }
 
-Edge* add(Edge *edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
+Edge* get_match(Edge *edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
 	auto ret = edges.insert(edge);
 	if (!ret.second) {
 		//duplicate or twin edge
@@ -81,17 +81,42 @@ Edge* add(Edge *edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
 	return *(ret.first); //pointer to edge, or equivalent edge if it already exists
 }
 
+Edge* add(Vertex *a, Vertex *b, Mesh* mesh) {
+	int edge, twin;
+	for (auto e=mesh->edges.begin(); e!=mesh->edges.end(); e++) {
+		if (e->tail == a && e->head == b) {
+			edge = e-edges.begin();
+		}
+		else if (e->head == a && e->tail == b) {
+			twin = e-edges.begin();
+		}
+	}
+
+	if (!edge) {
+		mesh->edges.push_back(Edge(a,b));
+		edge = edges.back()-edges.begin();
+		edge->init();
+	}
+	if (twin) {
+		tie(edge, twin);
+	}
+	return edge;
+}
+
 void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
     bool(*edge_pt)(Edge*,Edge*) = edgecmp;
     auto edges = set<Edge*,bool(*)(Edge*,Edge*)>(edge_pt);
 	faces.reserve(faces.size() + triangle_count);
+	edges.reserve(edges.size() + triangle_count * 3);
 	
 	Vertex *a, *b, *c;
 	Edge *e1, *e2, *e3;
 	
 	for (auto t = triangles; t< triangles + triangle_count*3; t++) {
 		a = &vertices[t[0]]; b = &vertices[t[1]]; c = &vertices[t[2]];
-		e1 = add(new Edge(a, b), edges); e2 = add(new Edge(b, c), edges); e3 = add(new Edge(c, a), edges);
+		e1 = add(a, b, this);
+		e2 = add(b, c, this);
+		e3 = add(c, a, this);
 		faces.emplace_back(Face(e1, e2, e3));
 	}
 }

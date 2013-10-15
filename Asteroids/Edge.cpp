@@ -15,20 +15,20 @@ bool operator!=(const Edge &lhs, const Edge &rhs) {
 	return !(lhs == rhs);
 }
 
-void Edge::init(Vertex *tail, Vertex *head) {
-	this->tail = tail;
-	this->head = head;
+void Edge::init() {	
 	tail->edges.insert(this);
 	twin = next = prev = NULL;
 	left = right = NULL;
 }
 
 Edge::Edge(Vertex* tail, Vertex* head) {
-	init(tail, head);
+	this->tail = tail;
+	this->head = head;
 }
 
 Edge::Edge(vec3 tail, vec3 head) {
-	init(new Vertex(tail), new Vertex(head));
+	this->tail = new Vertex(tail);
+	this->head = new Vertex(head);
 }
 
 Edge::~Edge() {

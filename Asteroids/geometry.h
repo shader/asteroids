@@ -55,8 +55,7 @@ public:
 	friend Edge perturb(const Edge &edge, float max_radius);
 
 	vec3 midpoint() const;
-private:
-	void init(Vertex *tail, Vertex *head);
+	void init();
 };
 
 class Face {
