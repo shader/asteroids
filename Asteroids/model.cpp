@@ -50,7 +50,7 @@ void Model::Bind(Shader* shader, GLenum mode) {
 
 	vertices = new vec3[mesh->vertices.size()];
 	normals = new vec3[mesh->vertices.size()];
-	for (auto i = 0; i<mesh->vertices.size(); i++) {
+	for (uint i = 0; i<mesh->vertices.size(); i++) {
 		vertices[i] = mesh->vertices[i].position;
 		normals[i] = mesh->vertices[i].normal();
 	}
@@ -63,20 +63,20 @@ void Model::Bind(Shader* shader, GLenum mode) {
 		break;
 	case(GL_LINES):
 		for (auto f = mesh->faces.begin(); f != mesh->faces.end(); f++) {
-			Edge *e = f->first;
+			Edge *e = &f->first();
 			do {
-				indices.push_back(e->tail->index);
-				indices.push_back(e->head->index);
-				e = e->next;
-			} while (e != f->first);
+				indices.push_back(e->tail_vertex);
+				indices.push_back(e->head_vertex);
+				e = &e->next();
+			} while (e != &f->first());
 		}
 		break;
 	case(GL_TRIANGLES):
 		for (auto f = mesh->faces.begin(); f != mesh->faces.end(); f++) {
-			Edge* e = f->first; //get first edge in face
-			indices.push_back(e->tail->index);
-			indices.push_back(e->head->index);
-			indices.push_back(e->next->head->index);
+			Edge* e = &f->first(); //get first edge in face
+			indices.push_back(e->tail_vertex);
+			indices.push_back(e->head_vertex);
+			indices.push_back(e->next().head_vertex);
 		}
 		break;
 	};
@@ -139,12 +139,7 @@ void Model::Draw(mat4 view, mat4 projection) {
 }
 
 void Model::Subdivide(int times) {
-	Mesh* new_mesh;
-	for (int i=0; i<times; i++) {
-		new_mesh = subdivide(mesh);
-		delete mesh;
-		mesh = new_mesh;
-	}
+	subdivide(mesh);
 }
 
 void Model::Perturb(float max_radius) {

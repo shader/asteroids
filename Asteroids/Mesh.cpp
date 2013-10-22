@@ -2,17 +2,20 @@
 #include "utils.h"
 using namespace glm;
 
-bool edgecmp(Edge* lhs, Edge* rhs) { return *lhs < *rhs; }
-
 Mesh::~Mesh() {
 }
 
 Mesh* split(Mesh *mesh) {
-	mesh->vertices.reserve(mesh->vertices.size() * 2);
-	mesh->edges.reserve(mesh->edges.size() * 2);
-	mesh->faces.reserve(mesh->faces.size() * 2);
-	for (auto f = mesh->faces.begin(); f!=mesh->faces.end(); f++) {
-		f->split(mesh->faces, mesh->edges, mesh->vertices);
+	mesh->vertices.reserve(mesh->vertices.size() + mesh->edges.size()); // 
+	mesh->faces.reserve(mesh->faces.size() * 4); // 4 new faces for every face
+	mesh->edges.reserve(mesh->faces.size() * 4 * 3);
+	int end = mesh->edges.size();
+	for (int e = 0; e<end; e++) {
+		mesh->edges[e].split();
+	}
+	end = mesh->faces.size();
+	for (int f = 0; f<end; f++) {
+		mesh->faces[f].split();
 	}
 	return mesh;
 }
@@ -31,7 +34,7 @@ Mesh* subdivide(Mesh *mesh) {
 	return split(average(mesh));
 }
 
-void Mesh::Perturb(float max_radius) {	
+void Mesh::Perturb(float max_radius) {
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = perturb(v->position, max_radius);
 	}
@@ -53,70 +56,40 @@ void Mesh::Normalize() {
 	}
 }
 
-Edge* get_match(Edge *edge, set<Edge*,bool(*)(Edge*,Edge*)> &edges) {
-	auto ret = edges.insert(edge);
-	if (!ret.second) {
-		//duplicate or twin edge
-		Edge* other = *(ret.first);
-		if (*other != *edge) { //not identical edges, must be twin
-			if (other->twin == NULL) { //new twin
-				tie(other, edge);
-				return edge; //return new edge, even though it wasn't saved in the edges set
-			} else if (other->twin != edge) {
-				//same edge, different instance
-				edge->prev->next = other->twin; //patch hole in loop
-				edge->next->prev = other->twin;
-				delete edge; //equivalent, but twin already exists
-				return other->twin;
-			} else { //identical, return twin
-				return edge;
-			}
-		} else if (other != edge) {
-			//same edge, different pointers
-			edge->prev->next = other;
-			edge->next->prev = other;
-			delete edge;
-		}
-	}
-	return *(ret.first); //pointer to edge, or equivalent edge if it already exists
-}
-
-Edge* add(Vertex *a, Vertex *b, Mesh* mesh) {
+int add_edge(int a, int b, Mesh* mesh) {
 	int edge, twin;
+	edge = twin = -1;
 	for (auto e=mesh->edges.begin(); e!=mesh->edges.end(); e++) {
-		if (e->tail == a && e->head == b) {
-			edge = e-edges.begin();
+		if (e->tail_vertex == a && e->head_vertex == b) {
+			edge = e - mesh->edges.begin();
 		}
-		else if (e->head == a && e->tail == b) {
-			twin = e-edges.begin();
+		else if (e->head_vertex == a && e->tail_vertex == b) {
+			twin = e - mesh->edges.begin();
 		}
 	}
 
-	if (!edge) {
-		mesh->edges.push_back(Edge(a,b));
-		edge = edges.back()-edges.begin();
-		edge->init();
+	if (edge == -1) {
+		edge = mesh->edges.size();
+		mesh->edges.push_back(Edge(a,b,mesh));
 	}
-	if (twin) {
-		tie(edge, twin);
+	if (twin != -1) {
+		tie(mesh->edges[edge], mesh->edges[twin]);
 	}
 	return edge;
 }
 
 void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
-    bool(*edge_pt)(Edge*,Edge*) = edgecmp;
-    auto edges = set<Edge*,bool(*)(Edge*,Edge*)>(edge_pt);
 	faces.reserve(faces.size() + triangle_count);
 	edges.reserve(edges.size() + triangle_count * 3);
 	
-	Vertex *a, *b, *c;
-	Edge *e1, *e2, *e3;
+	int a, b, c;
+	int e1, e2, e3;
 	
-	for (auto t = triangles; t< triangles + triangle_count*3; t++) {
-		a = &vertices[t[0]]; b = &vertices[t[1]]; c = &vertices[t[2]];
-		e1 = add(a, b, this);
-		e2 = add(b, c, this);
-		e3 = add(c, a, this);
-		faces.emplace_back(Face(e1, e2, e3));
+	for (auto t = triangles; t< triangles + triangle_count*3; t+=3) {
+		a = t[0]; b = t[1]; c = t[2];
+		e1 = add_edge(a, b, this);
+		e2 = add_edge(b, c, this);
+		e3 = add_edge(c, a, this);
+		faces.emplace_back(Face(e1, e2, e3, this));
 	}
 }

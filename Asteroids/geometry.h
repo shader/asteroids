@@ -14,16 +14,15 @@ typedef vec3 Color;
 class Vertex {
 public:	
 	Vertex();
-	Vertex(float x, float y, float z);
-	Vertex(vec3 position);
-	Vertex(vec3 position, GLuint index);
+	Vertex(float x, float y, float z, class Mesh* mesh);
+	Vertex(vec3 position, class Mesh* mesh);
 	vec3 position, new_position;
 	vec2 texture_coord;
 	float temperature;
-	GLuint index;
-	set<class Edge*> edges;
+	set<int> edges;
+	Mesh* mesh;
 
-	vector<Vertex*> neighbors() const;
+	vector<int> neighbors() const;
 	vec3 normal() const;
 	friend Vertex average(const Vertex &vertex);
 	friend Vertex perturb(Vertex vertex, float max_radius);
@@ -35,24 +34,26 @@ public:
 
 class Edge {
 public:
-	Edge(Vertex *tail, Vertex *head);
-	Edge(vec3 tail, vec3 head);
+	Edge(int tail, int head, Mesh* mesh);
 	~Edge();
-	class Vertex *head, *tail;
-	class Edge *next, *prev, *twin;
-	class Face *left, *right;
+	int index, head_vertex, tail_vertex;
+	int next_edge, prev_edge, twin_edge;
+	int left_face, right_face;
+	Mesh* mesh;
 	
 	friend bool operator<(const Edge &lhs, const Edge &rhs);
 	friend bool operator==(const Edge &lhs, const Edge &rhs);
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
 
-	void attach(Edge* edge);
-	void split(vector<Edge> &edges, vector<Vertex> &vertices);
-	friend pair<Edge*, Edge*> split(Edge *edge);
-	friend void tie(Edge* edge, Edge* twin);
-	friend Edge* twin(Edge *edge);
-	friend Edge average(const Edge &edge);
-	friend Edge perturb(const Edge &edge, float max_radius);
+	void attach(Edge &edge);
+	void attach(int edge);
+	void split();
+	Vertex& head() const, &tail() const;
+	Edge &next() const, &prev() const, &twin() const;
+	class Face &left() const, &right() const;
+
+	friend void tie(Edge &edge, Edge &twin);
+	friend Edge& create_twin(Edge &edge);
 
 	vec3 midpoint() const;
 	void init();
@@ -61,13 +62,14 @@ public:
 class Face {
 public:
 	Face();
-	Face(Edge* first);
-	Face(Edge *a, Edge *b, Edge *c);
-	Face(vec3 a, vec3 b, vec3 c);
+	Face(int first, Mesh* mesh);
+	Face(int a, int b, int c, Mesh* mesh);
 
-	class Edge *first;
+	int first_edge, index;
+	class Mesh* mesh;
 
-	vector<Face*> neighbors();
+	vector<int> neighbors();
+	Edge &first() const;
 
 	friend bool operator<(const Face &lhs, const Face &rhs);
 	friend bool operator==(const Face &lhs, const Face &rhs);
@@ -75,9 +77,7 @@ public:
 
 	vec3 midpoint() const;
 	vec3 normal() const;
-	void split(vector<Face> &faces, vector<Edge> &edges, vector<Vertex> &vertices);
-	friend vector<Edge*> split_edges(Face *face);
-	friend vector<Face*> split(Face *face);
+	void split();
 	friend Face average(const Face &face);
 	friend Face perturb(const Face &face, float max_radius);
 };

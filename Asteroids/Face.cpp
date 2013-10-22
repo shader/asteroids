@@ -4,13 +4,13 @@ using namespace glm;
 
 bool operator<(const Face &lhs, const Face &rhs) {
 	return lhs.midpoint() < rhs.midpoint() ||
-		(lhs.midpoint() == rhs.midpoint() && (*(lhs.first) < *(rhs.first) ||
-			(*(lhs.first) == *(rhs.first) && (*(lhs.first->next) < *(rhs.first->next) ||
-				(*(lhs.first->next) == *(rhs.first->next) && *(lhs.first->next->next) < *(rhs.first->next->next))))));
+		(lhs.midpoint() == rhs.midpoint() && (lhs.first() < rhs.first() ||
+			(lhs.first() == rhs.first() && (lhs.first().next()) < rhs.first().next() ||
+				(lhs.first().next() == rhs.first().next() && lhs.first().next().next() < rhs.first().next().next()))));
 }
 bool operator==(const Face &lhs, const Face &rhs) {
-	return *(lhs.first) == (*rhs.first) &&
-		*(lhs.first->next) == (*rhs.first->next);
+	return lhs.first() == rhs.first() &&
+		lhs.first().next() == rhs.first().next();
 }
 bool operator!=(const Face &lhs, const Face &rhs) {
 	return !(lhs == rhs);
@@ -18,122 +18,74 @@ bool operator!=(const Face &lhs, const Face &rhs) {
 
 Face::Face() {}
 
-Face::Face(Edge* first) {
-	this->first = first;
-	Edge* e = first;
+Edge &Face::first() const { return mesh->edges[first_edge]; }
+
+Face::Face(int first, Mesh *mesh) {
+	first_edge = first;
+	this->mesh = mesh;
+	index = mesh->faces.size();
+	Edge *e = &this->first();
 	do {
-		e->left = this;
-		if (e->twin != NULL) e->twin->right = this;
-		else e->twin = twin(e);
-		e=e->next;
-	} while (e != first);
+		e->left_face = index;
+		if (e->twin_edge != -1) e->twin().right_face = index;
+		else e->twin_edge = create_twin(*e).index;
+		e = &e->next();
+	} while (e->index != first);
 }
 
-Face::Face(Edge *a, Edge *b, Edge *c) {
-	this->first = a;
-	a->left = this;
-	a->attach(b);
-	b->attach(c);
-	c->attach(a);
-}
+Face::Face(int a, int b, int c, Mesh* mesh) {
+	first_edge = a;
+	Edge &e1 = mesh->edges[a], &e2 = mesh->edges[b], &e3 = mesh->edges[c];
+	this->mesh = mesh;
+	first().left_face = index = mesh->faces.size();
 
-Face::Face(vec3 a, vec3 b, vec3 c) {
-	first = new Edge(a, b);
-	first->left = this;
-	first->attach(new Edge(b, c));
-	first->next->attach(new Edge(c, a));
-	first->next->next->attach(first);
+	e1.attach(e2);
+	e2.attach(e3);
+	e3.attach(e1);
 }
 
 vec3 Face::midpoint() const {
-	return (1.0/3) * (first->head->position + first->next->head->position + first->next->next->head->position);
+	return (1.0/3) * (first().head().position + first().next().head().position + first().next().next().head().position);
 }
 
 vec3 Face::normal() const {
-	vec3 a = first->head->position - first->tail->position;
-	vec3 b = first->next->head->position - first->next->tail->position;
+	vec3 a = first().head().position - first().tail().position;
+	vec3 b = first().next().head().position - first().next().tail().position;
 	vec3 normal = cross(a, b);
 	return normalize(normal);
 }
 
-Face* new_face(Edge *e, Face* prev, vector<Face> faces) {
-	faces.emplace_back(Face());
-	Face *new_face = &faces.back();
-	new_face->first = e;
+int new_face(Edge &e) {
+	int new_face = e.mesh->faces.size();
+	e.mesh->faces.emplace_back(Face(e.index, e.mesh));
 	return new_face;
 }
 
-void Face::split(vector<Face> &faces, vector<Edge> &edges, vector<Vertex> &vertices) {
-	Edge *e = first;
-	//split edges
-	do {
-		Edge *next = e->next;
-		e->split(edges, vertices);
-		e = next;
-	} while (e != first);
-
+void Face::split() {
 	//add new edges and faces
-	e = first;
-	Face *f = this;
+	Edge *e = &first(), *new_twin = nullptr, *twin = nullptr, *new_edge;
 	do {
-		Edge *next = e->next->next;
-		edges.emplace_back(Edge(e->head, e->prev->tail));
-		Edge* new_edge = &edges.back();
-		if (e != first) { //new face
-			f = new_face(e, f, faces);
+		Edge *next = &e->next().next();
+		mesh->edges.emplace_back(Edge(e->head_vertex, e->prev().tail_vertex, mesh));
+		new_edge = &mesh->edges.back();
+		e->attach(*new_edge);
+		new_edge->attach(e->prev());
+		if (e->index != first_edge) {
+			new_face(*e);
 		}
-		e->attach(new_edge);
-		new_edge->attach(e->prev);
-		twin(new_edge);
+
+		new_twin = &create_twin(*new_edge);
+		if (twin) {
+			new_twin->attach(*twin);
+		}
+		twin = new_twin;
+
 		e = next;
-	} while (e != first);
+	} while (e->index != first_edge);
+
+	first().next().twin().attach(*twin);
 
 	//add new face in center
-	e = first->next->twin;
-	new_face(e, f, faces);
-}
-
-vector<Edge*> split_edges(Face *face) {
-	Edge *e = face->first;
-	vector<Edge*> edges;
-	edges.reserve(6);
-	do {
-		Edge *next = e->next;
-		pair<Edge*,Edge*>new_edges = split(e);
-		edges.push_back(new_edges.first);
-		edges.push_back(new_edges.second);
-		e = next;
-	} while (e != face->first);
-	return edges;
-}
-
-vector<Face*> split(Face *face) {
-	vector<Face*> faces;
-	vector<Edge*> twins;
-	faces.reserve(4);
-	twins.reserve(3);
-	vector<Edge*> edges = split_edges(face);
-	for (int i=1; i<6; i+=2) {
-		Edge *a = edges[i];
-		Edge *b = edges[(i+1)%6];
-		Edge *c = new Edge(b->head, a->tail);
-		twins.push_back(twin(c)); //new edge for fourth triangle
-		faces.push_back(new Face(a, b, c));
-	}
-	faces.push_back(new Face(twins[0], twins[1], twins[2]));
-	return faces;
-}
-
-Face average(const Face &face) {
-	Edge *a = new Edge(average(*face.first));
-	Edge *b = new Edge(average(*face.first->next));
-	Edge *c = new Edge(average(*face.first->next->next));
-	return Face(a, b, c);
-}
-
-Face perturb(const Face &face, float max_radius) {
-	Edge *a = new Edge(perturb(*face.first, max_radius));
-	Edge *b = new Edge(perturb(*face.first->next, max_radius));
-	Edge *c = new Edge(perturb(*face.first->next->next, max_radius));
-	return Face(a, b, c);
+	e = &first().next().twin();
+	new_face(*e);
 }
