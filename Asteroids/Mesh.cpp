@@ -41,19 +41,34 @@ void Mesh::Perturb(float max_radius) {
 }
 
 void Mesh::Normalize() {
-	vec3 min_corner, max_corner, center, max_deviation;
+	vec3 min_corner, max_corner, center;
 	min_corner = max_corner = vec3(0,0,0);
+	float max_length = 0;
 
+	//find center
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		min_corner = min(min_corner, v->position);
 		max_corner = max(max_corner, v->position);
 	}
 	center = (min_corner + max_corner) / 2.0f;
-	max_deviation = max(abs(min_corner - center), abs(max_corner - center));
-	float scale = glm::max(max_deviation.x, glm::max(max_deviation.y, max_deviation.z));
+
+	//find max length
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
-		v->position = (v->position - center) / scale;
+		max_length = glm::max(max_length, length(v->position - center));
 	}
+
+	//normalize
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
+		v->position = (v->position - center) / max_length;
+	}
+}
+
+Box Mesh::BoundingBox() {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
+		box.lower = min(box.lower, v->position);
+		box.upper = max(box.upper, v->position);
+	}
+	return box;
 }
 
 int add_edge(int a, int b, Mesh* mesh) {

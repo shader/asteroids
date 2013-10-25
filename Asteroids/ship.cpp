@@ -13,4 +13,5 @@ Ship::Ship() : Model() {
 	
 	mesh->LoadTriangles(&indices[0][0], 6);
 	mesh->Normalize();
+	mesh->BoundingBox();
 }

@@ -11,6 +11,10 @@ using namespace std;
 
 typedef vec3 Color;
 
+struct Box {
+	vec3 lower, upper;
+};
+
 class Vertex {
 public:	
 	Vertex();
@@ -88,9 +92,11 @@ public:
 	vector<Vertex> vertices;
 	vector<Edge> edges;
 	vector<Face> faces;
+	Box box;
 	
 	void Perturb(float max_radius);
 	void Normalize();
+	Box BoundingBox();
 	void LoadTriangles(uint* triangles, int triangle_count);
 
 	friend Mesh* split(Mesh* mesh);
