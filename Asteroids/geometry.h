@@ -35,7 +35,6 @@ public:
 class Edge {
 public:
 	Edge(int tail, int head, Mesh* mesh);
-	~Edge();
 	int index, head_vertex, tail_vertex;
 	int next_edge, prev_edge, twin_edge;
 	int left_face, right_face;

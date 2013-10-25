@@ -11,6 +11,12 @@ void DefaultScene::Initialize() {
 	destroyer->position = vec3(0,0,0);
 	Add(destroyer);
 
+	spawn_asteroid();
+
+	Scene::Initialize();
+}
+
+Asteroid* DefaultScene::spawn_asteroid() {
 	auto asteroid = new Asteroid(this);
 	asteroid->size = vec3(2);
 	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
@@ -18,8 +24,7 @@ void DefaultScene::Initialize() {
 	asteroid->angular_vel = rand_vec3() * 2.0f;
 	asteroids.push_back(asteroid);
 	Add(asteroid);
-
-	Scene::Initialize();
+	return asteroid;
 }
 
 void DefaultScene::Update(Time time, const InputState &input) {	
@@ -39,7 +44,7 @@ void DefaultScene::Update(Time time, const InputState &input) {
 	}
 
 	//handle keyboard input
-	if (bullet_count < 20 && (input.keyboard[' '] || input.keyboard['z'])) {
+	if (bullet_count < 20 && !(prev_state.keyboard[' '] || prev_state.keyboard['z']) && (input.keyboard[' '] || input.keyboard['z'])) {
  		bullet_count++;
 		Bullet *bullet = new Bullet(this);
 		bullet->position = destroyer->position;
@@ -60,6 +65,11 @@ void DefaultScene::Update(Time time, const InputState &input) {
 	}
 	if (input.special_keys[GLUT_KEY_UP] || input.keyboard['x']) {
 		destroyer->velocity = destroyer->velocity + destroyer->orientation * vec3(0,50 * t,0);
+	}
+
+	if (input.keyboard['a'] && !prev_state.keyboard['a']) {
+		auto asteroid = spawn_asteroid();
+		asteroid->Initialize();
 	}
 
 	Scene::Update(time, input);

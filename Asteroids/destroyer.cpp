@@ -5,6 +5,7 @@
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	ship = new Ship();
 	models.push_back(ship);
+	size = vec3(0.75);
 }
 
 void Destroyer::Initialize() {

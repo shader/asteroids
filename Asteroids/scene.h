@@ -13,6 +13,7 @@ public:
 	mat4 Projection, View, InvView;
 	list<Object*> objects;
 	int width, height;
+	InputState prev_state;
 
 	vec3 light_dir, light_color;
 
@@ -30,6 +31,7 @@ public:
 	void Initialize();
 	void Update(Time time, const InputState &input);
 	void Keyboard(const InputState &input);
+	Asteroid *spawn_asteroid();
 
 private:
 	Destroyer *destroyer;

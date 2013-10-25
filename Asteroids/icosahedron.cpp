@@ -4,18 +4,18 @@ Icosahedron::Icosahedron() : Mesh() {
 	static float x = .525731112119133606f;
 	static float z = .850650808352039932f;
 
-	vertices.emplace_back(Vertex(-x, 0.0f, z, this));
-	vertices.emplace_back(Vertex(x, 0.0, z, this));
-	vertices.emplace_back(Vertex(-x, 0.0, -z, this));
-	vertices.emplace_back(Vertex(x, 0.0, -z, this));
-	vertices.emplace_back(Vertex(0.0, z, x, this));
-	vertices.emplace_back(Vertex(0.0, z, -x, this));
-	vertices.emplace_back(Vertex(0.0, -z, x, this));
-	vertices.emplace_back(Vertex(0.0, -z, -x, this));
-	vertices.emplace_back(Vertex(z, x, 0.0, this));
-	vertices.emplace_back(Vertex(-z, x, 0.0, this));
-	vertices.emplace_back(Vertex(z, -x, 0.0, this));
-	vertices.emplace_back(Vertex(-z, -x, 0.0, this));
+	vertices.push_back(Vertex(-x, 0.0f, z, this));
+	vertices.push_back(Vertex(x, 0.0, z, this));
+	vertices.push_back(Vertex(-x, 0.0, -z, this));
+	vertices.push_back(Vertex(x, 0.0, -z, this));
+	vertices.push_back(Vertex(0.0, z, x, this));
+	vertices.push_back(Vertex(0.0, z, -x, this));
+	vertices.push_back(Vertex(0.0, -z, x, this));
+	vertices.push_back(Vertex(0.0, -z, -x, this));
+	vertices.push_back(Vertex(z, x, 0.0, this));
+	vertices.push_back(Vertex(-z, x, 0.0, this));
+	vertices.push_back(Vertex(z, -x, 0.0, this));
+	vertices.push_back(Vertex(-z, -x, 0.0, this));
 	 
 	uint indices[20][3] = {
 		{1, 4, 0}, {4, 9, 0}, {4, 5, 9}, {8, 5, 4},	{1, 8, 4}, 

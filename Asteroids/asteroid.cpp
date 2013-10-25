@@ -3,7 +3,7 @@
 #include "utils.h"
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
-	rock = new Rock(7, 0.5, 2);
+	rock = new Rock(7, 0.75, 3);
 	models.push_back(rock);
 	velocity = rand_vec3();
 	position = rand_vec3();

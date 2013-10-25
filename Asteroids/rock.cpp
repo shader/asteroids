@@ -13,4 +13,5 @@ Rock::Rock(int levels, float start, float rate) : Model() {
 			Subdivide();
 		}
 	}
+	mesh->Normalize();
 }

@@ -57,21 +57,17 @@ void Mesh::Normalize() {
 }
 
 int add_edge(int a, int b, Mesh* mesh) {
-	int edge, twin;
-	edge = twin = -1;
+	int edge, twin = -1;
 	for (auto e=mesh->edges.begin(); e!=mesh->edges.end(); e++) {
-		if (e->tail_vertex == a && e->head_vertex == b) {
-			edge = e - mesh->edges.begin();
-		}
-		else if (e->head_vertex == a && e->tail_vertex == b) {
+		if (e->head_vertex == a && e->tail_vertex == b) {
 			twin = e - mesh->edges.begin();
+			break;
 		}
 	}
+	
+	edge = mesh->edges.size();
+	mesh->edges.push_back(Edge(a,b,mesh));
 
-	if (edge == -1) {
-		edge = mesh->edges.size();
-		mesh->edges.push_back(Edge(a,b,mesh));
-	}
 	if (twin != -1) {
 		tie(mesh->edges[edge], mesh->edges[twin]);
 	}
@@ -90,6 +86,6 @@ void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
 		e1 = add_edge(a, b, this);
 		e2 = add_edge(b, c, this);
 		e3 = add_edge(c, a, this);
-		faces.emplace_back(Face(e1, e2, e3, this));
+		faces.push_back(Face(e1, e2, e3, this));
 	}
 }

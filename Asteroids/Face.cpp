@@ -57,7 +57,7 @@ vec3 Face::normal() const {
 
 int new_face(Edge &e) {
 	int new_face = e.mesh->faces.size();
-	e.mesh->faces.emplace_back(Face(e.index, e.mesh));
+	e.mesh->faces.push_back(Face(e.index, e.mesh));
 	return new_face;
 }
 
@@ -66,7 +66,7 @@ void Face::split() {
 	Edge *e = &first(), *new_twin = nullptr, *twin = nullptr, *new_edge;
 	do {
 		Edge *next = &e->next().next();
-		mesh->edges.emplace_back(Edge(e->head_vertex, e->prev().tail_vertex, mesh));
+		mesh->edges.push_back(Edge(e->head_vertex, e->prev().tail_vertex, mesh));
 		new_edge = &mesh->edges.back();
 		e->attach(*new_edge);
 		new_edge->attach(e->prev());
@@ -76,14 +76,14 @@ void Face::split() {
 
 		new_twin = &create_twin(*new_edge);
 		if (twin) {
-			new_twin->attach(*twin);
+			twin->attach(*new_twin);
 		}
 		twin = new_twin;
 
 		e = next;
 	} while (e->index != first_edge);
 
-	first().next().twin().attach(*twin);
+	twin->attach(first().next().twin());
 
 	//add new face in center
 	e = &first().next().twin();
