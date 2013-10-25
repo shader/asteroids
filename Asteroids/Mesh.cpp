@@ -60,6 +60,7 @@ void Mesh::Normalize() {
 	//normalize
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = (v->position - center) / max_length;
+		radius = glm::max(length(v->position), radius);
 	}
 }
 

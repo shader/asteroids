@@ -16,7 +16,16 @@ Object::~Object() {
 	destroyed(this);
 }
 
-void Object::Initialize() {}
+void Object::Initialize() {
+	for (auto m = models.begin(); m!=models.end(); m++) {
+		(*m)->Bind();
+		if (length((*m)->position) > 0) {
+			radius = glm::max(radius, length(((*m)->position + normalize((*m)->position) * (*m)->radius) * glm::max(size.x, glm::max(size.y, size.z))));
+		} else {
+			radius = glm::max(radius, (*m)->radius * glm::max(size.x, glm::max(size.y, size.z)));
+		}
+	}
+}
 
 void Object::Draw(mat4 view, mat4 projection) {	
 	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
@@ -34,3 +43,5 @@ void Object::Update(Time time) {
 	position += velocity * t;
 	orientation = orientation * quat(angular_vel * t);
 }
+
+function<void()> Object::Collision(Object &other) { return [](){}; };

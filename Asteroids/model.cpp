@@ -47,12 +47,14 @@ void Model::Bind(Shader* shader, GLenum mode) {
 	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
 	vec3 *vertices, *normals;
 	indices.empty();
+	radius = 0;
 
 	vertices = new vec3[mesh->vertices.size()];
 	normals = new vec3[mesh->vertices.size()];
 	for (uint i = 0; i<mesh->vertices.size(); i++) {
 		vertices[i] = mesh->vertices[i].position;
 		normals[i] = mesh->vertices[i].normal();
+		radius = glm::max(radius, length(vertices[i]));
 	}
 
 	draw_mode = mode;

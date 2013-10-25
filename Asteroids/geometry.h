@@ -93,6 +93,7 @@ public:
 	vector<Edge> edges;
 	vector<Face> faces;
 	Box box;
+	float radius;
 	
 	void Perturb(float max_radius);
 	void Normalize();

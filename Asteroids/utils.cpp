@@ -3,9 +3,7 @@
 using namespace glm;
 
 bool operator<(const vec3 &lhs, const vec3 &rhs) {
-	return lhs.x < rhs.x ||
-		(lhs.x == rhs.x && (lhs.y < rhs.y ||
-			(lhs.y == rhs.y && lhs.z < rhs.z)));
+	return lhs.x < rhs.x && lhs.y < rhs.y && lhs.z < rhs.z;
 }
 
 vec3 operator*(const vec3 &lhs, const float &rhs) {

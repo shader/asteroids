@@ -32,9 +32,10 @@ public:
 	void Update(Time time, const InputState &input);
 	void Keyboard(const InputState &input);
 	Asteroid *spawn_asteroid();
+	void add_asteroid(Asteroid *asteroid);
 
 private:
 	Destroyer *destroyer;
-	vector<Asteroid*> asteroids;
-	int bullet_count;
+	int bullet_count, asteroid_count;
+	void process_collisions();
 };

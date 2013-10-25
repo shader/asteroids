@@ -21,6 +21,7 @@ public:
 
 	vec3 position, size;
 	quat orientation;
+	float radius;
 	Shader* shader;
 	
 	void Init();

@@ -12,7 +12,8 @@ void Destroyer::Initialize() {
 	ship->LoadShader(GL_VERTEX_SHADER, "shader.vert");
 	ship->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
 	ship->shader->Create();
-	ship->Bind();
+	
+	Object::Initialize();
 }
 
 void Destroyer::Update(Time time) {
@@ -22,4 +23,8 @@ void Destroyer::Update(Time time) {
 	if (speed > 0)
 		velocity = normalize(velocity) * glm::min(speed, 16.0f);
 	Object::Update(time);
+}
+
+function<void()> Destroyer::Collision(Object &other) {
+	return [=](){ delete this; };
 }
