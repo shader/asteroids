@@ -30,6 +30,7 @@ function<void()> Destroyer::Collision(Object &other) {
 	return [=](){ 
 		Explosion* explosion = new Explosion(scene);
 		explosion->position = position;
+		explosion->velocity = velocity;
 		explosion->Initialize();
 		scene->Add(explosion);
 		//explosion->destroyed += [](Object* obj){ obj->scene->Initialize(); };

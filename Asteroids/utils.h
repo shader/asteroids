@@ -4,6 +4,8 @@
 
 using namespace glm;
 
+const float TAU = 6.283185307179586476925286766559f;
+
 bool operator<(const vec3 &lsh, const vec3 &rhs);
 
 vec3 operator*(const vec3 &lhs, const float &rhs);

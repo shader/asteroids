@@ -37,8 +37,6 @@ float rand(float min, float max) {
 	return min + (max - min)*rand() / (float)RAND_MAX;
 }
 
-const float TAU = 6.283185307179586476925286766559f;
-
 vec3 rand_ball() { //uniform distribution within a ball
 	vec3 v = vec3(0);
 	do {

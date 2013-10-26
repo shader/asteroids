@@ -35,10 +35,11 @@ void Asteroid::Split() {
 		auto a = new Asteroid(scene), b = new Asteroid(scene);
 		a->position = b->position = position;
 		a->size = b->size = size / 2.0f;
-		a->velocity = velocity + vec3(rand_vec2(),0);
-		b->velocity = velocity + vec3(rand_vec2(),0);
-		a->angular_vel = angular_vel + rand_vec3();	
-		b->angular_vel = angular_vel + rand_vec3();
+		float angle = rand(0,TAU/8);
+		a->velocity = velocity * quat(vec3(0,0,angle));
+		b->velocity = velocity * quat(vec3(0,0,-angle));
+		a->angular_vel = angular_vel + vec3(rand_vec2(),0);
+		b->angular_vel = angular_vel + vec3(rand_vec2(),0);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(a);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
 		a->Initialize(); b->Initialize();
