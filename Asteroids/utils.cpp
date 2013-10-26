@@ -31,7 +31,6 @@ mat4 translation(vec3 position) {
 
 mat4 scale(vec3 size) {
 	return glm::scale(mat4(1.0), size);
-
 }
 
 float rand(float min, float max) {
@@ -39,6 +38,16 @@ float rand(float min, float max) {
 }
 
 const float TAU = 6.283185307179586476925286766559f;
+
+vec3 rand_ball() { //uniform distribution within a ball
+	vec3 v = vec3(0);
+	do {
+		v.x = rand(-1.0f, 1.0f);
+		v.y = rand(-1.0f, 1.0f);
+		v.z = rand(-1.0f, 1.0f);
+	} while (length(v) > 1.0f); //filter by length - simpler than doing trig
+	return v;
+}
 
 vec3 rand_vec3() { //random unit 3d vector
 	float z = rand(-1.0f, 1.0f);

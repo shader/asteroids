@@ -43,5 +43,5 @@ void Asteroid::Split() {
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
 		a->Initialize(); b->Initialize();
 	}
-	delete this;
+	scene->Remove(this);
 }

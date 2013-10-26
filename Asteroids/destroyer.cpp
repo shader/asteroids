@@ -1,6 +1,7 @@
 #include "object.h"
 #include "utils.h"
 #include "ship.h"
+#include "scene.h"
 
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	ship = new Ship();
@@ -26,5 +27,12 @@ void Destroyer::Update(Time time) {
 }
 
 function<void()> Destroyer::Collision(Object &other) {
-	return [=](){ delete this; };
+	return [=](){ 
+		Explosion* explosion = new Explosion(scene);
+		explosion->position = position;
+		explosion->Initialize();
+		scene->Add(explosion);
+		//explosion->destroyed += [](Object* obj){ obj->scene->Initialize(); };
+		scene->Remove(this);
+	};
 }

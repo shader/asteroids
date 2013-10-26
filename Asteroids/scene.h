@@ -11,7 +11,7 @@ public:
 	virtual ~Scene();
 	
 	mat4 Projection, View, InvView;
-	list<Object*> objects;
+	list<unique_ptr<Object>> objects;
 	int width, height;
 	InputState prev_state;
 

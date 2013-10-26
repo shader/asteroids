@@ -3,14 +3,13 @@
 #include "utils.h"
 
 void DefaultScene::Initialize() {
-	objects.clear();
+	objects.erase(objects.begin(), objects.end());
 	light_dir = vec3(1);
 	light_color = vec3(1);
 	bullet_count = asteroid_count = 0;
 
 	destroyer = new Destroyer(this);
 	destroyer->position = vec3(0,0,0);
-	destroyer->destroyed += [&](Object* obj){ this->Initialize(); };
 	Add(destroyer);
 
 	spawn_asteroid();
@@ -39,12 +38,11 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 void DefaultScene::process_collisions() {
 	vector<function<void()>> callbacks;
 	int collisions = 0;
-	for (auto i = objects.begin(); i!= objects.end(); i++) {
-		for (auto j = objects.begin(); j!=i; j++) {
-			auto a = *i, b = *j;
-			if (length(a->position - b->position) < a->radius + b->radius) {
-				callbacks.push_back(a->Collision(*b));
-				callbacks.push_back(b->Collision(*a));
+	for (auto a = objects.begin(); a!= objects.end(); a++) {
+		for (auto b = objects.begin(); b!=a; b++) {
+			if (length((*a)->position - (*b)->position) < (*a)->radius + (*b)->radius) {
+				callbacks.push_back((*a)->Collision(**b));
+				callbacks.push_back((*b)->Collision(**a));
 				collisions++;
 			}
 		}

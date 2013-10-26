@@ -6,6 +6,7 @@
 #include "event.h"
 #include "GL\freeglut.h"
 #include "memory"
+#include "particles.h"
 
 class Scene;
 class Object {
@@ -57,5 +58,22 @@ public:
 
 private:
 	Model* model;
+	double age;
+};
+
+class Explosion : public Object {
+public:
+	Explosion(Scene *scene);
+	~Explosion();
+	vector<Particle> particles;
+	void Initialize();
+	void Update(Time time);
+	void Draw(mat4 view, mat4 projection);
+
+private:
+	GLuint verticesID, indicesID, vertex_array;
+	vec3 *vertices;
+	GLuint *indices;
+	Shader* shader;
 	double age;
 };

@@ -8,19 +8,19 @@ Scene::Scene() {
 }
 
 Scene::~Scene() {
-	auto o = objects.begin();
-	while (o != objects.end()) {
-		delete (*o++);
-	}
+	//auto o = objects.begin();
+	//while (o != objects.end()) {
+	//	delete (*o++);
+	//}
 }
 
 void Scene::Add(Object *obj) {
 	obj->destroyed += this->remover;
-	objects.push_back(obj);
+	objects.push_back(move(unique_ptr<Object>(obj)));
 }
 
 void Scene::Remove(Object *obj) {
-	objects.remove(obj);
+	objects.remove_if([=](unique_ptr<Object> const &p){ return p.get() == obj; });
 }
 
 void Scene::Initialize()

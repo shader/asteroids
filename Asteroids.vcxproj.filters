@@ -90,6 +90,9 @@
     <ClCompile Include="Asteroids\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\explosion.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">
@@ -137,12 +140,21 @@
     <ClInclude Include="Asteroids\primitives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Asteroids\particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\shader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\explosion.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\color.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

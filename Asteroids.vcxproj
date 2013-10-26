@@ -79,6 +79,7 @@
     <ClCompile Include="Asteroids\default_scene.cpp" />
     <ClCompile Include="Asteroids\destroyer.cpp" />
     <ClCompile Include="Asteroids\Edge.cpp" />
+    <ClCompile Include="Asteroids\explosion.cpp" />
     <ClCompile Include="Asteroids\Face.cpp" />
     <ClCompile Include="Asteroids\icosahedron.cpp" />
     <ClCompile Include="Asteroids\loop.cpp" />
@@ -100,6 +101,7 @@
     <ClInclude Include="Asteroids\event.h" />
     <ClInclude Include="Asteroids\geometry.h" />
     <ClInclude Include="Asteroids\headers.h" />
+    <ClInclude Include="Asteroids\particles.h" />
     <ClInclude Include="Asteroids\primitives.h" />
     <ClInclude Include="Asteroids\input.h" />
     <ClInclude Include="Asteroids\menu.h" />
@@ -114,6 +116,8 @@
     <ClInclude Include="Asteroids\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\color.frag" />
+    <None Include="resources\explosion.vert" />
     <None Include="resources\shader.frag" />
     <None Include="resources\shader.vert" />
   </ItemGroup>

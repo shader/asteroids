@@ -15,6 +15,7 @@ mat4 translation(vec3 position);
 mat4 translation(vec4 position);
 mat4 scale(vec3 size);
 float rand(float min, float max);
+vec3 rand_ball();
 vec3 rand_vec3();
 vec2 rand_vec2();
 
