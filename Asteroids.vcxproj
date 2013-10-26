@@ -91,6 +91,7 @@
     <ClCompile Include="Asteroids\quad.cpp" />
     <ClCompile Include="Asteroids\rock.cpp" />
     <ClCompile Include="Asteroids\scene.cpp" />
+    <ClCompile Include="Asteroids\scene_manager.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
     <ClCompile Include="Asteroids\ship.cpp" />
     <ClCompile Include="Asteroids\texture.cpp" />

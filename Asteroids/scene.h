@@ -2,16 +2,20 @@
 #include "timer.h"
 #include "object.h"
 #include "input.h"
+#include <stack>
+#include <queue>
 
 class Scene {
 	function<void(Object*)> remover;
 
 public:
-	Scene();
+	Scene(class SceneManager *manager);
 	virtual ~Scene();
 	
+	SceneManager *manager;
 	mat4 Projection, View, InvView;
 	list<unique_ptr<Object>> objects;
+	list<function<void()>> event_queue;
 	int width, height;
 	InputState prev_state;
 
@@ -26,8 +30,24 @@ public:
 	virtual void Remove(Object *obj);
 };
 
+class SceneManager {
+public:
+	stack<unique_ptr<Scene>> scenes;
+
+	Scene& current();
+
+	void Update(Time time, const InputState &input);
+	void Draw();
+	void Resize(int w, int h);
+	void Restart();
+	void Push(Scene * scene);
+private:
+	queue<function<void()>> event_queue;
+};
+
 class DefaultScene : public Scene {
 public:
+	DefaultScene(SceneManager *manager);
 	void Initialize();
 	void Update(Time time, const InputState &input);
 	void Keyboard(const InputState &input);

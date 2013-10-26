@@ -93,6 +93,9 @@
     <ClCompile Include="Asteroids\explosion.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\scene_manager.cpp">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">

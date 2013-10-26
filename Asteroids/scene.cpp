@@ -1,6 +1,7 @@
 #include "headers.h"
 
-Scene::Scene() {
+Scene::Scene(SceneManager *manager) {
+	this->manager = manager;
 	Projection = perspective(45.0f, (GLfloat)800/600, 1.f, 1000.f);
 	View = lookAt(vec3(0,0,20), vec3(0,0,0), vec3(0,1,0));
 	InvView = inverse(View);
@@ -28,6 +29,7 @@ void Scene::Initialize()
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		(*o)->Initialize();
 	}
+	event_queue.clear();
 }
 
 void Scene::Update(Time time, const InputState &input)
@@ -42,6 +44,7 @@ void Scene::Update(Time time, const InputState &input)
 	while (o != objects.end()) {
 		(*o++)->Update(time);
 	}
+
 	prev_state = input;
 }
 

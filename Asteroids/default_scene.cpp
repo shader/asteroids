@@ -2,6 +2,8 @@
 #include "object.h"
 #include "utils.h"
 
+DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {}
+
 void DefaultScene::Initialize() {
 	objects.erase(objects.begin(), objects.end());
 	light_dir = vec3(1);
@@ -36,13 +38,13 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 }
 
 void DefaultScene::process_collisions() {
-	vector<function<void()>> callbacks;
+	map<Object*,function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
 		for (auto b = objects.begin(); b!=a; b++) {
 			if (length((*a)->position - (*b)->position) < (*a)->radius + (*b)->radius) {
-				callbacks.push_back((*a)->Collision(**b));
-				callbacks.push_back((*b)->Collision(**a));
+				callbacks.insert(pair<Object*,function<void()>>(a->get(), (*a)->Collision(**b)));
+				callbacks.insert(pair<Object*,function<void()>>(b->get(), (*b)->Collision(**a)));
 				collisions++;
 			}
 		}
@@ -50,7 +52,7 @@ void DefaultScene::process_collisions() {
 
 	//handle state changes
 	for (auto c=callbacks.begin(); c!=callbacks.end(); c++) {
-		(*c)();
+		c->second();
 	}
 
 	if (collisions > 0) {

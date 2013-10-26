@@ -4,13 +4,11 @@
 using namespace std;
 using namespace glm;
 
-void LoadShaders();
 void Initialize();
-void Cleanup();
 
 Timer timer;
 bool quit;
-Scene* scene;
+SceneManager scene_manager;
 InputState input;
 
 void Close() {
@@ -48,7 +46,7 @@ void KeyboardSpecialUp(int key, int x, int y) {
 }
 
 void Draw() {
-	scene->Draw();
+	scene_manager.Draw();
 }
 
 void Initialize() {
@@ -84,18 +82,12 @@ int main( int argc, char *argv[] )
 	glutSpecialUpFunc(KeyboardSpecialUp);
 	glutCloseFunc(Close);
 
-	scene = new DefaultScene();
-	scene->Initialize();
+	scene_manager.Push(new DefaultScene(&scene_manager));
 
 	while(!quit) {
-		scene->Update(timer.GetTime(), input);
-		scene->Draw();
+		scene_manager.Update(timer.GetTime(), input);
+		scene_manager.Draw();
 		glutMainLoopEvent();
 	}
-	Cleanup();
 	return 0;
-}
-
-void Cleanup() {
-	delete scene;
 }
