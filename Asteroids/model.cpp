@@ -45,12 +45,11 @@ void Model::Bind(Shader* shader) {
 
 void Model::Bind(Shader* shader, GLenum mode) {
 	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
-	vec3 *vertices, *normals;
 	indices.empty();
 	radius = 0;
 
-	vertices = new vec3[mesh->vertices.size()];
-	normals = new vec3[mesh->vertices.size()];
+	vector<vec3> vertices(mesh->vertices.size());
+	vector<vec3> normals(mesh->vertices.size());
 	for (uint i = 0; i<mesh->vertices.size(); i++) {
 		vertices[i] = mesh->vertices[i].position;
 		normals[i] = mesh->vertices[i].normal();
@@ -87,13 +86,13 @@ void Model::Bind(Shader* shader, GLenum mode) {
 	shader->Begin();
 		//position
 		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), vertices, GL_STATIC_DRAW);		
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), &vertices[0], GL_STATIC_DRAW);		
 		glEnableVertexAttribArray((*shader)["vertex"]);
 		glVertexAttribPointer ((*shader)["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
 		//normal
 		glBindBuffer (GL_ARRAY_BUFFER, normalsID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), normals, GL_STATIC_DRAW);		
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), &normals[0], GL_STATIC_DRAW);		
 		glEnableVertexAttribArray((*shader)["normal"]);
 		glVertexAttribPointer ((*shader)["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
@@ -110,9 +109,6 @@ void Model::Bind(Shader* shader, GLenum mode) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
 	shader->End();
 	glBindVertexArray(0);
-
-	delete [] vertices;
-	delete [] normals;
 }
 
 void Model::Draw(Shader* shader, mat4 view, mat4 projection, GLenum mode) {

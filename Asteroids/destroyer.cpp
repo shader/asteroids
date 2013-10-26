@@ -5,7 +5,7 @@
 
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	ship = new Ship();
-	models.push_back(ship);
+	models.push_back(shared_ptr<Model>(ship));
 	size = vec3(0.75);
 }
 

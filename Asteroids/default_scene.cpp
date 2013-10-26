@@ -18,6 +18,11 @@ void DefaultScene::Initialize() {
 	Box box = destroyer->models[0]->mesh->BoundingBox();
 	float test = box.upper[0];
 
+	bullet_model = shared_ptr<Model>(new Ship());
+	bullet_model->LoadShader(GL_VERTEX_SHADER, "shader.vert");
+	bullet_model->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
+	bullet_model->shader->Create();
+
 	Scene::Initialize();
 }
 
@@ -82,8 +87,9 @@ void DefaultScene::Update(Time time, const InputState &input) {
 
 	//handle keyboard input
 	if (bullet_count < 20 && !(prev_state.keyboard[' '] || prev_state.keyboard['z']) && (input.keyboard[' '] || input.keyboard['z'])) {
- 		bullet_count++;
+  		bullet_count++;
 		Bullet *bullet = new Bullet(this);
+		bullet->models.push_back(bullet_model);
 		bullet->Initialize();
 		bullet->position = destroyer->position + destroyer->orientation*vec3(0,1,0) * (destroyer->radius + bullet->radius);
 		bullet->orientation = destroyer->orientation;

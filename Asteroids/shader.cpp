@@ -6,14 +6,10 @@ using namespace std;
 Shader::Shader(void)
 {
 	GLuint _shaders[] = {0, 0, 0};
-	_attributes.clear();
-	_uniforms.clear();
 }
 
 Shader::~Shader(void)
 {
-	_attributes.clear();	
-	_uniforms.clear();
 	glDeleteProgram(_program);
 }
 

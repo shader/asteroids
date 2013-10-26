@@ -4,30 +4,26 @@
 using namespace std;
 
 Explosion::Explosion(Scene *scene) : Object(scene) {
-	shader = new Shader();
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &indicesID);
 
 	age=0.0f;
 	particles.resize(100, Particle());
-	vertices = new vec3[particles.size()];
-	indices = new GLuint[particles.size()];
+	vertices.resize(100, vec3(0));
+	indices.resize(100,0);
 }
 
 Explosion::~Explosion() {
 	glDeleteBuffers(1, &verticesID);
 	glDeleteBuffers(1, &indicesID);
 	glDeleteVertexArrays(1, &vertex_array);
-	delete shader;
-	delete vertices;
-	delete indices;
 }
 
 void Explosion::Initialize() {
-	shader->Load(GL_VERTEX_SHADER, "explosion.vert");
-	shader->Load(GL_FRAGMENT_SHADER, "color.frag");
-	shader->Create();
+	shader.Load(GL_VERTEX_SHADER, "explosion.vert");
+	shader.Load(GL_FRAGMENT_SHADER, "color.frag");
+	shader.Create();
 
 	for (uint i=0; i<particles.size(); i++) {
 		particles[i].age = 0;
@@ -60,19 +56,19 @@ void Explosion::Draw(mat4 view, mat4 projection) {
 	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
 	mat4 mvp = projection * view * model;
 	glBindVertexArray(vertex_array);
-	shader->Begin();
+	shader.Begin();
 		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*particles.size(), vertices, GL_STATIC_DRAW);		
-		glEnableVertexAttribArray((*shader)["vertex"]);
-		glVertexAttribPointer ((*shader)["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*vertices.size(), &vertices[0], GL_STATIC_DRAW);		
+		glEnableVertexAttribArray(shader["vertex"]);
+		glVertexAttribPointer (shader["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*particles.size(), &indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
 
-		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &mvp[0][0]);
-		glUniform1f((*shader)("age"), age);
+		glUniformMatrix4fv(shader("MVP"), 1, GL_FALSE, &mvp[0][0]);
+		glUniform1f(shader("age"), age);
 
 		glDrawElements(GL_POINTS, particles.size(), GL_UNSIGNED_INT, 0);
-	shader->End();
+	shader.End();
 	glBindVertexArray(0);
 }

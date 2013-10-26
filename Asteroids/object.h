@@ -13,7 +13,7 @@ class Object {
 public:
 	vec3 position, size, velocity, angular_vel;
 	quat orientation;
-	vector<Model*> models;
+	vector<shared_ptr<Model>> models;
 	Scene *scene;
 	Event<Object*> destroyed;
 	float radius;
@@ -52,7 +52,6 @@ private:
 class Bullet : public Object {
 public:
 	Bullet(Scene *scene);
-	void Initialize();
 	void Update(Time time);
 	function<void()> Collision(Object &other);
 
@@ -72,8 +71,8 @@ public:
 
 private:
 	GLuint verticesID, indicesID, vertex_array;
-	vec3 *vertices;
-	GLuint *indices;
-	Shader* shader;
+	vector<vec3> vertices;
+	vector<GLuint> indices;
+	Shader shader;
 	double age;
 };

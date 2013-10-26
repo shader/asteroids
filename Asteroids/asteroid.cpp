@@ -5,7 +5,7 @@
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
 	rock = new Rock(7, 0.75, 3);
-	models.push_back(rock);
+	models.push_back(shared_ptr<Model>(rock));
 	velocity = rand_vec3();
 	position = rand_vec3();
 }

@@ -56,6 +56,7 @@ public:
 
 private:
 	Destroyer *destroyer;
+	shared_ptr<Model> bullet_model;
 	int bullet_count, asteroid_count;
 	void process_collisions();
 };
