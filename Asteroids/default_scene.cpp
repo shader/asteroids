@@ -43,21 +43,23 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 }
 
 void DefaultScene::process_collisions() {
-	map<Object*,function<void()>> callbacks;
+	//map<Object*,function<void()>> callbacks;
+	queue<function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
 		for (auto b = objects.begin(); b!=a; b++) {
 			if (length((*a)->position - (*b)->position) < (*a)->radius + (*b)->radius) {
-				callbacks.insert(pair<Object*,function<void()>>(a->get(), (*a)->Collision(**b)));
-				callbacks.insert(pair<Object*,function<void()>>(b->get(), (*b)->Collision(**a)));
+				callbacks.push((*a)->Collision(**b));
+				callbacks.push((*b)->Collision(**a));
 				collisions++;
 			}
 		}
 	}
 
 	//handle state changes
-	for (auto c=callbacks.begin(); c!=callbacks.end(); c++) {
-		c->second();
+	while (!callbacks.empty()) {
+		callbacks.front()();
+		callbacks.pop();
 	}
 
 	if (collisions > 0) {

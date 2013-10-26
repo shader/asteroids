@@ -93,6 +93,7 @@
     <ClCompile Include="Asteroids\scene.cpp" />
     <ClCompile Include="Asteroids\scene_manager.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
+    <ClCompile Include="Asteroids\shader_manager.cpp" />
     <ClCompile Include="Asteroids\ship.cpp" />
     <ClCompile Include="Asteroids\texture.cpp" />
     <ClCompile Include="Asteroids\utils.cpp" />

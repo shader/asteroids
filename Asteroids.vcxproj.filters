@@ -96,6 +96,9 @@
     <ClCompile Include="Asteroids\scene_manager.cpp">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\shader_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">

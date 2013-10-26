@@ -3,12 +3,9 @@
 
 using namespace std;
 
-Shader::Shader(void)
-{
-	GLuint _shaders[] = {0, 0, 0};
-}
+Shader::Shader() {}
 
-Shader::~Shader(void)
+Shader::~Shader()
 {
 	glDeleteProgram(_program);
 }
@@ -46,11 +43,10 @@ void Shader::Load(GLenum shader, const string filename){
 }
 
 void Shader::Create() {
-	_program = glCreateProgram ();
-	ShaderMap::iterator cur;
+	_program = glCreateProgram();
 
 	//attach all loaded shaders
-	for (cur = _shaders.begin(); cur != _shaders.end(); ++cur) {
+	for (auto cur = _shaders.begin(); cur != _shaders.end(); ++cur) {
 		glAttachShader (_program, cur->second);
 	}
 
@@ -68,7 +64,7 @@ void Shader::Create() {
 	}
 
 	//delete shaders
-	for (cur = _shaders.begin(); cur != _shaders.end(); ++cur) {
+	for (auto cur = _shaders.begin(); cur != _shaders.end(); ++cur) {
 		glDeleteShader(cur->second);
 	}
 }
@@ -83,18 +79,19 @@ void Shader::End() {
 
 //An indexer that returns the location of the attribute
 GLuint Shader::operator [](const string attribute) {
-	GLuint value = _attributes[attribute];
-	if (value == 0) {
-		value = _attributes[attribute] = glGetAttribLocation(_program, attribute.c_str());
+	auto it = _attributes.find(attribute);
+	if (it != _attributes.end()) {
+		return it->second;
+	} else {
+		return _attributes[attribute] = glGetAttribLocation(_program, attribute.c_str());
 	}
-	return value;
 }
 
 GLuint Shader::operator()(const string uniform){
-	GLuint value = _uniforms[uniform];
-	if (value == 0) {
-		return _uniforms[uniform] = glGetUniformLocation(_program, uniform.c_str());
+	auto it = _uniforms.find(uniform);
+	if (it != _uniforms.end()) {
+		return it->second;
 	} else {
-		return value;
+		return _uniforms[uniform] = glGetUniformLocation(_program, uniform.c_str());
 	}
 }

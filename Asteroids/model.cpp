@@ -5,13 +5,13 @@ Model::Model() {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
-	mesh = new Mesh();
-	shader = new Shader();
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &normalsID);
 	glGenBuffers (1, &colorsID);
 	glGenBuffers (1, &indicesID);
+	mesh = new Mesh();
+	shader = new Shader();
 }
 
 Model::~Model() {
@@ -82,8 +82,7 @@ void Model::Bind(Shader* shader, GLenum mode) {
 		break;
 	};
 
-	glBindVertexArray(vertex_array);	 
-	shader->Begin();
+	glBindVertexArray(vertex_array);
 		//position
 		glBindBuffer (GL_ARRAY_BUFFER, verticesID);
 		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh->vertices.size(), &vertices[0], GL_STATIC_DRAW);		
@@ -107,7 +106,6 @@ void Model::Bind(Shader* shader, GLenum mode) {
 		//index
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
-	shader->End();
 	glBindVertexArray(0);
 }
 
