@@ -13,7 +13,7 @@ Object::~Object() {
 	destroyed(this);
 }
 
-void Object::Initialize() {
+void Object::Load() {
 	for (auto m = models.begin(); m!=models.end(); m++) {
 		(*m)->Bind();
 		if (length((*m)->position) > 0) {
@@ -23,6 +23,8 @@ void Object::Initialize() {
 		}
 	}
 }
+
+void Object::Initialize() {}
 
 void Object::Draw(mat4 view, mat4 projection) {	
 	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);

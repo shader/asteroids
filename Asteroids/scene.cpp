@@ -8,12 +8,7 @@ Scene::Scene(SceneManager *manager) {
 	remover = function<void(Object*)>([&](Object *obj){ this->Remove(obj); });
 }
 
-Scene::~Scene() {
-	//auto o = objects.begin();
-	//while (o != objects.end()) {
-	//	delete (*o++);
-	//}
-}
+Scene::~Scene() {}
 
 void Scene::Add(Object *obj) {
 	obj->destroyed += this->remover;
@@ -23,6 +18,12 @@ void Scene::Add(Object *obj) {
 void Scene::Remove(Object *obj) {
 	objects.remove_if([=](unique_ptr<Object> const &p){ return p.get() == obj; });
 }
+
+void Scene::Load() {
+	for (auto o = objects.begin(); o!= objects.end(); o++) {
+		(*o)->Load();
+	}
+};
 
 void Scene::Initialize()
 {

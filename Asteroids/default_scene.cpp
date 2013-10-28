@@ -4,25 +4,28 @@
 
 DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {}
 
-void DefaultScene::Initialize() {
-	objects.erase(objects.begin(), objects.end());
+void DefaultScene::Load() {
 	light_dir = vec3(1);
 	light_color = vec3(1);
-	bullet_count = asteroid_count = 0;
-
-	destroyer = new Destroyer(this);
-	destroyer->position = vec3(0,0,0);
-	Add(destroyer);
-
-	spawn_asteroid();
-	Box box = destroyer->models[0]->mesh->BoundingBox();
-	float test = box.upper[0];
 
 	bullet_model = shared_ptr<Model>(new Ship());
-	bullet_model->LoadShader(GL_VERTEX_SHADER, "shader.vert");
-	bullet_model->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
+	bullet_model->LoadShaders("shader.vert", "shader.frag");
 	bullet_model->shader->Create();
+	bullet_model->Bind();
 
+	Scene::Load();
+}
+
+void DefaultScene::Initialize() {
+	objects.erase(objects.begin(), objects.end());
+	destroyer = new Destroyer(this);
+	destroyer->Load();
+	Add(destroyer);
+
+	bullet_count = asteroid_count = 0;
+
+	spawn_asteroid();
+	
 	Scene::Initialize();
 }
 
@@ -32,6 +35,7 @@ Asteroid* DefaultScene::spawn_asteroid() {
 	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
 	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -4.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
+	asteroid->Load();
 	add_asteroid(asteroid);
 	return asteroid;
 }
@@ -64,7 +68,7 @@ void DefaultScene::process_collisions() {
 
 	if (collisions > 0) {
 		if (asteroid_count <=0) {
-			Initialize();
+			manager->Restart();
 		}
 	}
 }

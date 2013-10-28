@@ -83,7 +83,9 @@ GLuint Shader::operator [](const string attribute) {
 	if (it != _attributes.end()) {
 		return it->second;
 	} else {
-		return _attributes[attribute] = glGetAttribLocation(_program, attribute.c_str());
+		GLuint location = glGetAttribLocation(_program, attribute.c_str());
+		_attributes[attribute] = location;
+		return location;
 	}
 }
 

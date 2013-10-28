@@ -10,11 +10,12 @@ Asteroid::Asteroid(Scene *scene) : Object(scene) {
 	position = rand_vec3();
 }
 
-void Asteroid::Initialize() {
-	rock->LoadShader(GL_VERTEX_SHADER, "shader.vert");
-	rock->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
-	rock->shader->Create();
+void Asteroid::Load() {
+	rock->LoadShaders("shader.vert", "shader.frag");
+	Object::Load();
+}
 
+void Asteroid::Initialize() {
 	Object::Initialize();
 }
 

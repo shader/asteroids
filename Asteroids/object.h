@@ -20,6 +20,7 @@ public:
 
 	Object(Scene *scene);
 	virtual ~Object();
+	virtual void Load();
 	virtual void Initialize();
 	virtual void Draw(mat4 view, mat4 projection);
 	virtual void Update(Time time);
@@ -29,6 +30,7 @@ public:
 class Destroyer : public Object {
 public:
 	Destroyer(Scene *scene);
+	void Load();
 	void Initialize();
 	void Update(Time time);
 	function<void()> Collision(Object &other);
@@ -40,6 +42,7 @@ private:
 class Asteroid : public Object {
 public:
 	Asteroid(Scene *scene);
+	void Load();
 	void Initialize();
 	void Update(Time time);
 	function<void()> Collision(Object &other);

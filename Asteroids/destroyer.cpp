@@ -9,11 +9,16 @@ Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	size = vec3(0.75);
 }
 
+void Destroyer::Load() {
+	ship->LoadShaders("shader.vert", "shader.frag");
+
+	Object::Load();
+}
+
 void Destroyer::Initialize() {
-	ship->LoadShader(GL_VERTEX_SHADER, "shader.vert");
-	ship->LoadShader(GL_FRAGMENT_SHADER, "shader.frag");
-	ship->shader->Create();
-	
+	position = vec3(0,0,0);
+	orientation = quat(vec3(0,0,0));
+
 	Object::Initialize();
 }
 

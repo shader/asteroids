@@ -21,6 +21,7 @@ public:
 
 	vec3 light_dir, light_color;
 
+	virtual void Load();
 	virtual void Initialize();
 	virtual void Update(Time time, const InputState &input);
 	virtual void Draw();
@@ -48,6 +49,7 @@ private:
 class DefaultScene : public Scene {
 public:
 	DefaultScene(SceneManager *manager);
+	void Load();
 	void Initialize();
 	void Update(Time time, const InputState &input);
 	void Keyboard(const InputState &input);

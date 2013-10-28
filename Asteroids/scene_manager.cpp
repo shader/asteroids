@@ -27,5 +27,6 @@ void SceneManager::Restart() {
 
 void SceneManager::Push(Scene *scene) {
 	scenes.push(unique_ptr<Scene>(scene));
+	scene->Load();
 	scene->Initialize();
 }
