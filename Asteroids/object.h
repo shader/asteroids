@@ -55,6 +55,7 @@ private:
 class Bullet : public Object {
 public:
 	Bullet(Scene *scene);
+	void Initialize();
 	void Update(Time time);
 	function<void()> Collision(Object &other);
 

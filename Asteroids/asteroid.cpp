@@ -43,6 +43,8 @@ void Asteroid::Split() {
 		b->angular_vel = angular_vel + vec3(rand_vec2(),0);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(a);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
+		
+		a->Load(); b->Load();
 		a->Initialize(); b->Initialize();
 	}
 	scene->Remove(this);
