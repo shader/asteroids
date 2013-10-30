@@ -34,5 +34,5 @@ private:
 class ShaderManager {
 public:
 	Shader& GetShader(string name);
-	list<Shader> shaders;
+	list<shared_ptr<Shader>> shaders;
 };
