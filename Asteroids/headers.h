@@ -29,6 +29,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 //local
+#include "content.h"
 #include "utils.h"
 #include "timer.h"
 #include "input.h"

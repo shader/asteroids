@@ -2,41 +2,87 @@
 #include "utils.h"
 using namespace glm;
 
-Mesh::~Mesh() {
+Mesh::Mesh() {
+	vertices = vector<Vertex>();
+	edges = vector<Edge>();
+	faces = vector<Face>();
+	box = Box();
+	radius = 0;
+};
+
+//copy constructor - update mesh pointer of elements
+Mesh::Mesh(const Mesh &mesh) {	
+	vertices = mesh.vertices;
+	edges = mesh.edges;
+	faces = mesh.faces;
+	box = mesh.box;
+	radius = mesh.radius;
+
+	for (auto v=vertices.begin(); v!=vertices.end(); v++) {
+		v->mesh = this;
+	}
+	for (auto e=edges.begin(); e!=edges.end(); e++) {
+		e->mesh = this;
+	}
+	for (auto f=faces.begin(); f!=faces.end(); f++) {
+		f->mesh = this;
+	}
 }
 
-Mesh* split(Mesh *mesh) {
-	mesh->vertices.reserve(mesh->vertices.size() + mesh->edges.size()); // 
-	mesh->faces.reserve(mesh->faces.size() * 4); // 4 new faces for every face
-	mesh->edges.reserve(mesh->faces.size() * 4 * 3);
-	int end = mesh->edges.size();
+Mesh& Mesh::operator=(const Mesh &mesh) {
+	if (this != &mesh) {
+		vertices = mesh.vertices;
+		edges = mesh.edges;
+		faces = mesh.faces;
+		box = mesh.box;
+		radius = mesh.radius;
+
+		for (auto v=vertices.begin(); v!=vertices.end(); v++) {
+			v->mesh = this;
+		}
+		for (auto e=edges.begin(); e!=edges.end(); e++) {
+			e->mesh = this;
+		}
+		for (auto f=faces.begin(); f!=faces.end(); f++) {
+			f->mesh = this;
+		}
+	}
+    return *this;
+}
+
+void Mesh::Split() {
+	vertices.reserve(vertices.size() + edges.size()); // 
+	faces.reserve(faces.size() * 4); // 4 new faces for every face
+	edges.reserve(faces.size() * 4 * 3);
+	int end = edges.size();
 	for (int e = 0; e<end; e++) {
-		mesh->edges[e].split();
+		edges[e].split();
 	}
-	end = mesh->faces.size();
+	end = faces.size();
 	for (int f = 0; f<end; f++) {
-		mesh->faces[f].split();
+		faces[f].split();
 	}
-	return mesh;
 }
 
-Mesh* average(Mesh *mesh) {
-	for (auto v = mesh->vertices.begin(); v!=mesh->vertices.end(); v++) {
-		v->new_position = average(*v).position;
+void Mesh::Average() {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
+		v->new_position = v->average();
 	}
-	for (auto v = mesh->vertices.begin(); v!=mesh->vertices.end(); v++) {
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = v->new_position;
 	}
-	return mesh;
 }
 
-Mesh* subdivide(Mesh *mesh) {
-	return split(average(mesh));
+void Mesh::Subdivide(int times) {
+	for (int i=0; i<times; i++) {
+		Split();
+		Average();
+	}
 }
 
 void Mesh::Perturb(float max_radius) {
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
-		v->position = perturb(v->position, max_radius);
+		v->position = ::perturb(v->position, max_radius);
 	}
 }
 

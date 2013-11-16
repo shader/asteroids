@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "object.h"
 #include "utils.h"
+#include "content.h"
 
 DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {}
 
@@ -8,10 +9,12 @@ void DefaultScene::Load() {
 	light_dir = vec3(1);
 	light_color = vec3(1);
 
-	bullet_model = shared_ptr<Model>(new Ship());
-	bullet_model->LoadShaders("shader.vert", "shader.frag");
-	bullet_model->shader->Create();
-	bullet_model->Bind();
+	Content::Load(basic, "shader.vert", "shader.frag");
+	Content::Load(explosion, "explosion.vert", "color.frag");
+
+	Content::Load(bullet, []()->Mesh{ return Ship(); });
+	Content::Load(icosahedron, []()->Mesh{ return Icosahedron(); });
+	Content::Load(ship, []()->Mesh{ return Ship(); });
 
 	Scene::Load();
 }

@@ -16,6 +16,7 @@ public:
 	~Shader();
 	void LoadString(GLenum shader, const string source);
 	void Load(GLenum shader, const string filename);
+	void Load(string vertex, string fragment);
 	void Create();
 	void Begin();
 	void End();
@@ -31,8 +32,7 @@ private:
 	map<string,GLuint> _uniforms;
 };
 
-class ShaderManager {
-public:
-	Shader& GetShader(string name);
-	list<shared_ptr<Shader>> shaders;
+enum ShaderType {
+	basic,
+	explosion,
 };

@@ -39,20 +39,16 @@ vector<int> Vertex::neighbors() const {
 	return n;
 }
 
-Vertex average(const Vertex &vertex) {
-	vector<int> neighbors = vertex.neighbors();
-	int n = neighbors.size();
-	Vertex new_vertex = Vertex(vertex.position * alpha(n), vertex.mesh);
+vec3 Vertex::average() {
+	vec3 average(0);
+	vector<int> ns = neighbors();
+	int n = ns.size();
+	Vertex new_vertex = Vertex(position * alpha(n), mesh);
 	for (int i = 0; i < n; i++) {
-		new_vertex.position += vertex.mesh->vertices[neighbors[i]].position;
+		average += mesh->vertices[ns[i]].position;
 	}
-	new_vertex.position /= (alpha(n) + n);
-	return new_vertex;
-}
-
-Vertex perturb(Vertex vertex, float max_radius) {
-	vec3 pos = perturb(vertex.position, max_radius);
-	return Vertex(pos, vertex.mesh);
+	average /= (alpha(n) + n);
+	return average;
 }
 
 vec3 Vertex::normal() const {

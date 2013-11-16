@@ -4,14 +4,12 @@
 #include "scene.h"
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
-	rock = new Rock(7, 0.75, 3);
-	models.push_back(shared_ptr<Model>(rock));
+	models.push_back(shared_ptr<Model>(new Rock(7, 0.75, 3)));
 	velocity = rand_vec3();
 	position = rand_vec3();
 }
 
 void Asteroid::Load() {
-	rock->LoadShaders("shader.vert", "shader.frag");
 	Object::Load();
 }
 

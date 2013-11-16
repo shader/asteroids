@@ -34,9 +34,6 @@ public:
 	void Initialize();
 	void Update(Time time);
 	function<void()> Collision(Object &other);
-
-private:
-	Ship* ship;
 };
 
 class Asteroid : public Object {
@@ -47,9 +44,6 @@ public:
 	void Update(Time time);
 	function<void()> Collision(Object &other);
 	void Split();
-
-private:
-	Rock* rock;
 };
 
 class Bullet : public Object {
@@ -60,7 +54,6 @@ public:
 	function<void()> Collision(Object &other);
 
 private:
-	Model* model;
 	double age;
 };
 
@@ -77,6 +70,5 @@ private:
 	GLuint verticesID, indicesID, vertex_array;
 	vector<vec3> vertices;
 	vector<GLuint> indices;
-	Shader shader;
 	double age;
 };

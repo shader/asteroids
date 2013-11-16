@@ -1,7 +1,7 @@
 #pragma once
 #include "model.h"
 
-class Ship : public Model {
+class Ship : public Mesh {
 public:
 	Ship();
 };

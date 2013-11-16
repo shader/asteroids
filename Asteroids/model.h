@@ -16,28 +16,28 @@ using namespace std;
 class Model
 {
 public:
-	Model();
+	Model(Mesh &mesh, ShaderType shader = basic);
 	~Model();
 
 	vec3 position, size;
 	quat orientation;
 	float radius;
-	Shader* shader;
+	ShaderType shader_type;
 	
 	void Init();
 	void LoadShader(GLenum type, string path);
 	void LoadShaders(string vertex, string fragment);
-	void Bind();
-	void Bind(Shader* shader);
-	void Bind(Shader* shader, GLenum mode);
-	void Draw(mat4 view, mat4 projection);
-	void Draw(Shader* shader, mat4 view, mat4 projection);
-	void Draw(Shader* shader, mat4 view, mat4 projection, GLenum mode);
 
-	Mesh* mesh;
+	void Bind();
+	void Bind(GLenum mode);
+	void Bind(Shader& shader, GLenum mode);
+
+	void Draw(mat4 view, mat4 projection);
+	void Draw(Shader& shader, mat4 view, mat4 projection);
+	void Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode);
+
+	Mesh mesh;
 	vector<Color> colors;
-	void Subdivide(int times = 1);
-	void Perturb(float max_radius);
 
 private:
 	GLuint verticesID, indicesID, colorsID, normalsID, vertex_array;

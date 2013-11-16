@@ -2,16 +2,18 @@
 #include "utils.h"
 #include "ship.h"
 #include "scene.h"
+#include "content.h"
 
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
-	ship = new Ship();
-	models.push_back(shared_ptr<Model>(ship));
+	Model* model = new Model(Content::mesh(ship));
+	models.push_back(shared_ptr<Model>(model));
 	size = vec3(0.75);
 }
 
 void Destroyer::Load() {
-	ship->LoadShaders("shader.vert", "shader.frag");
-
+	for (auto m = models.begin(); m!=models.end(); m++) {
+		(*m)->shader_type = basic;
+	}
 	Object::Load();
 }
 

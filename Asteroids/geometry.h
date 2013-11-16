@@ -28,8 +28,7 @@ public:
 
 	vector<int> neighbors() const;
 	vec3 normal() const;
-	friend Vertex average(const Vertex &vertex);
-	friend Vertex perturb(Vertex vertex, float max_radius);
+	vec3 average();
 
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
@@ -87,23 +86,32 @@ public:
 
 class Mesh {
 public:
-	~Mesh();
+	Mesh();
+	Mesh(const Mesh& mesh);
 	
 	vector<Vertex> vertices;
 	vector<Edge> edges;
 	vector<Face> faces;
 	Box box;
 	float radius;
-	
+
+	Mesh& operator=(const Mesh& mesh);
+
+	void Split();
+	void Average();
 	void Perturb(float max_radius);
 	void Normalize();
+	void Subdivide(int times=1);
 	Box BoundingBox();
 	void LoadTriangles(uint* triangles, int triangle_count);
+};
 
-	friend Mesh* split(Mesh* mesh);
-	friend Mesh* average(Mesh* mesh);
-	friend Mesh* perturb(Mesh* mesh, float max_radius);
-	friend Mesh* subdivide(Mesh *mesh);
+enum MeshType {
+	icosahedron,
+	rock,
+	ship,
+	bullet,
+	alien,
 };
 
 //loop averaging functions

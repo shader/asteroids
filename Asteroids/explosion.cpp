@@ -1,6 +1,7 @@
 #include "object.h"
 #include "utils.h"
 #include "scene.h"
+#include "content.h"
 using namespace std;
 
 Explosion::Explosion(Scene *scene) : Object(scene) {
@@ -21,10 +22,6 @@ Explosion::~Explosion() {
 }
 
 void Explosion::Initialize() {
-	shader.Load(GL_VERTEX_SHADER, "explosion.vert");
-	shader.Load(GL_FRAGMENT_SHADER, "color.frag");
-	shader.Create();
-
 	for (uint i=0; i<particles.size(); i++) {
 		particles[i].age = 0;
 		particles[i].position = vec3(0);
@@ -48,6 +45,7 @@ void Explosion::Update(Time time) {
 }
 
 void Explosion::Draw(mat4 view, mat4 projection) {
+	Shader shader = Content::shader(explosion);
 	for (uint i=0; i<particles.size(); i++) {
 		vertices[i] = particles[i].position;
 		indices[i] = i;

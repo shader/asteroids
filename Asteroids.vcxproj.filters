@@ -60,9 +60,6 @@
     <ClCompile Include="Asteroids\Face.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids\loop.cpp">
-      <Filter>Source Files\geometry</Filter>
-    </ClCompile>
     <ClCompile Include="Asteroids\Mesh.cpp">
       <Filter>Source Files\geometry</Filter>
     </ClCompile>
@@ -96,7 +93,10 @@
     <ClCompile Include="Asteroids\scene_manager.cpp">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids\shader_manager.cpp">
+    <ClCompile Include="Asteroids\subdivision.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\content.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asteroids\content.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

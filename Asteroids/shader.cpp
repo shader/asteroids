@@ -31,6 +31,11 @@ void Shader::LoadString(GLenum type, const string source) {
 	_shaders[type] = shader;
 }
 
+void Shader::Load(string vertex, string fragment) {
+	Load(GL_VERTEX_SHADER, vertex);
+	Load(GL_FRAGMENT_SHADER, fragment);
+}
+
 void Shader::Load(GLenum shader, const string filename){
 	ifstream infile("resources/"+filename);
 	if(infile) {
@@ -89,7 +94,7 @@ GLuint Shader::operator [](const string attribute) {
 	}
 }
 
-GLuint Shader::operator()(const string uniform){
+GLuint Shader::operator()(const string uniform) {
 	auto it = _uniforms.find(uniform);
 	if (it != _uniforms.end()) {
 		return it->second;
