@@ -38,7 +38,7 @@ void Object::Draw(mat4 view, mat4 projection) {
 	}
 }
 
-void Object::Update(Time time) {
+void Object::Update(Time time, InputState const &input) {
 	double t = time.Elapsed().Seconds();
 	position += velocity * t;
 	orientation = orientation * quat(angular_vel * t);

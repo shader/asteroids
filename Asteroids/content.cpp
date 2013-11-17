@@ -23,7 +23,7 @@ void Content::Load(ShaderType type, string vertex, string fragment) {
 void Content::Load(MeshType type, function<Mesh()> factory) {
 	auto mesh = meshes.find(type);
 	if (mesh == meshes.end()) {
-		auto ret = meshes.insert(pair<MeshType, Mesh>(type, factory())); //pair of iterator and bool
+		meshes.insert(pair<MeshType, Mesh>(type, factory()));
 	}
 }
 

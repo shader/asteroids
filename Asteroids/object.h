@@ -7,6 +7,7 @@
 #include "GL\freeglut.h"
 #include "memory"
 #include "particles.h"
+#include "input.h"
 
 class Scene;
 class Object {
@@ -23,7 +24,7 @@ public:
 	virtual void Load();
 	virtual void Initialize();
 	virtual void Draw(mat4 view, mat4 projection);
-	virtual void Update(Time time);
+	virtual void Update(Time time, InputState const &input);
 	virtual function<void()> Collision(Object &other);
 };
 
@@ -32,8 +33,11 @@ public:
 	Destroyer(Scene *scene);
 	void Load();
 	void Initialize();
-	void Update(Time time);
+	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
+private:
+	int bullet_count;
+	InputState prev_state;
 };
 
 class Asteroid : public Object {
@@ -41,7 +45,7 @@ public:
 	Asteroid(Scene *scene);
 	void Load();
 	void Initialize();
-	void Update(Time time);
+	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
 	void Split();
 };
@@ -50,7 +54,7 @@ class Bullet : public Object {
 public:
 	Bullet(Scene *scene);
 	void Initialize();
-	void Update(Time time);
+	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
 
 private:
@@ -63,7 +67,7 @@ public:
 	~Explosion();
 	vector<Particle> particles;
 	void Initialize();
-	void Update(Time time);
+	void Update(Time time, InputState const &input);
 	void Draw(mat4 view, mat4 projection);
 
 private:

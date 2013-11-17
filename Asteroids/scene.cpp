@@ -43,7 +43,7 @@ void Scene::Update(Time time, const InputState &input)
 
 	auto o = objects.begin();
 	while (o != objects.end()) {
-		(*o++)->Update(time);
+		(*o++)->Update(time, input);
 	}
 
 	prev_state = input;

@@ -31,7 +31,7 @@ void Explosion::Initialize() {
 	Object::Initialize();
 }
 
-void Explosion::Update(Time time) {
+void Explosion::Update(Time time, InputState const &input) {
 	age += time.ElapsedSeconds;
 	if (age > 3) {
 		scene->manager->Restart();
@@ -40,7 +40,7 @@ void Explosion::Update(Time time) {
 			p->age += time.ElapsedSeconds;
 			p->position += p->velocity * time.ElapsedSeconds;
 		}
-		Object::Update(time);
+		Object::Update(time, input);
 	}
 }
 

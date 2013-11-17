@@ -17,8 +17,8 @@ void Asteroid::Initialize() {
 	Object::Initialize();
 }
 
-void Asteroid::Update(Time time) {
-	Object::Update(time);
+void Asteroid::Update(Time time, InputState const &input) {
+	Object::Update(time, input);
 }
 
 function<void()> Asteroid::Collision(Object &other) {

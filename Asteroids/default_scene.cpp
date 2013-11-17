@@ -25,7 +25,7 @@ void DefaultScene::Initialize() {
 	destroyer->Load();
 	Add(destroyer);
 
-	bullet_count = asteroid_count = 0;
+	asteroid_count = 0;
 
 	spawn_asteroid();
 	
@@ -83,42 +83,16 @@ void DefaultScene::Update(Time time, const InputState &input) {
 
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		if (dot((*obj)->velocity, (*obj)->position) > 0) {
+		if (dot((*obj)->velocity, (*obj)->position) > 0 && typeid(obj) != typeid(Explosion)) {
 			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
-			if (p.x > 1 || p.x < 0) {
-				(*obj)->position.x = -(*obj)->position.x;
-			}
-			if (p.y > 1 || p.y < 0) {
-				(*obj)->position.y = -(*obj)->position.y;
+			if (p.x > 1 || p.x < 0 || p.y > 1 || p.y < 0) {
+				auto v = normalize((*obj)->velocity);
+				(*obj)->position -= 2 * dot(v, (*obj)->position) * v;
 			}
 		}
 	}
 
 	//handle keyboard input
-	if (bullet_count < 20 && !(prev_state.keyboard[' '] || prev_state.keyboard['z']) && (input.keyboard[' '] || input.keyboard['z'])) {
-  		bullet_count++;
-		Bullet *bullet = new Bullet(this);
-		bullet->models.push_back(bullet_model);
-		bullet->Initialize();
-		bullet->position = destroyer->position + destroyer->orientation*vec3(0,1,0) * (destroyer->radius + bullet->radius);
-		bullet->orientation = destroyer->orientation;
-		bullet->velocity = destroyer->velocity + destroyer->orientation*vec3(0,16,0);
-		bullet->destroyed += [&](Object* obj){ bullet_count--; };
-		Add(bullet);
-	}
-
-	if (input.special_keys[GLUT_KEY_LEFT]) {
-		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,10 * t));
-		destroyer->orientation = normalize(destroyer->orientation);
-	}
-	if (input.special_keys[GLUT_KEY_RIGHT]) {
-		destroyer->orientation = destroyer->orientation * quat(vec3(0,0,-10 * t));
-		destroyer->orientation = normalize(destroyer->orientation);
-	}
-	if (input.special_keys[GLUT_KEY_UP] || input.keyboard['x']) {
-		destroyer->velocity = destroyer->velocity + destroyer->orientation * vec3(0,50 * t,0);
-	}
-
 	if (input.keyboard['a'] && !prev_state.keyboard['a']) {
 		auto asteroid = spawn_asteroid();
 		asteroid->Initialize();
