@@ -11,10 +11,9 @@ Mesh& Content::mesh(MeshType type) {
 void Content::Load(ShaderType type, string vertex, string fragment) {
 	auto shader = shaders.find(type);
 	if (shader == shaders.end()) {
-		Shader s;
-		s.Load(vertex, fragment);
-		s.Create();
-		shaders.insert(pair<ShaderType, Shader>(type, s));
+		shaders[type] = Shader();
+		shaders[type].Load(vertex, fragment);
+		shaders[type].Create();
 	} else {
 		shader->second.Load(vertex, fragment);
 		shader->second.Create();
