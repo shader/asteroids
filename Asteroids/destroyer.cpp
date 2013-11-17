@@ -10,6 +10,8 @@ Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	size = vec3(0.75);
 }
 
+int Destroyer::bullet_count = 0;
+
 void Destroyer::Load() {
 	Object::Load();
 }
@@ -17,7 +19,6 @@ void Destroyer::Load() {
 void Destroyer::Initialize() {
 	position = vec3(0,0,0);
 	orientation = quat(vec3(0,0,0));
-	bullet_count = 0;
 
 	Object::Initialize();
 }

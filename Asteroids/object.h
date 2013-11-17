@@ -36,7 +36,7 @@ public:
 	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
 private:
-	int bullet_count;
+	static int bullet_count;
 	InputState prev_state;
 };
 
