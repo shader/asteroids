@@ -60,13 +60,15 @@ void Destroyer::Update(Time time, InputState const &input) {
 }
 
 function<void()> Destroyer::Collision(Object &other) {
+	auto s = scene;
+	auto p = position;
+	auto v = velocity;
 	return [=](){ 
-		Explosion* explosion = new Explosion(scene);
-		explosion->position = position;
-		explosion->velocity = velocity;
+		Explosion* explosion = new Explosion(s);
+		explosion->position = p;
+		explosion->velocity = v;
 		explosion->Initialize();
-		scene->Add(explosion);
-		//explosion->destroyed += [](Object* obj){ obj->scene->Initialize(); };
-		scene->Remove(this);
+		s->Add(explosion);
+		s->Remove(this);
 	};
 }

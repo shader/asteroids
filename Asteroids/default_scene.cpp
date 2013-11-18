@@ -3,7 +3,9 @@
 #include "utils.h"
 #include "content.h"
 
-DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {}
+DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {
+	level = 1;
+}
 
 void DefaultScene::Load() {
 	light_dir = vec3(1);
@@ -21,13 +23,15 @@ void DefaultScene::Load() {
 
 void DefaultScene::Initialize() {
 	objects.erase(objects.begin(), objects.end());
-	destroyer = new Destroyer(this);
+	Destroyer *destroyer = new Destroyer(this);
 	destroyer->Load();
 	Add(destroyer);
 
 	asteroid_count = 0;
 
-	spawn_asteroid();
+	for (int i=0; i<level; i++) {
+		spawn_asteroid();
+	}
 	
 	Scene::Initialize();
 }
@@ -71,6 +75,7 @@ void DefaultScene::process_collisions() {
 
 	if (collisions > 0) {
 		if (asteroid_count <=0) {
+			level += 1;
 			manager->Restart();
 		}
 	}

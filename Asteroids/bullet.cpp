@@ -23,5 +23,6 @@ void Bullet::Update(Time time, InputState const &input) {
 }
 
 function<void()> Bullet::Collision(Object &other) {
-	return [&](){ scene->Remove(this); };
+	auto s = scene;
+	return [=](){ s->Remove(this); };
 }

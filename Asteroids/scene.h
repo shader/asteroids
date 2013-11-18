@@ -57,8 +57,7 @@ public:
 	void add_asteroid(Asteroid *asteroid);
 
 private:
-	Destroyer *destroyer;
 	shared_ptr<Model> bullet_model;
-	int bullet_count, asteroid_count;
+	int asteroid_count, level;
 	void process_collisions();
 };
