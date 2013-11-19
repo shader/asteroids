@@ -16,6 +16,7 @@ using namespace std;
 class Model
 {
 public:
+	Model(ShaderType shader = basic);
 	Model(Mesh &mesh, ShaderType shader = basic);
 	~Model();
 

@@ -12,7 +12,6 @@ out vec4 light_dir;
 uniform mat4 MVP;
 uniform mat4 model_view;
 uniform mat3 normal_matrix;
-uniform mat4 inv_model;
 uniform mat4 inv_view;
 
 void main()

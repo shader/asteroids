@@ -1,11 +1,17 @@
 #include "content.h"
 
 Shader& Content::shader(ShaderType type) {
-	return shaders[type];
+	auto shader = shaders.find(type);
+	if (shader != shaders.end()) {
+		return shaders[type];
+	}
 }
 
 Mesh& Content::mesh(MeshType type) {
-	return meshes[type];
+	auto mesh = meshes.find(type);
+	if (mesh != meshes.end()) {
+		return meshes[type];
+	}
 }
 
 void Content::Load(ShaderType type, string vertex, string fragment) {

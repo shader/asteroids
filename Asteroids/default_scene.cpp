@@ -9,7 +9,7 @@ DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {
 
 void DefaultScene::Load() {
 	light_dir = vec3(1);
-	light_color = vec3(1);
+	light_color = vec3(1);	
 
 	Content::Load(basic, "shader.vert", "shader.frag");
 	Content::Load(explosion, "explosion.vert", "color.frag");
@@ -17,14 +17,25 @@ void DefaultScene::Load() {
 	Content::Load(bullet, []()->Mesh{ return Ship(); });
 	Content::Load(icosahedron, []()->Mesh{ return Icosahedron(); });
 	Content::Load(ship, []()->Mesh{ return Ship(); });
+	
+	lives = new LifeCounter(this, 3);
+	lives->GameOver += [&](){ level = 1; manager->Restart(); };
+	Add(lives);
 
 	Scene::Load();
 }
 
 void DefaultScene::Initialize() {
-	objects.erase(objects.begin(), objects.end());
+	objects.remove_if([](unique_ptr<Object> const &p){
+		return typeid(*p.get()) == typeid(Destroyer) ||
+		typeid(*p.get()) == typeid(Asteroid) ||
+		typeid(*p.get()) == typeid(Bullet) ||
+		typeid(*p.get()) == typeid(Explosion);
+	});
+	
 	Destroyer *destroyer = new Destroyer(this);
 	destroyer->Load();
+	destroyer->destroyed += [&](Object *obj){ lives->Die(); };
 	Add(destroyer);
 
 	asteroid_count = 0;
@@ -32,7 +43,7 @@ void DefaultScene::Initialize() {
 	for (int i=0; i<level; i++) {
 		spawn_asteroid();
 	}
-	
+		
 	Scene::Initialize();
 }
 
@@ -88,7 +99,7 @@ void DefaultScene::Update(Time time, const InputState &input) {
 
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		if (dot((*obj)->velocity, (*obj)->position) > 0 && typeid(obj) != typeid(Explosion)) {
+		if (dot((*obj)->velocity, (*obj)->position) > 0) { // && typeid(*(obj->get())) != typeid(Explosion)) {
 			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
 			if (p.x > 1 || p.x < 0 || p.y > 1 || p.y < 0) {
 				auto v = normalize((*obj)->velocity);

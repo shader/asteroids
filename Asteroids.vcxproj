@@ -83,6 +83,7 @@
     <ClCompile Include="Asteroids\explosion.cpp" />
     <ClCompile Include="Asteroids\Face.cpp" />
     <ClCompile Include="Asteroids\icosahedron.cpp" />
+    <ClCompile Include="Asteroids\life_counter.cpp" />
     <ClCompile Include="Asteroids\main.cpp" />
     <ClCompile Include="Asteroids\menu.cpp" />
     <ClCompile Include="Asteroids\Mesh.cpp" />

@@ -32,6 +32,7 @@ void Explosion::Initialize() {
 }
 
 void Explosion::Update(Time time, InputState const &input) {
+	velocity -= velocity * .5 * time.ElapsedSeconds; //'friction' decay
 	age += time.ElapsedSeconds;
 	if (age > 3) {
 		scene->manager->Restart();

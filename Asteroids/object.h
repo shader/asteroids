@@ -52,7 +52,8 @@ public:
 
 class Bullet : public Object {
 public:
-	Bullet(Scene *scene);
+	Bullet(Scene *scene, Object* source);
+	Object* source;
 	void Initialize();
 	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
@@ -75,4 +76,21 @@ private:
 	vector<vec3> vertices;
 	vector<GLuint> indices;
 	double age;
+};
+
+class LifeCounter : public Object {
+public:
+	Event<void> GameOver;
+
+	LifeCounter(Scene *scene, int lives = 3);
+
+	void Initialize();
+	void Update(Time time, InputState const &input);
+	void Draw(mat4 view, mat4 projection);
+	void Die();
+
+private:
+	int lives, max_lives;
+	Model icon;
+	quat rotation;
 };

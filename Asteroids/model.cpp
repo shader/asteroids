@@ -1,6 +1,18 @@
 #include "headers.h"
 using namespace glm;
 
+Model::Model(ShaderType shader) {
+	shader_type = shader;
+	position = vec3(0.0f, 0.0f, 0.0f);
+	size = vec3(1.0f, 1.0f, 1.0f);
+	draw_mode = GL_TRIANGLES;
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers (1, &verticesID);
+	glGenBuffers (1, &normalsID);
+	glGenBuffers (1, &colorsID);
+	glGenBuffers (1, &indicesID);
+}
+
 Model::Model(Mesh &mesh, ShaderType shader) {
 	this->mesh = mesh;
 	shader_type = shader;

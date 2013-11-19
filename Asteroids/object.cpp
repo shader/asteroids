@@ -34,7 +34,7 @@ void Object::Draw(mat4 view, mat4 projection) {
 		Content::shader((*m)->shader_type).Begin();
 		glUniformMatrix4fv(Content::shader((*m)->shader_type)("inv_view"), 1, GL_FALSE, &(mv[0][0]));
 		(*m)->Draw(mv, projection);
-		Content::shader((*m)->shader_type).Begin();
+		Content::shader((*m)->shader_type).End();
 	}
 }
 

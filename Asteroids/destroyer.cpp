@@ -24,8 +24,8 @@ void Destroyer::Initialize() {
 }
 
 void Destroyer::Update(Time time, InputState const &input) {
-	double t = time.Elapsed().Seconds();	
-	velocity -= velocity * .3 * t; //'friction' decay
+	double t = time.Elapsed().Seconds();
+	velocity -= velocity * .4 * t; //'friction' decay
 	float speed = length(velocity);
 	if (speed > 0)
 		velocity = normalize(velocity) * glm::min(speed, 16.0f);
@@ -45,12 +45,12 @@ void Destroyer::Update(Time time, InputState const &input) {
 	//bullets
 	if (bullet_count < 20 && !(prev_state.keyboard[' '] || prev_state.keyboard['z']) && (input.keyboard[' '] || input.keyboard['z'])) {
   		bullet_count++;
-		Bullet *bullet = new Bullet(scene);
+		Bullet *bullet = new Bullet(scene, this);
 		bullet->Initialize();
 		bullet->Load();
 		bullet->position = position + orientation*vec3(0,1,0) * (radius + bullet->radius);
 		bullet->orientation = orientation;
-		bullet->velocity = velocity + orientation*vec3(0,16,0);
+		bullet->velocity = velocity + orientation*vec3(0,20,0);
 		bullet->destroyed += [&](Object* obj){ bullet_count--; };
 		scene->Add(bullet);
 	}
@@ -60,15 +60,19 @@ void Destroyer::Update(Time time, InputState const &input) {
 }
 
 function<void()> Destroyer::Collision(Object &other) {
-	auto s = scene;
-	auto p = position;
-	auto v = velocity;
-	return [=](){ 
-		Explosion* explosion = new Explosion(s);
-		explosion->position = p;
-		explosion->velocity = v;
-		explosion->Initialize();
-		s->Add(explosion);
-		s->Remove(this);
-	};
+	if (!(typeid(other) == typeid(Bullet) && ((Bullet*)&other)->source == this)) {
+		auto s = scene;
+		auto p = position;
+		auto v = velocity;
+		return [=](){ 
+			Explosion* explosion = new Explosion(s);
+			explosion->position = p;
+			explosion->velocity = v;
+			explosion->Initialize();
+			s->Add(explosion);
+			s->Remove(this);
+		};
+	} else {
+		return [](){};
+	}
 }

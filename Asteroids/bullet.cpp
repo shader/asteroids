@@ -3,10 +3,11 @@
 #include "scene.h"
 #include "content.h"
 
-Bullet::Bullet(Scene *scene) : Object(scene) {
-	size = vec3(0.25);
+Bullet::Bullet(Scene *scene, Object* source) : Object(scene) {
+	this->source = source;
+	size = vec3(0.1, 0.2, 0.1);
 	age = 0;
-	models.push_back(shared_ptr<Model>(new Model(Content::mesh(bullet))));
+	models.push_back(shared_ptr<Model>(new Model(Ship())));
 }
 
 void Bullet::Initialize() {

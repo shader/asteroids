@@ -60,4 +60,5 @@ private:
 	shared_ptr<Model> bullet_model;
 	int asteroid_count, level;
 	void process_collisions();
+	LifeCounter *lives;
 };

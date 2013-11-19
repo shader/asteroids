@@ -17,3 +17,19 @@ public:
 		}
 	};
 };
+
+template <> 
+class Event <void> {
+	list<function<void()>> handlers;
+
+public:
+	void operator+=(function<void()> handler) {
+		handlers.push_back( move(handler) );
+	};
+
+	void operator()() {
+        for(auto handler = begin(handlers); handler != end(handlers); handler++) {
+			(*handler)();
+		}
+	};
+};
