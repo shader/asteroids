@@ -28,7 +28,7 @@ public:
 
 	vector<int> neighbors() const;
 	vec3 normal() const;
-	vec3 average();
+	vec3 average(bool spike = false);
 
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
@@ -100,6 +100,7 @@ public:
 	void Split();
 	void Average();
 	void Perturb(float max_radius);
+	void Scale(vec3 scale);
 	void Normalize();
 	void Subdivide(int times=1);
 	Box BoundingBox();

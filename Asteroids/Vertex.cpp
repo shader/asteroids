@@ -39,11 +39,10 @@ vector<int> Vertex::neighbors() const {
 	return n;
 }
 
-vec3 Vertex::average() {
-	vec3 average(0);
+vec3 Vertex::average(bool spike) {
 	vector<int> ns = neighbors();
 	int n = ns.size();
-	Vertex new_vertex = Vertex(position * alpha(n), mesh);
+	vec3 average = spike ? vec3(0) : position * alpha(n);
 	for (int i = 0; i < n; i++) {
 		average += mesh->vertices[ns[i]].position;
 	}
