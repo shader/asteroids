@@ -16,11 +16,12 @@ void DefaultScene::Load() {
 
 	Content::Load(bullet, []()->Mesh{ return Ship(); });
 	Content::Load(icosahedron, []()->Mesh{ return Icosahedron(); });
+	Content::Load(rock, []()->Mesh{ return Rock(7, 0.75, 3); });
 	Content::Load(ship, []()->Mesh{ return Ship(); });
 	Content::Load(alien, []()->Mesh {
 		Mesh alien = Icosahedron();
 		alien.Subdivide(2);
-		//alien.Scale(vec3(1,1,0.2));
+		alien.Scale(vec3(1,1,0.2));
 		alien.Normalize();
 		alien.BoundingBox();
 		return alien;

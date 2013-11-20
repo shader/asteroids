@@ -8,7 +8,7 @@ LifeCounter::LifeCounter(Scene* scene, int max_lives) : Object(scene) {
 	position = vec3(0.75, 19, -10);
 	this->max_lives = this->lives = max_lives;
 
-	icon.mesh = Ship();
+	icon.mesh = Content::mesh(ship);
 	icon.Bind();
 	rotation = quat(vec3(0));
 }

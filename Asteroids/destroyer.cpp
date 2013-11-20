@@ -1,6 +1,5 @@
 #include "object.h"
 #include "utils.h"
-#include "model.h"
 #include "scene.h"
 #include "content.h"
 

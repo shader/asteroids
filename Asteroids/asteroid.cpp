@@ -1,10 +1,10 @@
 #include "object.h"
-#include "model.h"
 #include "utils.h"
 #include "scene.h"
+#include "content.h"
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
-	models.push_back(shared_ptr<Model>(new Rock(7, 0.75, 3)));
+	models.push_back(shared_ptr<Model>(new Model(Content::mesh(rock))));
 	velocity = rand_vec3();
 	position = rand_vec3();
 }

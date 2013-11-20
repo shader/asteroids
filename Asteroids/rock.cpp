@@ -1,15 +1,15 @@
 #include "model.h"
 #include "content.h"
 
-Rock::Rock(int levels, float start, float rate) : Model(Icosahedron(), basic) {
+Rock::Rock(int levels, float start, float rate) : Icosahedron() {
 	float max_radius = start;
 	for (int i=0; i<levels; i++) {
 		if (i%2 == 0) {
-			mesh.Perturb(max_radius);
+			Perturb(max_radius);
 			max_radius /= rate;
 		} else {
-			mesh.Subdivide();
+			Subdivide();
 		}
 	}
-	mesh.Normalize();
+	Normalize();
 }
