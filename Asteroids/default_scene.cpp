@@ -17,6 +17,14 @@ void DefaultScene::Load() {
 	Content::Load(bullet, []()->Mesh{ return Ship(); });
 	Content::Load(icosahedron, []()->Mesh{ return Icosahedron(); });
 	Content::Load(ship, []()->Mesh{ return Ship(); });
+	Content::Load(alien, []()->Mesh {
+		Mesh alien = Icosahedron();
+		alien.Subdivide(2);
+		//alien.Scale(vec3(1,1,0.2));
+		alien.Normalize();
+		alien.BoundingBox();
+		return alien;
+	});
 	
 	lives = new LifeCounter(this, 3);
 	lives->GameOver += [&](){ level = 1; manager->Restart(); };
@@ -37,6 +45,10 @@ void DefaultScene::Initialize() {
 	destroyer->Load();
 	destroyer->destroyed += [&](Object *obj){ lives->Die(); };
 	Add(destroyer);
+
+	Alien *alien= new Alien(this);
+	alien->Load();
+	Add(alien);
 
 	asteroid_count = 0;
 

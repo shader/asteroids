@@ -86,6 +86,12 @@ void Mesh::Perturb(float max_radius) {
 	}
 }
 
+void Mesh::Scale(vec3 scale) {	
+	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
+		v->position *= scale;
+	}
+}
+
 void Mesh::Normalize() {
 	vec3 min_corner, max_corner, center;
 	min_corner = max_corner = vec3(0,0,0);

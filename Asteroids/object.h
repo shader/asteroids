@@ -38,6 +38,18 @@ private:
 	InputState prev_state;
 };
 
+class Alien : public Object {
+public:
+	Alien(Scene *scene);
+	void Load();
+	void Initialize();
+	void Update(Time time, InputState const &input);
+	function<void()> Collision(Object &other);
+private:
+	static int bullet_count;
+};
+
+
 class Asteroid : public Object {
 public:
 	Asteroid(Scene *scene);
