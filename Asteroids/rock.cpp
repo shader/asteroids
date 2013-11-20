@@ -1,4 +1,4 @@
-#include "rock.h"
+#include "model.h"
 #include "content.h"
 
 Rock::Rock(int levels, float start, float rate) : Model(Icosahedron(), basic) {

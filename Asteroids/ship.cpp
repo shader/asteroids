@@ -1,4 +1,4 @@
-#include "ship.h"
+#include "model.h"
 
 Ship::Ship() : Mesh() {
 	vertices.push_back(Vertex(0.5f, 0, 0, this));

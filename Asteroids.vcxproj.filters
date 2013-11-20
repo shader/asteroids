@@ -102,6 +102,9 @@
     <ClCompile Include="Asteroids\life_counter.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\alien_ship.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">
@@ -122,16 +125,10 @@
     <ClInclude Include="Asteroids\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Asteroids\ship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Asteroids\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Asteroids\rock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Asteroids\object.h">

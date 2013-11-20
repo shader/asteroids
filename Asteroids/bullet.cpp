@@ -1,5 +1,5 @@
 #include "object.h"
-#include "ship.h"
+#include "model.h"
 #include "scene.h"
 #include "content.h"
 

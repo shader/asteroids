@@ -9,6 +9,7 @@
 #include <string>
 #include "shader.h"
 #include "geometry.h"
+#include "primitives.h"
 
 using namespace glm;
 using namespace std;
@@ -44,4 +45,19 @@ private:
 	GLuint verticesID, indicesID, colorsID, normalsID, vertex_array;
 	GLenum draw_mode;
 	vector<GLuint> indices;
+};
+
+class Rock : public Model {
+public:
+	Rock(int levels, float start, float rate);
+};
+
+class Ship : public Mesh {
+public:
+	Ship();
+};
+
+class AlienShip : public Ship {
+public:
+	AlienShip();
 };

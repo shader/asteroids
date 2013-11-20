@@ -1,8 +1,6 @@
 #pragma once
 #include "model.h"
 #include "timer.h"
-#include "ship.h"
-#include "rock.h"
 #include "event.h"
 #include "GL\freeglut.h"
 #include "memory"

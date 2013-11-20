@@ -39,5 +39,3 @@
 #include "menu.h"
 #include "geometry.h"
 #include "primitives.h"
-#include "rock.h"
-#include "ship.h"

@@ -1,5 +1,5 @@
 #include "object.h"
-#include "rock.h"
+#include "model.h"
 #include "utils.h"
 #include "scene.h"
 

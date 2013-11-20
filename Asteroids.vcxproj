@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asteroids\alien_ship.cpp" />
     <ClCompile Include="Asteroids\asteroid.cpp" />
     <ClCompile Include="Asteroids\bullet.cpp" />
     <ClCompile Include="Asteroids\content.cpp" />
@@ -111,10 +112,8 @@
     <ClInclude Include="Asteroids\menu.h" />
     <ClInclude Include="Asteroids\model.h" />
     <ClInclude Include="Asteroids\object.h" />
-    <ClInclude Include="Asteroids\rock.h" />
     <ClInclude Include="Asteroids\scene.h" />
     <ClInclude Include="Asteroids\shader.h" />
-    <ClInclude Include="Asteroids\ship.h" />
     <ClInclude Include="Asteroids\texture.h" />
     <ClInclude Include="Asteroids\timer.h" />
     <ClInclude Include="Asteroids\utils.h" />

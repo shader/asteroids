@@ -11,6 +11,10 @@ public:
 		handlers.push_back( move(handler) );
 	};
 
+	void clear() {
+		handlers.clear();
+	};
+
 	void operator()(Args args) {
         for(auto handler = begin(handlers); handler != end(handlers); handler++) {
 			(*handler)(args);
@@ -25,6 +29,10 @@ class Event <void> {
 public:
 	void operator+=(function<void()> handler) {
 		handlers.push_back( move(handler) );
+	};
+
+	void clear() {
+		handlers.clear();
 	};
 
 	void operator()() {

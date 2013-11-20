@@ -8,7 +8,11 @@ Scene::Scene(SceneManager *manager) {
 	remover = function<void(Object*)>([&](Object *obj){ this->Remove(obj); });
 }
 
-Scene::~Scene() {}
+Scene::~Scene() {
+	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
+		(*obj)->destroyed.clear();
+	}
+}
 
 void Scene::Add(Object *obj) {
 	obj->destroyed += this->remover;

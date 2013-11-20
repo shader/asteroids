@@ -14,7 +14,6 @@ LifeCounter::LifeCounter(Scene* scene, int max_lives) : Object(scene) {
 }
 
 void LifeCounter::Initialize() {
-	lives = max_lives;
 }
 
 void LifeCounter::Die() {
