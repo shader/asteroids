@@ -74,8 +74,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Asteroids\alien_ship.cpp" />
+    <ClCompile Include="Asteroids\alien.cpp" />
     <ClCompile Include="Asteroids\asteroid.cpp" />
+    <ClCompile Include="Asteroids\background.cpp" />
     <ClCompile Include="Asteroids\bullet.cpp" />
     <ClCompile Include="Asteroids\content.cpp" />
     <ClCompile Include="Asteroids\default_scene.cpp" />
@@ -123,6 +124,8 @@
     <None Include="resources\explosion.vert" />
     <None Include="resources\shader.frag" />
     <None Include="resources\shader.vert" />
+    <None Include="resources\texture.frag" />
+    <None Include="resources\texture.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

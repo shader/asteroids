@@ -3,11 +3,13 @@
 
 using namespace std;
 
-Shader::Shader() {}
+Shader::Shader() {
+	_program=-1;
+}
 
 Shader::~Shader()
 {
-	glDeleteProgram(_program);
+	if (_program != -1) glDeleteProgram(_program);
 }
 
 void Shader::LoadString(GLenum type, const string source) {	

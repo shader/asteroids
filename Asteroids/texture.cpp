@@ -2,8 +2,8 @@
 using namespace std;
 
 Texture::Texture() {
+	texture = sampler = -1;
 	glGenTextures(1, &texture);
-	glGenSamplers(1, &sampler);
 }
 
 Texture::~Texture() {
@@ -11,7 +11,7 @@ Texture::~Texture() {
 	glDeleteSamplers(1, &sampler);
 }
 
-void Texture::Bind() {
+void Texture::Bind() {	
 	glBindTexture(GL_TEXTURE_2D, texture);
 }
 
@@ -45,8 +45,11 @@ bool Texture::load2D(string path, bool generate_mipmaps) {
 	int gl_format = bpp == 24 ? GL_BGR : bpp == 8 ? GL_LUMINANCE : 0;
 	
 	Bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, gl_format, GL_UNSIGNED_BYTE, data);
-	
+	if (sampler == -1) glGenSamplers(1, &sampler);
+
 	if(generate_mipmaps)
 		glGenerateMipmap(GL_TEXTURE_2D);
 

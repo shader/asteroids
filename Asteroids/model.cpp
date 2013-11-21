@@ -6,11 +6,8 @@ Model::Model(ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
-	glGenVertexArrays(1, &vertex_array);
-	glGenBuffers (1, &verticesID);
-	glGenBuffers (1, &normalsID);
-	glGenBuffers (1, &colorsID);
-	glGenBuffers (1, &indicesID);
+	
+	verticesID = texcoordsID = normalsID = colorsID = indicesID = vertex_array = -1;
 }
 
 Model::Model(Mesh &mesh, ShaderType shader) {
@@ -19,19 +16,29 @@ Model::Model(Mesh &mesh, ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
-	glGenVertexArrays(1, &vertex_array);
-	glGenBuffers (1, &verticesID);
-	glGenBuffers (1, &normalsID);
-	glGenBuffers (1, &colorsID);
-	glGenBuffers (1, &indicesID);
+	verticesID = texcoordsID = normalsID = colorsID = indicesID = vertex_array = -1;
 }
 
 Model::~Model() {
-	glDeleteBuffers(1, &verticesID);
-	glDeleteBuffers(1, &normalsID);
-	glDeleteBuffers(1, &colorsID);
-	glDeleteBuffers(1, &indicesID);
-	glDeleteVertexArrays(1, &vertex_array);
+	DeleteBuffers();
+}
+
+void Model::GenBuffers(Shader &shader) {
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers (1, &verticesID);
+	glGenBuffers (1, &indicesID);
+	if (shader["texcoord"]!=-1) glGenBuffers (1, &texcoordsID);
+	if (shader["normal"]!=-1) glGenBuffers (1, &normalsID);
+	if (shader["color"]!=-1) glGenBuffers (1, &colorsID);
+}
+
+void Model::DeleteBuffers() {
+	if (verticesID != -1) glDeleteBuffers(1, &verticesID);
+	if (texcoordsID != -1) glDeleteBuffers (1, &texcoordsID);
+	if (normalsID != -1) glDeleteBuffers(1, &normalsID);
+	if (colorsID != -1) glDeleteBuffers(1, &colorsID);
+	if (indicesID != -1) glDeleteBuffers(1, &indicesID);
+	if (vertex_array != -1) glDeleteVertexArrays(1, &vertex_array);
 }
 
 void Model::Bind() {
@@ -45,14 +52,18 @@ void Model::Bind(GLenum mode) {
 
 void Model::Bind(Shader& shader, GLenum mode) {
 	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
+	DeleteBuffers();
+	GenBuffers(shader);
 	indices.empty();
 	radius = 0;
 
 	vector<vec3> vertices(mesh.vertices.size());
+	vector<vec2> texcoords(mesh.vertices.size());
 	vector<vec3> normals(mesh.vertices.size());
 	for (uint i = 0; i<mesh.vertices.size(); i++) {
 		vertices[i] = mesh.vertices[i].position;
 		normals[i] = mesh.vertices[i].normal();
+		if (shader["texcoord"] != -1) texcoords[i] = mesh.vertices[i].texture_coord;
 		radius = glm::max(radius, length(vertices[i]));
 	}
 
@@ -88,15 +99,25 @@ void Model::Bind(Shader& shader, GLenum mode) {
 		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh.vertices.size(), &vertices[0], GL_STATIC_DRAW);		
 		glEnableVertexAttribArray(shader["vertex"]);
 		glVertexAttribPointer (shader["vertex"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+		//texture coordinates
+		if (shader["texcoord"] != -1) {
+			glBindBuffer (GL_ARRAY_BUFFER, texcoordsID);
+			glBufferData (GL_ARRAY_BUFFER, sizeof(vec2)*mesh.vertices.size(), &texcoords[0], GL_STATIC_DRAW);		
+			glEnableVertexAttribArray(shader["texcoord"]);
+			glVertexAttribPointer(shader["texcoord"], 2, GL_FLOAT, GL_FALSE, 0, 0);
+		}
 		
 		//normal
-		glBindBuffer (GL_ARRAY_BUFFER, normalsID);
-		glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh.vertices.size(), &normals[0], GL_STATIC_DRAW);		
-		glEnableVertexAttribArray(shader["normal"]);
-		glVertexAttribPointer(shader["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		if (shader["normal"] != -1) {
+			glBindBuffer (GL_ARRAY_BUFFER, normalsID);
+			glBufferData (GL_ARRAY_BUFFER, sizeof(vec3)*mesh.vertices.size(), &normals[0], GL_STATIC_DRAW);		
+			glEnableVertexAttribArray(shader["normal"]);
+			glVertexAttribPointer(shader["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
+		}
 		
 		//color
-		if (colors.size() > 0) {
+		if (shader["color"] != -1) {
 			glBindBuffer (GL_ARRAY_BUFFER, colorsID);
 			glBufferData (GL_ARRAY_BUFFER, sizeof(Color)*colors.size(), &colors[0], GL_STATIC_DRAW);		
 			glEnableVertexAttribArray(shader["color"]);
@@ -119,8 +140,8 @@ void Model::Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode) {
 	glBindVertexArray(vertex_array);
 	shader.Begin();
 		glUniformMatrix4fv(shader("MVP"), 1, GL_FALSE, &MVP[0][0]);
-		glUniformMatrix4fv(shader("model_view"), 1, GL_FALSE, &model_view[0][0]);
-		glUniformMatrix3fv(shader("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
+		if (shader("model_view")!=-1) glUniformMatrix4fv(shader("model_view"), 1, GL_FALSE, &model_view[0][0]);
+		if (shader("normal_matrix")!=-1) glUniformMatrix3fv(shader("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
 		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, 0);
 	shader.End();
 	glBindVertexArray(0);

@@ -64,7 +64,7 @@ void Initialize() {
 		cerr << "Error: " << glewGetErrorString(err) << endl;
 	}
 	
-	glPolygonMode (GL_FRONT, GL_FILL);
+	//glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable( GL_DEPTH_TEST );
 
 	LoadMenu();

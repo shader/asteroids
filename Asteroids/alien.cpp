@@ -23,9 +23,11 @@ void Alien::Initialize() {
 }
 
 void Alien::Update(Time time, InputState const &input) {
-	double t = time.Elapsed().Seconds();
+	double t = time.ElapsedSeconds;
 	velocity -= velocity * .4 * t; //'friction' decay
 	float speed = length(velocity);
+
+	orientation = quat(vec3(0, 0, time.TotalSeconds));
 
 	//bullets
 	//if (bullet_count < 20 && !(prev_state.keyboard[' '] || prev_state.keyboard['z']) && (input.keyboard[' '] || input.keyboard['z'])) {

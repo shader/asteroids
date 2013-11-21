@@ -64,19 +64,19 @@ void Mesh::Split() {
 	}
 }
 
-void Mesh::Average() {
+void Mesh::Average(bool spike) {
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
-		v->new_position = v->average();
+		v->new_position = v->average(spike);
 	}
 	for (auto v = vertices.begin(); v!=vertices.end(); v++) {
 		v->position = v->new_position;
 	}
 }
 
-void Mesh::Subdivide(int times) {
+void Mesh::Subdivide(int times, bool spike) {
 	for (int i=0; i<times; i++) {
 		Split();
-		Average();
+		Average(spike);
 	}
 }
 

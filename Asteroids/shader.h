@@ -35,4 +35,5 @@ private:
 enum ShaderType {
 	basic,
 	explosion,
+	textured,
 };

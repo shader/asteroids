@@ -13,6 +13,7 @@ void DefaultScene::Load() {
 
 	Content::Load(basic, "shader.vert", "shader.frag");
 	Content::Load(explosion, "explosion.vert", "color.frag");
+	Content::Load(textured, "texture.vert", "texture.frag");
 
 	Content::Load(bullet, []()->Mesh{ return Ship(); });
 	Content::Load(icosahedron, []()->Mesh{ return Icosahedron(); });
@@ -20,8 +21,8 @@ void DefaultScene::Load() {
 	Content::Load(ship, []()->Mesh{ return Ship(); });
 	Content::Load(alien, []()->Mesh {
 		Mesh alien = Icosahedron();
-		alien.Subdivide(2);
-		alien.Scale(vec3(1,1,0.2));
+		alien.Subdivide(3, true);
+		//alien.Scale(vec3(1,1,0.2));
 		alien.Normalize();
 		alien.BoundingBox();
 		return alien;
@@ -36,10 +37,7 @@ void DefaultScene::Load() {
 
 void DefaultScene::Initialize() {
 	objects.remove_if([](unique_ptr<Object> const &p){
-		return typeid(*p.get()) == typeid(Destroyer) ||
-		typeid(*p.get()) == typeid(Asteroid) ||
-		typeid(*p.get()) == typeid(Bullet) ||
-		typeid(*p.get()) == typeid(Explosion);
+		return typeid(*p.get()) != typeid(LifeCounter);
 	});
 	
 	Destroyer *destroyer = new Destroyer(this);
@@ -47,6 +45,9 @@ void DefaultScene::Initialize() {
 	destroyer->destroyed += [&](Object *obj){ lives->Die(); };
 	Add(destroyer);
 
+	Background *background = new Background(this);
+	Add(background);
+	
 	Alien *alien= new Alien(this);
 	alien->Load();
 	Add(alien);

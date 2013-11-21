@@ -26,8 +26,23 @@ Vertex::Vertex(float x, float y, float z, Mesh* mesh) {
 	this->mesh = mesh;
 }
 
+Vertex::Vertex(float x, float y, float z, float u, float v, Mesh* mesh) {
+	this->position.x = x;
+	this->position.y = y;
+	this->position.z = z;
+	this->texture_coord.x = u;
+	this->texture_coord.y = v;
+	this->mesh = mesh;
+}
+
 Vertex::Vertex(vec3 position, Mesh* mesh) {
 	this->position = position;
+	this->mesh = mesh;
+}
+
+Vertex::Vertex(vec3 position, vec2 tex, Mesh* mesh) {
+	this->position = position;
+	this->texture_coord = tex;
 	this->mesh = mesh;
 }
 

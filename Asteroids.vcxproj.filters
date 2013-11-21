@@ -102,8 +102,11 @@
     <ClCompile Include="Asteroids\life_counter.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids\alien_ship.cpp">
-      <Filter>Source Files\models</Filter>
+    <ClCompile Include="Asteroids\alien.cpp">
+      <Filter>Source Files\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\background.cpp">
+      <Filter>Source Files\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +167,12 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\color.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\texture.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\texture.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

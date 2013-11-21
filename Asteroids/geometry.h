@@ -19,7 +19,9 @@ class Vertex {
 public:	
 	Vertex();
 	Vertex(float x, float y, float z, class Mesh* mesh);
+	Vertex(float x, float y, float z, float u, float v, class Mesh* mesh);
 	Vertex(vec3 position, class Mesh* mesh);
+	Vertex(vec3 position, vec2 tex, class Mesh* mesh);
 	vec3 position, new_position;
 	vec2 texture_coord;
 	float temperature;
@@ -98,11 +100,11 @@ public:
 	Mesh& operator=(const Mesh& mesh);
 
 	void Split();
-	void Average();
+	void Average(bool spike = false);
 	void Perturb(float max_radius);
 	void Scale(vec3 scale);
 	void Normalize();
-	void Subdivide(int times=1);
+	void Subdivide(int times=1, bool spike=false);
 	Box BoundingBox();
 	void LoadTriangles(uint* triangles, int triangle_count);
 };

@@ -29,6 +29,8 @@ public:
 	void Init();
 	void LoadShader(GLenum type, string path);
 	void LoadShaders(string vertex, string fragment);
+	void GenBuffers(Shader& shader);
+	void DeleteBuffers();
 
 	void Bind();
 	void Bind(GLenum mode);
@@ -42,7 +44,7 @@ public:
 	vector<Color> colors;
 
 private:
-	GLuint verticesID, indicesID, colorsID, normalsID, vertex_array;
+	GLuint verticesID, texcoordsID, indicesID, colorsID, normalsID, vertex_array;
 	GLenum draw_mode;
 	vector<GLuint> indices;
 };

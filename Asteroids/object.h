@@ -6,6 +6,7 @@
 #include "memory"
 #include "particles.h"
 #include "input.h"
+#include "texture.h"
 
 class Scene;
 class Object {
@@ -103,4 +104,12 @@ private:
 	int lives, max_lives;
 	Model icon;
 	quat rotation;
+};
+
+class Background : public Object {
+public:
+	Background(Scene *scene);
+	void Draw(mat4 view, mat4 projection);
+	Texture texture;
+	Model quad;
 };
