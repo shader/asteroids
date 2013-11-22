@@ -19,7 +19,7 @@ void LifeCounter::Initialize() {
 void LifeCounter::Die() {
 	lives--;
 	if (lives <= 0) {
-		//GameOver();
+		GameOver();
 	}
 }
 

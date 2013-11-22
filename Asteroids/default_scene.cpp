@@ -22,7 +22,6 @@ void DefaultScene::Load() {
 	Content::Load(alien, []()->Mesh {
 		Mesh alien = Icosahedron();
 		alien.Subdivide(3, true);
-		//alien.Scale(vec3(1,1,0.2));
 		alien.Normalize();
 		alien.BoundingBox();
 		return alien;
@@ -31,23 +30,23 @@ void DefaultScene::Load() {
 	lives = new LifeCounter(this, 3);
 	lives->GameOver += [&](){ level = 1; manager->Restart(); };
 	Add(lives);
+		
+	Background *background = new Background(this);
+	Add(background);
 
 	Scene::Load();
 }
 
 void DefaultScene::Initialize() {
 	objects.remove_if([](unique_ptr<Object> const &p){
-		return typeid(*p.get()) != typeid(LifeCounter);
+		return (typeid(*p.get()) != typeid(LifeCounter) &&
+			typeid(*p.get()) != typeid(Background));
 	});
 	
 	Destroyer *destroyer = new Destroyer(this);
 	destroyer->Load();
-	destroyer->destroyed += [&](Object *obj){ lives->Die(); };
 	Add(destroyer);
-
-	Background *background = new Background(this);
-	Add(background);
-	
+		
 	Alien *alien= new Alien(this);
 	alien->Load();
 	Add(alien);
@@ -79,7 +78,6 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 }
 
 void DefaultScene::process_collisions() {
-	//map<Object*,function<void()>> callbacks;
 	queue<function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
@@ -113,11 +111,13 @@ void DefaultScene::Update(Time time, const InputState &input) {
 
 	//wrap edges
 	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		if (dot((*obj)->velocity, (*obj)->position) > 0) { // && typeid(*(obj->get())) != typeid(Explosion)) {
+		if (dot((*obj)->velocity, (*obj)->position) > 0) {
 			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
-			if (p.x > 1 || p.x < 0 || p.y > 1 || p.y < 0) {
-				auto v = normalize((*obj)->velocity);
-				(*obj)->position -= 2 * dot(v, (*obj)->position) * v;
+			if (p.x > 1 || p.x < 0) {
+				(*obj)->position.x = -(*obj)->position.x;
+			}
+			if (p.y > 1 || p.y < 0) {
+				(*obj)->position.y = -(*obj)->position.y;
 			}
 		}
 	}

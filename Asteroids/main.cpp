@@ -83,6 +83,7 @@ int main( int argc, char *argv[] )
 	glutCloseFunc(Close);
 
 	scene_manager.Push(new DefaultScene(&scene_manager));
+	timer.Reset();
 
 	while(!quit) {
 		scene_manager.Update(timer.GetTime(), input);

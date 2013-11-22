@@ -34,6 +34,8 @@ public:
 	void Initialize();
 	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
+
+	Event<void> Killed;
 private:
 	static int bullet_count;
 	InputState prev_state;
@@ -46,6 +48,8 @@ public:
 	void Initialize();
 	void Update(Time time, InputState const &input);
 	function<void()> Collision(Object &other);
+
+	Event<void> Killed;
 private:
 	static int bullet_count;
 };

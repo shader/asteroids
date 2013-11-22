@@ -54,6 +54,13 @@ public:
 		QueryPerformanceCounter( &now );
 	}
 
+	void Reset()
+	{
+		QueryPerformanceFrequency( &frequency );
+		QueryPerformanceCounter( &begin );
+		QueryPerformanceCounter( &now );
+	}
+
     void Start()
 	{
 		QueryPerformanceCounter( &start );
