@@ -14,6 +14,25 @@ Scene::~Scene() {
 	}
 }
 
+vector<Object*> Scene::Find(const type_info &id) {
+	vector<Object*> objs;
+	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
+		if (typeid(**obj) == id) {
+			objs.push_back(obj->get());
+		}
+	}
+	return objs;
+}
+
+Object* Scene::Get(Object *obj) {
+	for (auto o = objects.begin(); o!=objects.end(); o++) {
+		if (o->get() == obj) {
+			return obj;
+		}
+	}
+	return nullptr;
+}
+
 void Scene::Add(Object *obj) {
 	obj->destroyed += this->remover;
 	objects.push_back(move(unique_ptr<Object>(obj)));
@@ -47,7 +66,9 @@ void Scene::Update(Time time, const InputState &input)
 
 	auto o = objects.begin();
 	while (o != objects.end()) {
-		(*o++)->Update(time, input);
+		auto obj = (o++)->get();
+		if (obj->flags[ObjectFlags::Enabled] && obj->flags[ObjectFlags::Update])
+			obj->Update(time, input);
 	}
 
 	prev_state = input;
@@ -59,7 +80,8 @@ void Scene::Draw()
 
 	mat4 vp = Projection * View;
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
-		(*o)->Draw(View, Projection);
+		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw])
+			(*o)->Draw(View, Projection);
 	}
 
 	glutSwapBuffers();

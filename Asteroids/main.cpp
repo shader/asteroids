@@ -82,8 +82,11 @@ int main( int argc, char *argv[] )
 	glutSpecialUpFunc(KeyboardSpecialUp);
 	glutCloseFunc(Close);
 
+
 	scene_manager.Push(new DefaultScene(&scene_manager));
 	timer.Reset();
+	
+	rand_engine = std::default_random_engine((unsigned long)timer.TotalTime().start.LowPart);
 
 	while(!quit) {
 		scene_manager.Update(timer.GetTime(), input);

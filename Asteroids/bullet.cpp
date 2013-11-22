@@ -6,6 +6,7 @@ Bullet::Bullet(Scene *scene, Object* source) : Object(scene) {
 	this->source = source;
 	size = vec3(0.1, 0.2, 0.1);
 	age = 0;
+	speed = 20;
 	models.push_back(shared_ptr<Model>(new Model(Content::mesh(bullet))));
 }
 

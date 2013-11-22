@@ -16,8 +16,8 @@ void Destroyer::Load() {
 }
 
 void Destroyer::Initialize() {
-	position = vec3(0,0,0);
-	orientation = quat(vec3(0,0,0));
+	position = velocity = vec3(0);
+	orientation = quat(vec3(0));
 
 	Object::Initialize();
 }
@@ -49,7 +49,7 @@ void Destroyer::Update(Time time, InputState const &input) {
 		bullet->Load();
 		bullet->position = position + orientation*vec3(0,1,0) * (radius + bullet->radius);
 		bullet->orientation = orientation;
-		bullet->velocity = velocity + orientation*vec3(0,20,0);
+		bullet->velocity = velocity + orientation*vec3(0,bullet->speed,0);
 		bullet->destroyed += [&](Object* obj){ bullet_count--; };
 		scene->Add(bullet);
 	}
@@ -64,12 +64,18 @@ function<void()> Destroyer::Collision(Object &other) {
 		auto p = position;
 		auto v = velocity;
 		return [=](){ 
+			auto destroyer = this;
+			flags[ObjectFlags::Enabled] = false;
 			Explosion* explosion = new Explosion(s);
 			explosion->position = p;
 			explosion->velocity = v;
 			explosion->Initialize();
+			explosion->destroyed += [=](Object *exp){
+				destroyer->Killed();
+				destroyer->flags[ObjectFlags::Enabled] = true;
+				destroyer->Initialize();
+			};
 			s->Add(explosion);
-			s->Remove(this);
 		};
 	} else {
 		return [](){};

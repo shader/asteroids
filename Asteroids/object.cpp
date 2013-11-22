@@ -8,6 +8,7 @@ Object::Object(Scene *scene) {
 	size = vec3(1,1,1);
 	angular_vel = vec3(0);
 	this->scene = scene;
+	flags.set();
 }
 
 Object::~Object() {

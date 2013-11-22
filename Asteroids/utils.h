@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <random>
 
 using namespace glm;
 
@@ -23,3 +25,7 @@ vec2 rand_vec2();
 
 vec3 perturb(vec3 point, float max_radius);
 void destructive_perturb(vec3* out_point, float max_radius);
+
+quat axis_angle(vec3 axis, float angle);
+
+static std::default_random_engine rand_engine;

@@ -7,10 +7,24 @@
 #include "particles.h"
 #include "input.h"
 #include "texture.h"
+#include <random>
+#include <bitset>
 
 class Scene;
+
+struct ObjectFlags {
+	enum Flags {
+		Enabled,
+		Draw,
+		Update,
+		Collide,
+		Wrap,
+	};
+};
+
 class Object {
 public:
+	bitset<5> flags;
 	vec3 position, size, velocity, angular_vel;
 	quat orientation;
 	vector<shared_ptr<Model>> models;
@@ -42,8 +56,14 @@ private:
 };
 
 class Alien : public Object {
+	float evasiveness;
+	int value;
+	discrete_distribution<int> target_distribution;
+
 public:
 	Alien(Scene *scene);
+	void Fire();
+	void Evade();
 	void Load();
 	void Initialize();
 	void Update(Time time, InputState const &input);
@@ -51,9 +71,8 @@ public:
 
 	Event<void> Killed;
 private:
-	static int bullet_count;
+	float age;
 };
-
 
 class Asteroid : public Object {
 public:
@@ -67,6 +86,8 @@ public:
 
 class Bullet : public Object {
 public:
+	float speed;
+
 	Bullet(Scene *scene, Object* source);
 	Object* source;
 	void Initialize();
@@ -113,6 +134,15 @@ private:
 class Background : public Object {
 public:
 	Background(Scene *scene);
+	void Draw(mat4 view, mat4 projection);
+	Texture texture;
+	Model quad;
+};
+
+class ScoreBoard : public Object {
+public:
+	int score;
+	ScoreBoard(Scene *scene);
 	void Draw(mat4 view, mat4 projection);
 	Texture texture;
 	Model quad;

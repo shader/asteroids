@@ -34,23 +34,28 @@ void DefaultScene::Load() {
 	Background *background = new Background(this);
 	Add(background);
 
+	ScoreBoard * score_board = new ScoreBoard(this);
+	Add(score_board);
+
 	Scene::Load();
 }
 
 void DefaultScene::Initialize() {
 	objects.remove_if([](unique_ptr<Object> const &p){
 		return (typeid(*p.get()) != typeid(LifeCounter) &&
-			typeid(*p.get()) != typeid(Background));
+			typeid(*p.get()) != typeid(Background) &&
+			typeid(*p.get()) != typeid(ScoreBoard));
 	});
-	
+
 	Destroyer *destroyer = new Destroyer(this);
+	destroyer->Killed += [=](){ lives->Die(); };
 	destroyer->Load();
 	Add(destroyer);
-		
+	
 	Alien *alien= new Alien(this);
 	alien->Load();
 	Add(alien);
-
+	
 	asteroid_count = 0;
 
 	for (int i=0; i<level; i++) {
@@ -81,7 +86,9 @@ void DefaultScene::process_collisions() {
 	queue<function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
+		if ((*a)->flags[ObjectFlags::Enabled] && (*a)->flags[ObjectFlags::Collide])
 		for (auto b = objects.begin(); b!=a; b++) {
+			if ((*b)->flags[ObjectFlags::Enabled] && (*b)->flags[ObjectFlags::Collide])
 			if (length((*a)->position - (*b)->position) < (*a)->radius + (*b)->radius) {
 				callbacks.push((*a)->Collision(**b));
 				callbacks.push((*b)->Collision(**a));
@@ -110,10 +117,12 @@ void DefaultScene::Update(Time time, const InputState &input) {
 	process_collisions();
 
 	//wrap edges
-	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
+	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {		
+		if ((*obj)->flags[ObjectFlags::Enabled] && (*obj)->flags[ObjectFlags::Wrap])
 		if (dot((*obj)->velocity, (*obj)->position) > 0) {
 			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
 			if (p.x > 1 || p.x < 0) {
+				if (typeid(**obj)!=typeid(Alien))
 				(*obj)->position.x = -(*obj)->position.x;
 			}
 			if (p.y > 1 || p.y < 0) {

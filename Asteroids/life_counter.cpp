@@ -14,12 +14,14 @@ LifeCounter::LifeCounter(Scene* scene, int max_lives) : Object(scene) {
 }
 
 void LifeCounter::Initialize() {
+	lives = max_lives;
 }
 
 void LifeCounter::Die() {
-	lives--;
-	if (lives <= 0) {
+	if (lives == 0) {
 		GameOver();
+	} else {
+		lives--;
 	}
 }
 

@@ -27,7 +27,9 @@ public:
 	virtual void Draw();
 	virtual void Resize(int w, int h);
 
+	Object* Get(Object *obj);
 	virtual void Add(Object *obj);
+	virtual vector<Object*> Find(const type_info &id);
 	virtual void Remove(Object *obj);
 };
 

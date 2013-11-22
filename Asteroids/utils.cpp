@@ -33,6 +33,10 @@ mat4 scale(vec3 size) {
 	return glm::scale(mat4(1.0), size);
 }
 
+int rand(int min, int max) {
+	return min + (rand() % (max-min));
+}
+
 float rand(float min, float max) {
 	return min + (max - min)*rand() / (float)RAND_MAX;
 }
@@ -67,7 +71,7 @@ vec2 rand_vec2() { // random unit 2d vector
 }
 
 vec3 perturb(vec3 point, float max_radius) {
-	float r = rand(0, max_radius);
+	float r = rand(0.0f, max_radius);
 	vec3 dir = rand_vec3();
 
 	return point + r*dir;
@@ -75,4 +79,9 @@ vec3 perturb(vec3 point, float max_radius) {
 
 void destructive_perturb(vec3* out_point, float max_radius) {
 	*out_point = perturb(*out_point, max_radius);
+}
+
+quat axis_angle(vec3 axis, float angle) {
+	double s = sin(angle/2);
+	return quat(axis.x * s, axis.y * s, axis.z * s, cos(angle/2));
 }

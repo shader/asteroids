@@ -95,8 +95,10 @@
     <ClCompile Include="Asteroids\rock.cpp" />
     <ClCompile Include="Asteroids\scene.cpp" />
     <ClCompile Include="Asteroids\scene_manager.cpp" />
+    <ClCompile Include="Asteroids\score_board.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
     <ClCompile Include="Asteroids\ship.cpp" />
+    <ClCompile Include="Asteroids\spritefont.cpp" />
     <ClCompile Include="Asteroids\subdivision.cpp" />
     <ClCompile Include="Asteroids\texture.cpp" />
     <ClCompile Include="Asteroids\utils.cpp" />

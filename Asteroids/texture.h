@@ -26,3 +26,7 @@ private:
 
 	string path;
 };
+
+class SpriteFont : public Texture {
+	SpriteFont();
+};
