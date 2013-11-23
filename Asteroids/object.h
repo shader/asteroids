@@ -78,6 +78,8 @@ private:
 
 class Asteroid : public Object {
 public:
+	float value;
+
 	Asteroid(Scene *scene);
 	void Load();
 	void Initialize();

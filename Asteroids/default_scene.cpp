@@ -117,7 +117,9 @@ void DefaultScene::Update(Time time, const InputState &input) {
 		if (dot((*obj)->velocity, (*obj)->position) > 0) {
 			auto p = project((*obj)->position - normalize((*obj)->position)*(*obj)->size, View, Projection, vec4(0,0,1,1));
 			if (p.x > 1 || p.x < 0) {
-				if (typeid(**obj)!=typeid(Alien))
+				if (auto alien = dynamic_cast<Alien*>(obj->get()))
+					event_queue.push([=](){ Remove(alien); });
+
 				(*obj)->position.x = -(*obj)->position.x;
 			}
 			if (p.y > 1 || p.y < 0) {

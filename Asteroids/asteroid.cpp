@@ -6,6 +6,7 @@
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
 	velocity = position = vec3(0);
 	size = vec3(2);
+	value = 20;
 }
 
 void Asteroid::Load() {
@@ -26,6 +27,7 @@ function<void()> Asteroid::Collision(Object &other) {
 		return [=](){
 			if (scene->Get(this)) {
 				this->Split();
+				dynamic_cast<ScoreBoard*>(scene->Find(typeid(ScoreBoard))[0])->score += value;
 			}
 		};
 	} else {
@@ -36,6 +38,7 @@ function<void()> Asteroid::Collision(Object &other) {
 void Asteroid::Split() {
 	if (size.x > .5) {
 		auto a = new Asteroid(scene), b = new Asteroid(scene);
+		a->value = b->value = (size.x == 2) ? 50 : 100;
 		a->position = b->position = position;
 		a->size = b->size = size / 2.0f;
 		float angle = rand(0,TAU/8);

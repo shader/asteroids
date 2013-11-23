@@ -73,11 +73,7 @@ void Alien::Fire() {
 
 void Alien::Update(Time time, InputState const &input) {
 	Object::Update(time, input);
-
-	if (position.x < -10) {
-		scene->Remove(this); return;
-	};
-
+	
 	double t = time.ElapsedSeconds;
 	float speed = length(velocity);
 	age += t;

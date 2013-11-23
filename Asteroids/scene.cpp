@@ -53,7 +53,6 @@ void Scene::Initialize()
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		(*o)->Initialize();
 	}
-	event_queue.clear();
 }
 
 void Scene::Update(Time time, const InputState &input)
@@ -69,6 +68,11 @@ void Scene::Update(Time time, const InputState &input)
 		auto obj = (o++)->get();
 		if (obj->flags[ObjectFlags::Enabled] && obj->flags[ObjectFlags::Update])
 			obj->Update(time, input);
+	}
+
+	while(!event_queue.empty()) {
+		event_queue.front()();
+		event_queue.pop();
 	}
 
 	prev_state = input;
