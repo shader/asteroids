@@ -4,12 +4,12 @@
 #include "content.h"
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
-	models.push_back(shared_ptr<Model>(new Model(Content::mesh(rock))));
-	velocity = rand_vec3();
-	position = rand_vec3();
+	velocity = position = vec3(0);
+	size = vec3(2);
 }
 
 void Asteroid::Load() {
+	models.push_back(shared_ptr<Model>(new Model(Content::mesh(rock))));
 	Object::Load();
 }
 
@@ -23,7 +23,11 @@ void Asteroid::Update(Time time, InputState const &input) {
 
 function<void()> Asteroid::Collision(Object &other) {
 	if (typeid(other) == typeid(Bullet) || typeid(other) == typeid(Destroyer)) {
-		return [=](){ this->Split(); };
+		return [=](){
+			if (scene->Get(this)) {
+				this->Split();
+			}
+		};
 	} else {
 		return [](){};
 	}
@@ -42,7 +46,8 @@ void Asteroid::Split() {
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(a);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
 		
-		a->Load(); b->Load();
+		a->models.push_back(models[0]); b->models.push_back(models[0]); 
+		a->BoundingSphere(); b->BoundingSphere();
 		a->Initialize(); b->Initialize();
 	}
 	scene->Remove(this);

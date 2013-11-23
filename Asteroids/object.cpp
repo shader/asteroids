@@ -18,12 +18,19 @@ Object::~Object() {
 void Object::Load() {
 	for (auto m = models.begin(); m!=models.end(); m++) {
 		(*m)->Bind();
+	}
+	BoundingSphere();
+}
+
+float Object::BoundingSphere() {
+	for (auto m = models.begin(); m!=models.end(); m++) {
 		if (length((*m)->position) > 0) {
 			radius = glm::max(radius, length(((*m)->position + normalize((*m)->position) * (*m)->radius) * glm::max(size.x, glm::max(size.y, size.z))));
 		} else {
 			radius = glm::max(radius, (*m)->radius * glm::max(size.x, glm::max(size.y, size.z)));
 		}
 	}
+	return radius;
 }
 
 void Object::Initialize() {}

@@ -32,6 +32,8 @@ public:
 	Event<Object*> destroyed;
 	float radius;
 
+	float BoundingSphere();
+
 	Object(Scene *scene);
 	virtual ~Object();
 	virtual void Load();
@@ -51,7 +53,7 @@ public:
 
 	Event<void> Killed;
 private:
-	static int bullet_count;
+	int bullet_count;
 	InputState prev_state;
 };
 

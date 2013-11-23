@@ -7,9 +7,8 @@ Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	Model* model = new Model(Content::mesh(ship));
 	models.push_back(shared_ptr<Model>(model));
 	size = vec3(0.75);
+	bullet_count = 0;
 }
-
-int Destroyer::bullet_count = 0;
 
 void Destroyer::Load() {
 	Object::Load();

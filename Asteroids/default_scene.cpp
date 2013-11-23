@@ -37,37 +37,28 @@ void DefaultScene::Load() {
 	ScoreBoard * score_board = new ScoreBoard(this);
 	Add(score_board);
 
+	Destroyer *destroyer = new Destroyer(this);
+	destroyer->Killed += [=](){ lives->Die(); };
+	Add(destroyer);
+	
 	Scene::Load();
 }
 
 void DefaultScene::Initialize() {
 	objects.remove_if([](unique_ptr<Object> const &p){
-		return (typeid(*p.get()) != typeid(LifeCounter) &&
-			typeid(*p.get()) != typeid(Background) &&
-			typeid(*p.get()) != typeid(ScoreBoard));
+		return (typeid(*p) == typeid(Asteroid) ||
+			typeid(*p) == typeid(Alien)); 
 	});
 
-	Destroyer *destroyer = new Destroyer(this);
-	destroyer->Killed += [=](){ lives->Die(); };
-	destroyer->Load();
-	Add(destroyer);
-	
-	Alien *alien= new Alien(this);
-	alien->Load();
-	Add(alien);
-	
 	asteroid_count = 0;
 
-	for (int i=0; i<level; i++) {
-		spawn_asteroid();
-	}
+	spawn_asteroid();
 		
 	Scene::Initialize();
 }
 
 Asteroid* DefaultScene::spawn_asteroid() {
 	auto asteroid = new Asteroid(this);
-	asteroid->size = vec3(2);
 	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
 	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -4.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
@@ -103,10 +94,14 @@ void DefaultScene::process_collisions() {
 		callbacks.pop();
 	}
 
+	//increase level when cleared
 	if (collisions > 0) {
 		if (asteroid_count <=0) {
-			level += 1;
-			manager->Restart();
+			level = (level + 1) % 8; //max 8 asteroids
+			Find(typeid(Destroyer))[0]->Initialize();
+			for (int i=0; i<level; i++) {
+				spawn_asteroid();
+			}
 		}
 	}
 }
