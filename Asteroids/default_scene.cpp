@@ -34,8 +34,21 @@ void DefaultScene::Load() {
 	Background *background = new Background(this);
 	Add(background);
 
-	ScoreBoard * score_board = new ScoreBoard(this);
+	score_board = new ScoreBoard(this);
+	score_board->flags[ObjectFlags::Draw] = false;
 	Add(score_board);
+
+	score_board->Score += [=](int points) {
+		if (level >= 3 && rand(0, 50) < 1 && !(this->Get<Alien>())) {
+  			BigAlien* alien = new BigAlien(this);
+			alien->Load(); alien->Initialize();
+			Add(alien);
+		} else if (this->Get<ScoreBoard>()->Points() > 10000 && rand(0, 100) < 1 && !(this->Get<Alien>())) {
+			SmallAlien* alien = new SmallAlien(this);
+			alien->Load(); alien->Initialize();
+			Add(alien);
+		}
+	};
 
 	Destroyer *destroyer = new Destroyer(this);
 	destroyer->Killed += [=](){ lives->Die(); };
@@ -129,10 +142,36 @@ void DefaultScene::Update(Time time, const InputState &input) {
 	}
 
 	//handle keyboard input
-	if (input.keyboard['a'] && !prev_state.keyboard['a']) {
+	if (input.keyboard['1'] && !prev_state.keyboard['1']) {
 		auto asteroid = spawn_asteroid();
 		asteroid->Initialize();
 	}
 
+	if (input.keyboard['2'] && !prev_state.keyboard['2']) {
+		auto alien = new BigAlien(this);
+		alien->Load(); alien->Initialize();
+		Add(alien);
+	}
+
+	if (input.keyboard['3'] && !prev_state.keyboard['3']) {
+		auto alien = new SmallAlien(this);
+		alien->Load(); alien->Initialize();
+		Add(alien);
+	}
+
 	Scene::Update(time, input);
+}
+
+void DefaultScene::Draw() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	mat4 vp = Projection * View;
+	for (auto o = objects.begin(); o!= objects.end(); o++) {
+		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw])
+			(*o)->Draw(View, Projection);
+	}
+
+	score_board->Draw(mat4(1), mat4(1));
+		
+	glutSwapBuffers();
 }

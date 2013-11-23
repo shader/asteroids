@@ -136,7 +136,6 @@ void Model::Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode) {
 	mat4 model_view = view * trans * rotation * scale(size);
 	mat4 MVP = projection * model_view;
 	mat3 normal_matrix = mat3(inverse(transpose(view * trans * rotation)));
-	vec3 test;
 	glBindVertexArray(vertex_array);
 	shader.Begin();
 		glUniformMatrix4fv(shader("MVP"), 1, GL_FALSE, &MVP[0][0]);

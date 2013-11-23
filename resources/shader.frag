@@ -12,5 +12,5 @@ void main(void)
 	vec3 normal = normalize(px_normal);
 	float specular = pow(max(dot(normal, normalize(half_vec).xyz), 0), 32);
 	float diffuse = max(dot(normal, light_dir.xyz), 0);
-	frag_color = light_color * (specular + diffuse);
+	frag_color = vec4(light_color.rgb * (specular + diffuse), 1);
 }

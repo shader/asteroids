@@ -24,15 +24,6 @@ vector<Object*> Scene::Find(const type_info &id) {
 	return objs;
 }
 
-Object* Scene::Get(Object *obj) {
-	for (auto o = objects.begin(); o!=objects.end(); o++) {
-		if (o->get() == obj) {
-			return obj;
-		}
-	}
-	return nullptr;
-}
-
 void Scene::Add(Object *obj) {
 	obj->destroyed += this->remover;
 	objects.push_back(move(unique_ptr<Object>(obj)));
@@ -80,7 +71,7 @@ void Scene::Update(Time time, const InputState &input)
 
 void Scene::Draw() 
 {	
-	glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mat4 vp = Projection * View;
 	for (auto o = objects.begin(); o!= objects.end(); o++) {

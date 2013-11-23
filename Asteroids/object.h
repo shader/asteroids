@@ -58,10 +58,6 @@ private:
 };
 
 class Alien : public Object {
-	float evasiveness;
-	int value;
-	discrete_distribution<int> target_distribution;
-
 public:
 	Alien(Scene *scene);
 	void Fire();
@@ -72,8 +68,24 @@ public:
 	function<void()> Collision(Object &other);
 
 	Event<void> Killed;
+protected:	
+	float evasiveness;
+	float speed;
+	int value;
+	discrete_distribution<int> target_distribution;
+
 private:
 	float age;
+};
+
+class BigAlien : public Alien {
+public:
+	BigAlien(Scene *scene);
+};
+
+class SmallAlien : public Alien {
+public:
+	SmallAlien(Scene *scene);
 };
 
 class Asteroid : public Object {
@@ -145,9 +157,14 @@ public:
 
 class ScoreBoard : public Object {
 public:
-	int score;
+	Event<int> Score;
+	int Points();
+	void Reset();
 	ScoreBoard(Scene *scene);
+	~ScoreBoard();
 	void Draw(mat4 view, mat4 projection);
 	Texture texture;
-	Model quad;
+private:
+	int score;
+	GLuint vertex_array, verticesID, indicesID, texcoordsID;
 };

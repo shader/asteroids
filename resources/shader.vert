@@ -20,7 +20,7 @@ void main()
 
    px_normal = normal_matrix*normal;
    light_dir = vec4(1);
-   light_color = vec4(.75);
+   light_color = vec4(vec3(.75),1);
    vec4 eye = -normalize(inv_view*vec4(0,0,10,1) + model_view*vec4(vertex,1));
    half_vec = normalize(light_dir - eye);
 }

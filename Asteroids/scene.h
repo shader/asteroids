@@ -27,10 +27,18 @@ public:
 	virtual void Draw();
 	virtual void Resize(int w, int h);
 
-	Object* Get(Object *obj);
 	virtual void Add(Object *obj);
 	virtual vector<Object*> Find(const type_info &id);
 	virtual void Remove(Object *obj);
+
+	template<typename T>
+	T* Get(T* obj = nullptr) {
+		for (auto o = objects.begin(); o!=objects.end(); o++) {
+			if (obj && obj == o->get()) return obj;
+			else if (auto r = dynamic_cast<T*>(o->get())) return r;
+		}
+		return nullptr;
+	}
 };
 
 class SceneManager {
@@ -54,6 +62,7 @@ public:
 	void Load();
 	void Initialize();
 	void Update(Time time, const InputState &input);
+	void Draw();
 	void Keyboard(const InputState &input);
 	Asteroid *spawn_asteroid();
 	void add_asteroid(Asteroid *asteroid);
@@ -63,4 +72,5 @@ private:
 	int asteroid_count, level;
 	void process_collisions();
 	LifeCounter *lives;
+	ScoreBoard *score_board;
 };

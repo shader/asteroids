@@ -23,14 +23,23 @@ void Asteroid::Update(Time time, InputState const &input) {
 }
 
 function<void()> Asteroid::Collision(Object &other) {
-	if (typeid(other) == typeid(Bullet) || typeid(other) == typeid(Destroyer)) {
+	if ((typeid(other) == typeid(Bullet) && typeid(*((Bullet*)&other)->source) == typeid(Destroyer)) || typeid(other) == typeid(Destroyer)) {
+		//add points if killed by player
+		return [=](){
+			if (scene->Get(this)) {
+				scene->Get<ScoreBoard>()->Score(value);
+				this->Split();
+			}
+		};
+	} else if (typeid(other) == typeid(Bullet)) {
+		//split if shot by alien, but no points
 		return [=](){
 			if (scene->Get(this)) {
 				this->Split();
-				dynamic_cast<ScoreBoard*>(scene->Find(typeid(ScoreBoard))[0])->score += value;
 			}
 		};
 	} else {
+		//otherwise don't split
 		return [](){};
 	}
 }

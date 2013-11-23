@@ -14,6 +14,7 @@ void Background::Draw(mat4 view, mat4 projection) {
 	Shader *shader = &Content::shader(textured);
 	projection = ortho(-1.0f,1.0f,-1.0f,1.0f,0.0f,100.0f);	
 	mat4 model = translation(position);
+	texture.Bind();
 	shader->Begin();
 		glUniform1i((*shader)("tex"), 0);
 		quad.Draw(model, projection);

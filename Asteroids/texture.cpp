@@ -42,12 +42,12 @@ bool Texture::load2D(string path, bool generate_mipmaps) {
 	if(data == NULL || width == 0 || height == 0)
 		return false;
 
-	int gl_format = bpp == 24 ? GL_BGR : bpp == 8 ? GL_LUMINANCE : 0;
+	int gl_format = bpp == 24 ? GL_BGR : bpp == 8 ? GL_RED : bpp == 32 ? GL_BGRA : 0;
 	
 	Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, gl_format, GL_UNSIGNED_BYTE, data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, gl_format, GL_UNSIGNED_BYTE, data);
 	if (sampler == -1) glGenSamplers(1, &sampler);
 
 	if(generate_mipmaps)
