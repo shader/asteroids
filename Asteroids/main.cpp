@@ -49,6 +49,29 @@ void Draw() {
 	scene_manager.Draw();
 }
 
+void handle_menu( int ID )
+{
+	switch( ID ) {
+	case 0:
+		exit( 0 );
+		break;
+	case 1:
+		glutFullScreenToggle();
+		break;
+	case 2:
+		scene_manager.Restart();
+		break;
+	}
+}
+
+void LoadMenu() {
+	glutCreateMenu( handle_menu ); // Setup GLUT popup menu
+	glutAddMenuEntry( "Quit", 0 );
+	glutAddMenuEntry( "Toggle Fullscreen", 1);	
+	glutAddMenuEntry( "New Game", 2);
+	glutAttachMenu( GLUT_RIGHT_BUTTON );
+}
+
 void Initialize() {
 	srand(time(0));
 	//Initialize GLUT

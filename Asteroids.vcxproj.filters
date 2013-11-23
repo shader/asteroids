@@ -30,9 +30,6 @@
     <ClCompile Include="Asteroids\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids\menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Asteroids\scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

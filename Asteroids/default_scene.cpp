@@ -64,6 +64,7 @@ void DefaultScene::Initialize() {
 	});
 
 	asteroid_count = 0;
+	level = 1;
 
 	spawn_asteroid();
 		

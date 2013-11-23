@@ -157,13 +157,14 @@ public:
 
 class ScoreBoard : public Object {
 public:
-	Event<int> Score;
-	int Points();
-	void Reset();
 	ScoreBoard(Scene *scene);
 	~ScoreBoard();
+	void Initialize();
 	void Draw(mat4 view, mat4 projection);
+
 	Texture texture;
+	Event<int> Score;
+	int Points();
 private:
 	int score;
 	GLuint vertex_array, verticesID, indicesID, texcoordsID;

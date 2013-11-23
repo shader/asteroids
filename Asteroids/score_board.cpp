@@ -13,6 +13,8 @@ ScoreBoard::ScoreBoard(Scene *scene) : Object(scene) {
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &indicesID);
 	glGenBuffers (1, &texcoordsID);
+
+	flags[ObjectFlags::Collide] = false;
 }
 
 ScoreBoard::~ScoreBoard() {	
@@ -22,12 +24,12 @@ ScoreBoard::~ScoreBoard() {
 	glDeleteVertexArrays(1, &vertex_array);
 }
 
-int ScoreBoard::Points() {
-	return score;
+void ScoreBoard::Initialize() {
+	score = 0;
 }
 
-void ScoreBoard::Reset() {
-	score = 0;
+int ScoreBoard::Points() {
+	return score;
 }
 
 void ScoreBoard::Draw(mat4 model, mat4 projection) {
