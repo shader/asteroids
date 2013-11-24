@@ -30,6 +30,7 @@ void DefaultScene::Load() {
 
 	auto sphere = new Model(Sphere());
 	sphere->Bind();
+	sphere->material.color = vec4(0,0,1,0.5);
 	Content::Load(ModelType::sphere, sphere);
 	
 	lives = new LifeCounter(this, 3);
@@ -176,7 +177,7 @@ void DefaultScene::Draw() {
 		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw]) {
 			(*o)->Draw(View, Projection);
 			if ((*o)->flags[ObjectFlags::Collide])
-				(*o)->DrawBox(View, Projection);
+				(*o)->DrawSphere(View, Projection);
 		}
 	}
 

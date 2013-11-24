@@ -22,5 +22,5 @@ void main(void)
 	vec3 normal = normalize(px_normal);
 	float specular = pow(max(dot(normal, normalize(half_vec).xyz), 0), material.shininess) * material.specular;
 	float diffuse = max(dot(normal, light.dir.xyz), 0) * material.diffuse;
-	frag_color = vec4(light.color.rgb * (specular + diffuse) * material.color.rgb, 1);
+	frag_color = vec4(light.color.rgb * (specular + diffuse), 1) * material.color;
 }

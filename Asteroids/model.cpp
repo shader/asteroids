@@ -19,6 +19,10 @@ Model::Model(Mesh &mesh, ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
+		
+	Material m = { vec4(1), 32.0f, 1.0f, 1.0f };
+	material = m;
+
 	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
 }
 
@@ -139,10 +143,8 @@ void Model::Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode) {
 		if (shader("normal_matrix")!=-1) glUniformMatrix3fv(shader("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
 
 		if (shader.UniformBlockIndex("Material") !=-1 ) {
-			float material[] = {1.0f,1.0f,1.0f,1.0f, 1.0f, 1.0f, 1.0f,};
-
 			glBindBuffer(GL_UNIFORM_BUFFER, materialID);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(material), material, GL_STATIC_DRAW);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(Material), &material, GL_STATIC_DRAW);
 			glBindBufferBase(GL_UNIFORM_BUFFER, shader.UniformBlockIndex("Material"), materialID);
 		}
 
