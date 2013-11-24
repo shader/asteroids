@@ -7,7 +7,7 @@ Model::Model(ShaderType shader) {
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
 
-	Material m = { vec4(1), 32.0f, 1.0f, 1.0f };
+	Material m = { vec4(1), vec4(0), vec4(1), vec4(1), 32.0f };
 	material = m;
 	
 	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
@@ -19,8 +19,8 @@ Model::Model(Mesh &mesh, ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
-		
-	Material m = { vec4(1), 32.0f, 1.0f, 1.0f };
+	
+	Material m = { vec4(1), vec4(0), vec4(1), vec4(1), 32.0f };
 	material = m;
 
 	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
@@ -61,7 +61,7 @@ void Model::Bind(Shader& shader, GLenum mode) {
 	//Bind model vertex data to VertexArray, so it can be used for drawing later. Call whenever vertex data is updated
 	DeleteBuffers();
 	GenBuffers(shader);
-	indices.empty();
+	indices.clear();
 	radius = 0;
 	mesh.BoundingBox();
 

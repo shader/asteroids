@@ -117,6 +117,9 @@
     <ClCompile Include="Asteroids\sphere.cpp">
       <Filter>Source Files\models</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\asteroid_scene.cpp">
+      <Filter>Source Files\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">

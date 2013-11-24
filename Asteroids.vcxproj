@@ -76,6 +76,7 @@
   <ItemGroup>
     <ClCompile Include="Asteroids\alien.cpp" />
     <ClCompile Include="Asteroids\asteroid.cpp" />
+    <ClCompile Include="Asteroids\asteroid_scene.cpp" />
     <ClCompile Include="Asteroids\background.cpp" />
     <ClCompile Include="Asteroids\box.cpp" />
     <ClCompile Include="Asteroids\bullet.cpp" />

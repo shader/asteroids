@@ -15,10 +15,8 @@ using namespace glm;
 using namespace std;
 
 struct Material {
-	vec4 color;
+	vec4 color, ambient, diffuse, specular;
 	float shininess;
-	float specular;
-	float diffuse;
 };
 
 class Model

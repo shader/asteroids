@@ -53,7 +53,7 @@ void handle_menu( int ID )
 {
 	switch( ID ) {
 	case 0:
-		exit( 0 );
+		quit=true;
 		break;
 	case 1:
 		glutFullScreenToggle();
@@ -87,7 +87,6 @@ void Initialize() {
 		cerr << "Error: " << glewGetErrorString(err) << endl;
 	}
 	
-	//glPolygonMode (GL_FRONT, GL_FILL);
 	glEnable( GL_DEPTH_TEST );
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -106,8 +105,7 @@ int main( int argc, char *argv[] )
 	glutSpecialFunc(KeyboardSpecialDown);
 	glutSpecialUpFunc(KeyboardSpecialUp);
 	glutCloseFunc(Close);
-
-
+	
 	scene_manager.Push(new DefaultScene(&scene_manager));
 	timer.Reset();
 	

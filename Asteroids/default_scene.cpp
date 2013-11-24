@@ -5,6 +5,7 @@
 
 DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {
 	level = 1;
+	draw_spheres = draw_boxes = false;
 }
 
 void DefaultScene::Load() {
@@ -166,6 +167,14 @@ void DefaultScene::Update(Time time, const InputState &input) {
 		Add(alien);
 	}
 
+	if (input.keyboard['4'] && !prev_state.keyboard['4']) {
+		draw_boxes ^= 1;
+	}
+	
+	if (input.keyboard['5'] && !prev_state.keyboard['5']) {
+		draw_spheres ^= 1;
+	}
+
 	Scene::Update(time, input);
 }
 
@@ -176,8 +185,12 @@ void DefaultScene::Draw() {
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
 		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw]) {
 			(*o)->Draw(View, Projection);
-			if ((*o)->flags[ObjectFlags::Collide])
-				(*o)->DrawSphere(View, Projection);
+			if ((*o)->flags[ObjectFlags::Collide]) {
+				if (draw_spheres)
+					(*o)->DrawSphere(View, Projection);
+				if (draw_boxes)
+					(*o)->DrawBox(View, Projection);
+			}
 		}
 	}
 

@@ -43,8 +43,10 @@ public:
 
 class SceneManager {
 public:
+	bool pause;
+	InputState prev_state;
 	stack<unique_ptr<Scene>> scenes;
-
+	int width, height;
 	Scene& current();
 
 	void Update(Time time, const InputState &input);
@@ -73,4 +75,22 @@ private:
 	void process_collisions();
 	LifeCounter *lives;
 	ScoreBoard *score_board;
+
+	bool draw_boxes, draw_spheres;
+};
+
+class AsteroidScene : public Scene {
+public:
+	AsteroidScene(SceneManager *manager);
+	void Load();
+	void Initialize();
+	void Update(Time time, const InputState &input);
+	void Keyboard(const InputState &input);
+
+private:
+	GLenum mode;
+	float radius, rate;
+	bool lit;
+	unique_ptr<Object> asteroid;
+	shared_ptr<Model> asteroid_model;
 };

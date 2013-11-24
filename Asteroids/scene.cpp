@@ -48,12 +48,6 @@ void Scene::Initialize()
 
 void Scene::Update(Time time, const InputState &input)
 {
-	int w = glutGet (GLUT_WINDOW_WIDTH);
-	int h = glutGet (GLUT_WINDOW_HEIGHT);
-	if (w != width || h != height) {
-		Resize(w, h);
-	}
-
 	auto o = objects.begin();
 	while (o != objects.end()) {
 		auto obj = (o++)->get();
