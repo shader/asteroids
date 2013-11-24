@@ -111,6 +111,12 @@
     <ClCompile Include="Asteroids\score_board.cpp">
       <Filter>Source Files\objects</Filter>
     </ClCompile>
+    <ClCompile Include="Asteroids\box.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\sphere.cpp">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroids\event.h">
@@ -179,6 +185,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\texture.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\polygon.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

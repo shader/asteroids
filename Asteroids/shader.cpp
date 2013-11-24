@@ -86,6 +86,10 @@ void Shader::End() {
 
 //An indexer that returns the location of the attribute
 GLuint Shader::operator [](const string attribute) {
+	return Attribute(attribute);
+}
+
+GLuint Shader::Attribute(string attribute) {
 	auto it = _attributes.find(attribute);
 	if (it != _attributes.end()) {
 		return it->second;
@@ -97,10 +101,27 @@ GLuint Shader::operator [](const string attribute) {
 }
 
 GLuint Shader::operator()(const string uniform) {
+	return Uniform(uniform);
+}
+
+GLuint Shader::Uniform(string uniform) {
 	auto it = _uniforms.find(uniform);
 	if (it != _uniforms.end()) {
 		return it->second;
 	} else {
 		return _uniforms[uniform] = glGetUniformLocation(_program, uniform.c_str());
 	}
+}
+
+GLuint Shader::UniformBlockIndex(string uniform) {
+	auto it = _uniform_blocks.find(uniform);
+	if (it != _uniform_blocks.end()) {
+		return it->second;
+	} else {
+		return _uniform_blocks[uniform] = glGetUniformBlockIndex(_program, uniform.c_str());
+	}
+}
+
+void Shader::BindBlock(string uniform, GLuint binding_point) {
+	glUniformBlockBinding(_program, UniformBlockIndex(uniform), binding_point);
 }

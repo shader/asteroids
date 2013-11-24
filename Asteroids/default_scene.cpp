@@ -13,6 +13,7 @@ void DefaultScene::Load() {
 
 	Content::Load(basic, "shader.vert", "shader.frag");
 	Content::Load(explosion, "explosion.vert", "color.frag");
+	Content::Load(polygon, "polygon.vert", "color.frag");
 	Content::Load(textured, "texture.vert", "texture.frag");
 
 	Content::Load(bullet, []()->Mesh{ return Ship(); });
@@ -26,6 +27,10 @@ void DefaultScene::Load() {
 		alien.BoundingBox();
 		return alien;
 	});
+
+	auto sphere = new Model(Sphere());
+	sphere->Bind();
+	Content::Load(ModelType::sphere, sphere);
 	
 	lives = new LifeCounter(this, 3);
 	lives->GameOver += [&](){ level = 1; manager->Restart(); };
@@ -168,8 +173,11 @@ void DefaultScene::Draw() {
 
 	mat4 vp = Projection * View;
 	for (auto o = objects.begin(); o!= objects.end(); o++) {
-		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw])
+		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw]) {
 			(*o)->Draw(View, Projection);
+			if ((*o)->flags[ObjectFlags::Collide])
+				(*o)->DrawBox(View, Projection);
+		}
 	}
 
 	score_board->Draw(mat4(1), mat4(1));

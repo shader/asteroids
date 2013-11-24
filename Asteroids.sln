@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asteroids", "Asteroids.vcxproj", "{A547E346-B815-0A57-AF32-6EC7691515B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asteroids", "Asteroids.vcxproj", "{CF879CE7-F4FF-18E1-00A2-380C10D11532}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A547E346-B815-0A57-AF32-6EC7691515B8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A547E346-B815-0A57-AF32-6EC7691515B8}.Debug|Win32.Build.0 = Debug|Win32
-		{A547E346-B815-0A57-AF32-6EC7691515B8}.Release|Win32.ActiveCfg = Release|Win32
-		{A547E346-B815-0A57-AF32-6EC7691515B8}.Release|Win32.Build.0 = Release|Win32
+		{CF879CE7-F4FF-18E1-00A2-380C10D11532}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CF879CE7-F4FF-18E1-00A2-380C10D11532}.Debug|Win32.Build.0 = Debug|Win32
+		{CF879CE7-F4FF-18E1-00A2-380C10D11532}.Release|Win32.ActiveCfg = Release|Win32
+		{CF879CE7-F4FF-18E1-00A2-380C10D11532}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

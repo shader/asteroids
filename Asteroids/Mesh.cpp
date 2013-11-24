@@ -6,7 +6,6 @@ Mesh::Mesh() {
 	vertices = vector<Vertex>();
 	edges = vector<Edge>();
 	faces = vector<Face>();
-	box = Box();
 	radius = 0;
 };
 
@@ -34,7 +33,6 @@ Mesh& Mesh::operator=(const Mesh &mesh) {
 		vertices = mesh.vertices;
 		edges = mesh.edges;
 		faces = mesh.faces;
-		box = mesh.box;
 		radius = mesh.radius;
 
 		for (auto v=vertices.begin(); v!=vertices.end(); v++) {

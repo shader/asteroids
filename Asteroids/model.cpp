@@ -6,8 +6,11 @@ Model::Model(ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
+
+	Material m = { vec4(1), 32.0f, 1.0f, 1.0f };
+	material = m;
 	
-	verticesID = texcoordsID = normalsID = colorsID = indicesID = vertex_array = -1;
+	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
 }
 
 Model::Model(Mesh &mesh, ShaderType shader) {
@@ -16,7 +19,7 @@ Model::Model(Mesh &mesh, ShaderType shader) {
 	position = vec3(0.0f, 0.0f, 0.0f);
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
-	verticesID = texcoordsID = normalsID = colorsID = indicesID = vertex_array = -1;
+	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
 }
 
 Model::~Model() {
@@ -29,15 +32,15 @@ void Model::GenBuffers(Shader &shader) {
 	glGenBuffers (1, &indicesID);
 	if (shader["texcoord"]!=-1) glGenBuffers (1, &texcoordsID);
 	if (shader["normal"]!=-1) glGenBuffers (1, &normalsID);
-	if (shader["color"]!=-1) glGenBuffers (1, &colorsID);
+	if (shader.UniformBlockIndex("Material") !=-1 ) glGenBuffers (1, &materialID);
 }
 
 void Model::DeleteBuffers() {
 	if (verticesID != -1) glDeleteBuffers(1, &verticesID);
 	if (texcoordsID != -1) glDeleteBuffers (1, &texcoordsID);
 	if (normalsID != -1) glDeleteBuffers(1, &normalsID);
-	if (colorsID != -1) glDeleteBuffers(1, &colorsID);
 	if (indicesID != -1) glDeleteBuffers(1, &indicesID);
+	if (indicesID != -1) glDeleteBuffers(1, &materialID);
 	if (vertex_array != -1) glDeleteVertexArrays(1, &vertex_array);
 }
 
@@ -56,6 +59,7 @@ void Model::Bind(Shader& shader, GLenum mode) {
 	GenBuffers(shader);
 	indices.empty();
 	radius = 0;
+	mesh.BoundingBox();
 
 	vector<vec3> vertices(mesh.vertices.size());
 	vector<vec2> texcoords(mesh.vertices.size());
@@ -116,14 +120,6 @@ void Model::Bind(Shader& shader, GLenum mode) {
 			glVertexAttribPointer(shader["normal"], 3, GL_FLOAT, GL_FALSE, 0, 0);
 		}
 		
-		//color
-		if (shader["color"] != -1) {
-			glBindBuffer (GL_ARRAY_BUFFER, colorsID);
-			glBufferData (GL_ARRAY_BUFFER, sizeof(Color)*colors.size(), &colors[0], GL_STATIC_DRAW);		
-			glEnableVertexAttribArray(shader["color"]);
-			glVertexAttribPointer (shader["color"], 3, GL_FLOAT, GL_FALSE, 0, 0);
-		}
-
 		//index
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
@@ -141,6 +137,15 @@ void Model::Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode) {
 		glUniformMatrix4fv(shader("MVP"), 1, GL_FALSE, &MVP[0][0]);
 		if (shader("model_view")!=-1) glUniformMatrix4fv(shader("model_view"), 1, GL_FALSE, &model_view[0][0]);
 		if (shader("normal_matrix")!=-1) glUniformMatrix3fv(shader("normal_matrix"), 1, GL_FALSE, &normal_matrix[0][0]);
+
+		if (shader.UniformBlockIndex("Material") !=-1 ) {
+			float material[] = {1.0f,1.0f,1.0f,1.0f, 1.0f, 1.0f, 1.0f,};
+
+			glBindBuffer(GL_UNIFORM_BUFFER, materialID);
+			glBufferData(GL_UNIFORM_BUFFER, sizeof(material), material, GL_STATIC_DRAW);
+			glBindBufferBase(GL_UNIFORM_BUFFER, shader.UniformBlockIndex("Material"), materialID);
+		}
+
 		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, 0);
 	shader.End();
 	glBindVertexArray(0);

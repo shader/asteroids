@@ -14,6 +14,13 @@ Mesh& Content::mesh(MeshType type) {
 	}
 }
 
+Model* Content::model(ModelType::Type type) {
+	auto model = models.find(type);
+	if (model != models.end()) {
+		return models[type];
+	}
+}
+
 void Content::Load(ShaderType type, string vertex, string fragment) {
 	auto shader = shaders.find(type);
 	if (shader == shaders.end()) {
@@ -33,5 +40,10 @@ void Content::Load(MeshType type, function<Mesh()> factory) {
 	}
 }
 
+void Content::Load(ModelType::Type type, Model *model) {
+	models[type] = model;
+}
+
 map<ShaderType,Shader> Content::shaders = map<ShaderType,Shader>();
 map<MeshType,Mesh> Content::meshes = map<MeshType,Mesh>();
+map<ModelType::Type,Model*> Content::models = map<ModelType::Type,Model*>();

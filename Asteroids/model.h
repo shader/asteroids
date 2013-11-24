@@ -14,6 +14,13 @@
 using namespace glm;
 using namespace std;
 
+struct Material {
+	vec4 color;
+	float shininess;
+	float specular;
+	float diffuse;
+};
+
 class Model
 {
 public:
@@ -24,6 +31,7 @@ public:
 	vec3 position, size;
 	quat orientation;
 	float radius;
+	Material material;
 	ShaderType shader_type;
 	
 	void Init();
@@ -41,10 +49,16 @@ public:
 	void Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode);
 
 	Mesh mesh;
-	vector<Color> colors;
 
 private:
-	GLuint verticesID, texcoordsID, indicesID, colorsID, normalsID, vertex_array;
+	GLuint vertex_array, verticesID, texcoordsID, indicesID, normalsID, materialID;
 	GLenum draw_mode;
 	vector<GLuint> indices;
+};
+
+struct ModelType {
+	enum Type {
+		sphere,
+		rock,
+	};
 };

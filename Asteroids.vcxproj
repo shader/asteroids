@@ -77,6 +77,7 @@
     <ClCompile Include="Asteroids\alien.cpp" />
     <ClCompile Include="Asteroids\asteroid.cpp" />
     <ClCompile Include="Asteroids\background.cpp" />
+    <ClCompile Include="Asteroids\box.cpp" />
     <ClCompile Include="Asteroids\bullet.cpp" />
     <ClCompile Include="Asteroids\content.cpp" />
     <ClCompile Include="Asteroids\default_scene.cpp" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Asteroids\score_board.cpp" />
     <ClCompile Include="Asteroids\shader.cpp" />
     <ClCompile Include="Asteroids\ship.cpp" />
+    <ClCompile Include="Asteroids\sphere.cpp" />
     <ClCompile Include="Asteroids\spritefont.cpp" />
     <ClCompile Include="Asteroids\subdivision.cpp" />
     <ClCompile Include="Asteroids\texture.cpp" />
@@ -124,6 +126,7 @@
   <ItemGroup>
     <None Include="resources\color.frag" />
     <None Include="resources\explosion.vert" />
+    <None Include="resources\polygon.vert" />
     <None Include="resources\shader.frag" />
     <None Include="resources\shader.vert" />
     <None Include="resources\texture.frag" />

@@ -19,7 +19,12 @@ void Object::Load() {
 	for (auto m = models.begin(); m!=models.end(); m++) {
 		(*m)->Bind();
 	}
+	BoundingVolumes();
+}
+
+void Object::BoundingVolumes() {
 	BoundingSphere();
+	BoundingBox();
 }
 
 float Object::BoundingSphere() {
@@ -33,6 +38,17 @@ float Object::BoundingSphere() {
 	return radius;
 }
 
+Box Object::BoundingBox() {
+	for(auto m = models.begin(); m!=models.end(); m++) {
+		box.lower = min(box.lower, (**m).position + (*m)->mesh.box.lower);
+		box.upper = max(box.upper, (**m).position + (*m)->mesh.box.upper);
+	}
+	box.Bind();
+
+	Box b = {box.lower, box.upper};
+	return b;
+}
+
 void Object::Initialize() {}
 
 void Object::Draw(mat4 view, mat4 projection) {	
@@ -44,6 +60,21 @@ void Object::Draw(mat4 view, mat4 projection) {
 		(*m)->Draw(mv, projection);
 		Content::shader((*m)->shader_type).End();
 	}
+}
+
+void Object::DrawBox(mat4 view, mat4 projection) {	
+	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
+	mat4 mv = view * model;
+
+	box.Draw(mv, projection);
+}
+
+void Object::DrawSphere(mat4 view, mat4 projection) {	
+	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
+
+	mat4 mv = view * model;
+
+	Content::model(ModelType::sphere)->Draw(mv, projection);
 }
 
 void Object::Update(Time time, InputState const &input) {

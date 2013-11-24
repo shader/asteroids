@@ -13,6 +13,7 @@ Explosion::Explosion(Scene *scene) : Object(scene) {
 	particles.resize(100, Particle());
 	vertices.resize(100, vec3(0));
 	indices.resize(100,0);
+	flags[ObjectFlags::Collide] = false;
 }
 
 Explosion::~Explosion() {

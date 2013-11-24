@@ -33,14 +33,22 @@ public:
 	float radius;
 
 	float BoundingSphere();
+	Box BoundingBox();
+	void BoundingVolumes();
 
 	Object(Scene *scene);
 	virtual ~Object();
 	virtual void Load();
 	virtual void Initialize();
+
 	virtual void Draw(mat4 view, mat4 projection);
+	virtual void DrawBox(mat4 view, mat4 projection);
+	virtual void DrawSphere(mat4 view, mat4 projection);
+
 	virtual void Update(Time time, InputState const &input);
 	virtual function<void()> Collision(Object &other);
+private:
+	LineBox box;
 };
 
 class Destroyer : public Object {
