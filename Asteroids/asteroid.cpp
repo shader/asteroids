@@ -23,7 +23,8 @@ void Asteroid::Update(Time time, InputState const &input) {
 }
 
 function<void()> Asteroid::Collision(Object &other) {
-	if ((typeid(other) == typeid(Bullet) && typeid(*((Bullet*)&other)->source) == typeid(Destroyer)) || typeid(other) == typeid(Destroyer)) {
+	if ((typeid(other) == typeid(Bullet) && scene->Get(((Bullet*)&other)->source) &&
+		typeid(*((Bullet*)&other)->source) == typeid(Destroyer)) || typeid(other) == typeid(Destroyer)) {
 		//add points if killed by player
 		return [=](){
 			if (scene->Get(this)) {
