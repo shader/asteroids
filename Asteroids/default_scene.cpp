@@ -149,33 +149,34 @@ void DefaultScene::Update(Time time, const InputState &input) {
 		}
 	}
 
-	//handle keyboard input
-	if (input.keyboard['1'] && !prev_state.keyboard['1']) {
+	Scene::Update(time, input);
+}
+
+void DefaultScene::Keyboard(const InputState &input, const InputState &prev) {
+	if (input.keyboard['1'] && !prev.keyboard['1']) {
 		auto asteroid = spawn_asteroid();
 		asteroid->Initialize();
 	}
 
-	if (input.keyboard['2'] && !prev_state.keyboard['2']) {
+	if (input.keyboard['2'] && !prev.keyboard['2']) {
 		auto alien = new BigAlien(this);
 		alien->Load(); alien->Initialize();
 		Add(alien);
 	}
 
-	if (input.keyboard['3'] && !prev_state.keyboard['3']) {
+	if (input.keyboard['3'] && !prev.keyboard['3']) {
 		auto alien = new SmallAlien(this);
 		alien->Load(); alien->Initialize();
 		Add(alien);
 	}
 
-	if (input.keyboard['4'] && !prev_state.keyboard['4']) {
+	if (input.keyboard['4'] && !prev.keyboard['4']) {
 		draw_boxes ^= 1;
 	}
 	
-	if (input.keyboard['5'] && !prev_state.keyboard['5']) {
+	if (input.keyboard['5'] && !prev.keyboard['5']) {
 		draw_spheres ^= 1;
 	}
-
-	Scene::Update(time, input);
 }
 
 void DefaultScene::Draw() {

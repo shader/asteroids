@@ -15,6 +15,8 @@ void SceneManager::Update(Time time, const InputState &input) {
 		pause ^= 1;
 	}
 
+	current().Keyboard(input, prev_state);
+
 	if (!pause)
 		current().Update(time, input);
 

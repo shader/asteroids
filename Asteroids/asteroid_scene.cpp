@@ -27,33 +27,30 @@ void AsteroidScene::Initialize() {
 	asteroid_model->Bind(mode);
 }
 
-void AsteroidScene::Update(Time time, const InputState &input) {	
-	double t = time.Elapsed().Seconds();
-	
-
-	if (input.keyboard['0'] && !prev_state.keyboard['0']) {
+void AsteroidScene::Keyboard(const InputState &input, const InputState &prev) {
+	if (input.keyboard['0'] && !prev.keyboard['0']) {
 		mode = (mode == GL_LINES) ? GL_TRIANGLES : GL_LINES;
 		asteroid_model->Bind(mode);
 	}
 	
-	if (input.keyboard['1'] && !prev_state.keyboard['1']) {
+	if (input.keyboard['1'] && !prev.keyboard['1']) {
 		asteroid_model->mesh.Perturb(radius);
 		asteroid_model->Bind(mode);
 		radius /= rate;
 	}
-	if (input.keyboard['2'] && !prev_state.keyboard['2']) {
+	if (input.keyboard['2'] && !prev.keyboard['2']) {
 		asteroid_model->mesh.Split();
 		asteroid_model->Bind(mode);
 	}	
-	if (input.keyboard['3'] && !prev_state.keyboard['3']) {
+	if (input.keyboard['3'] && !prev.keyboard['3']) {
 		asteroid_model->mesh.Average();
 		asteroid_model->Bind(mode);
 	}
-	if (input.keyboard['4'] && !prev_state.keyboard['4']) {
+	if (input.keyboard['4'] && !prev.keyboard['4']) {
 		asteroid_model->mesh.Normalize();
 		asteroid_model->Bind(mode);
 	}
-	if (input.keyboard['5'] && !prev_state.keyboard['5']) {
+	if (input.keyboard['5'] && !prev.keyboard['5']) {
 		Material ambient = { vec4(1), vec4(.6), vec4(.3), vec4(.3), 32.0f };
 		Material shaded = { vec4(1), vec4(0), vec4(1), vec4(1), 32.0f };
 		asteroid_model->material = (lit ^= 1) ? shaded : ambient;
@@ -66,5 +63,5 @@ void AsteroidScene::Update(Time time, const InputState &input) {
 		exit(0);
 	}
 
-	Scene::Update(time, input);
+	Scene::Keyboard(input, prev);
 }

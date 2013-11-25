@@ -59,9 +59,9 @@ void Scene::Update(Time time, const InputState &input)
 		event_queue.front()();
 		event_queue.pop();
 	}
-
-	prev_state = input;
 }
+
+void Scene::Keyboard(const InputState &input, const InputState &prev) {}
 
 void Scene::Draw() 
 {	

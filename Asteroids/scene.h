@@ -17,7 +17,6 @@ public:
 	list<unique_ptr<Object>> objects;
 	queue<function<void()>> event_queue;
 	int width, height;
-	InputState prev_state;
 
 	vec3 light_dir, light_color;
 
@@ -26,6 +25,7 @@ public:
 	virtual void Update(Time time, const InputState &input);
 	virtual void Draw();
 	virtual void Resize(int w, int h);
+	virtual void Keyboard(const InputState &input, const InputState &prev);
 
 	virtual void Add(Object *obj);
 	virtual vector<Object*> Find(const type_info &id);
@@ -65,7 +65,7 @@ public:
 	void Initialize();
 	void Update(Time time, const InputState &input);
 	void Draw();
-	void Keyboard(const InputState &input);
+	void Keyboard(const InputState &input, const InputState &prev);
 	Asteroid *spawn_asteroid();
 	void add_asteroid(Asteroid *asteroid);
 
@@ -84,8 +84,7 @@ public:
 	AsteroidScene(SceneManager *manager);
 	void Load();
 	void Initialize();
-	void Update(Time time, const InputState &input);
-	void Keyboard(const InputState &input);
+	void Keyboard(const InputState &input, const InputState &prev);
 
 private:
 	GLenum mode;
