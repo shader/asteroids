@@ -10,6 +10,7 @@ in Light {
 
 layout (std140) uniform Material {
 	vec4 color;
+	vec4 emission;
 	vec4 ambient;
 	vec4 diffuse;
 	vec4 specular;
@@ -24,5 +25,5 @@ void main(void)
 	vec4 specular = pow(max(dot(normal, normalize(half_vec).xyz), 0), material.shininess) * material.specular;
 	vec4 diffuse = max(dot(normal, light.dir.xyz), 0) * material.diffuse;
 	vec4 ambient = material.ambient;
-	frag_color = vec4(light.color.rgb * (specular + diffuse + ambient).rgb, 1) * material.color;
+	frag_color = vec4(light.color.rgb * (specular + diffuse + ambient).rgb, 1) * material.color + material.emission;
 }

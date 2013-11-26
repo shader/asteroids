@@ -34,6 +34,7 @@ public:
 
 	float BoundingSphere();
 	Box BoundingBox();
+	Box WorldBox();
 	void BoundingVolumes();
 
 	Object(Scene *scene);

@@ -15,6 +15,8 @@ vec3 operator*(const float &lhs, const vec3 &rhs);
 vec3 operator*(const vec3 &lhs, const double &rhs);
 vec3 operator*(const double &lhs, const vec3 &rhs);
 
+quat operator*=(quat &lhs, const quat &rhs);
+
 mat4 translation(vec3 position);
 mat4 translation(vec4 position);
 mat4 scale(vec3 size);

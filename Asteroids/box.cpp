@@ -1,23 +1,12 @@
 #include "primitives.h"
 #include "content.h"
 
-LineBox::LineBox() {
-	glGenVertexArrays(1, &vertex_array);
-	glGenBuffers(1, &verticesID);
-	glGenBuffers(1, &indicesID);
+vector<vec3> BoxVertices(Box box) {
+	return BoxVertices(box.lower, box.upper);
 }
 
-void LineBox::Bind() {
-	Shader &shader = Content::shader(polygon);
-
+vector<vec3> BoxVertices(vec3 lower, vec3 upper) {
 	vector<vec3>vertices;
-	int indices[] = {
-		0,2, 0,4, 0,6,
-		1,3, 1,5, 1,7,
-		2,5, 2,7, 3,4,
-		3,6, 4,7, 5,6
-	};
-
 	vertices.push_back(lower);
 	vertices.push_back(upper);
 	for (int i=0; i < 3; i++) {
@@ -27,6 +16,31 @@ void LineBox::Bind() {
 		vertices.push_back(a);
 		vertices.push_back(b);
 	}
+	return vertices;
+}
+
+LineBox::LineBox() {
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers(1, &verticesID);
+	glGenBuffers(1, &indicesID);
+}
+
+LineBox::~LineBox() {
+	glDeleteBuffers(1, &verticesID);
+	glDeleteBuffers(1, &indicesID);
+	glDeleteVertexArrays(1, &vertex_array);
+}
+
+void LineBox::Bind() {
+	Shader &shader = Content::shader(polygon);
+
+	vector<vec3>vertices = BoxVertices(lower, upper);
+	int indices[] = {
+		0,2, 0,4, 0,6,
+		1,3, 1,5, 1,7,
+		2,5, 2,7, 3,4,
+		3,6, 4,7, 5,6
+	};
 
 	glBindVertexArray(vertex_array);
 

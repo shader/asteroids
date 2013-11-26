@@ -19,6 +19,10 @@ vec3 operator*(const double &lhs, const vec3 &rhs) {
 	return rhs * lhs;
 }
 
+quat operator*=(quat &lhs, const quat &rhs) {
+	return lhs = lhs * rhs;
+}
+
 mat4 translation(vec4 position) {
 	mat4 trans = mat4(1.0);
 	trans[3] = position;

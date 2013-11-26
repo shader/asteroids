@@ -15,7 +15,7 @@ using namespace glm;
 using namespace std;
 
 struct Material {
-	vec4 color, ambient, diffuse, specular;
+	vec4 color, emission, ambient, diffuse, specular;
 	float shininess;
 };
 

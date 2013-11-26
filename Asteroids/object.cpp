@@ -43,9 +43,23 @@ Box Object::BoundingBox() {
 		box.lower = min(box.lower, (**m).position + (*m)->mesh.box.lower);
 		box.upper = max(box.upper, (**m).position + (*m)->mesh.box.upper);
 	}
+	box.lower *= size;
+	box.upper *= size;
 	box.Bind();
 
 	Box b = {box.lower, box.upper};
+	return b;
+}
+
+Box Object::WorldBox() {
+	Box b = {box.lower, box.upper};
+	auto vertices = BoxVertices(b);
+
+	for (auto v=vertices.begin(); v!=vertices.end(); v++) {
+		vec3 vec = orientation * (*v);
+		b.lower = min(b.lower, vec);
+		b.upper = max(b.upper, vec);
+	}
 	return b;
 }
 
@@ -80,7 +94,7 @@ void Object::DrawSphere(mat4 view, mat4 projection) {
 void Object::Update(Time time, InputState const &input) {
 	double t = time.Elapsed().Seconds();
 	position += velocity * t;
-	orientation = orientation * quat(angular_vel * t);
+	orientation *= quat(angular_vel * t);
 }
 
 function<void()> Object::Collision(Object &other) { return [](){}; };

@@ -15,6 +15,9 @@ struct Box {
 	vec3 lower, upper;
 };
 
+vector<vec3> BoxVertices(Box box);
+vector<vec3> BoxVertices(vec3 lower, vec3 upper);
+
 class Vertex {
 public:	
 	Vertex();

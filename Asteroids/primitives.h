@@ -34,6 +34,7 @@ public:
 class LineBox {
 public:
 	LineBox();
+	~LineBox();
 	vec3 lower, upper;
 	void Bind();
 	void Draw(mat4 model, mat4 projection);
