@@ -50,8 +50,8 @@ void AsteroidScene::Keyboard(const InputState &input, const InputState &prev) {
 		asteroid_model->Bind(mode);
 	}
 	if (input.keyboard['5'] && !prev.keyboard['5']) {
-		Material ambient = { vec4(1), vec4(0), vec4(.6), vec4(.3), vec4(.3), 32.0f };
-		Material shaded = { vec4(1), vec4(0), vec4(0), vec4(1), vec4(1), 32.0f };
+		Material ambient = { vec4(1), vec4(0), vec4(0), vec4(0.3), vec4(0), 32.0f };
+		Material shaded = { vec4(1), vec4(0), vec4(0), vec4(0.3), vec4(1), 64.0f };
 		asteroid_model->material = (lit ^= 1) ? shaded : ambient;
 		asteroid_model->Bind(mode);
 	}

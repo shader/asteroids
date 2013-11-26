@@ -31,10 +31,11 @@ void DefaultScene::Load() {
 
 	auto sphere = new Model(Sphere());
 	sphere->Bind();
-	sphere->material.shininess = 64.0f;
-	sphere->material.specular = vec4(2,2,2,1);
-	sphere->material.color = vec4(0.1,0.1,1,0.5);
-	sphere->material.emission = vec4(0,0,0.5,0.1);
+	sphere->material.shininess = 32.0f;
+	sphere->material.specular = vec4(1,1,1,1);
+	sphere->material.diffuse = vec4(0,0,0.5,0.3);
+	sphere->material.color = vec4(0,0,1,0.5);
+	sphere->material.emission = vec4(0,0,0.1,0.1);
 	Content::Load(ModelType::sphere, sphere);
 	
 	lives = new LifeCounter(this, 3);

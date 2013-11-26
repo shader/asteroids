@@ -23,9 +23,9 @@ void main()
 
    px_normal = normal_matrix*normal;
    
-   light_out.dir = vec4(1);
+   light_out.dir = vec4(1,1,2,0);
    light_out.color = vec4(vec3(.75),1);
 
-   vec4 eye = -normalize(inv_view*vec4(0,0,10,1) + model_view*vec4(vertex,1));
+   vec4 eye = normalize(inv_view*vec4(0,0,0,1) - model_view*vec4(vertex,1));
    half_vec = normalize(light_out.dir - eye);
 }

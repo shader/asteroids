@@ -112,6 +112,7 @@
     <ClInclude Include="Asteroids\geometry.h" />
     <ClInclude Include="Asteroids\glyph.h" />
     <ClInclude Include="Asteroids\headers.h" />
+    <ClInclude Include="Asteroids\kd-tree.h" />
     <ClInclude Include="Asteroids\particles.h" />
     <ClInclude Include="Asteroids\primitives.h" />
     <ClInclude Include="Asteroids\input.h" />

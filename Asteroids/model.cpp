@@ -7,7 +7,7 @@ Model::Model(ShaderType shader) {
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
 
-	Material m = { vec4(1), vec4(0), vec4(0), vec4(1), vec4(1), 32.0f };
+	Material m = { vec4(1), vec4(0), vec4(0), vec4(vec3(0.5),1), vec4(1), 32.0f };
 	material = m;
 	
 	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;
@@ -20,7 +20,7 @@ Model::Model(Mesh &mesh, ShaderType shader) {
 	size = vec3(1.0f, 1.0f, 1.0f);
 	draw_mode = GL_TRIANGLES;
 	
-	Material m = { vec4(1), vec4(0), vec4(0), vec4(1), vec4(1), 32.0f };
+	Material m = { vec4(1), vec4(0), vec4(0), vec4(vec3(0.5),1), vec4(1), 32.0f };
 	material = m;
 
 	verticesID = texcoordsID = normalsID = indicesID = vertex_array = materialID = -1;

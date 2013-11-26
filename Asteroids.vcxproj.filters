@@ -170,6 +170,9 @@
     <ClInclude Include="Asteroids\glyph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Asteroids\kd-tree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shader.frag">
