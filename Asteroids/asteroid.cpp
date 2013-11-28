@@ -10,7 +10,10 @@ Asteroid::Asteroid(Scene *scene) : Object(scene) {
 }
 
 void Asteroid::Load() {
-	models.push_back(shared_ptr<Model>(new Model(Content::mesh(rock))));
+	Model *model = new Model(Content::mesh(rock));
+	model->material.shininess = 4;
+	model->material.specular = vec4(0.3);
+	models.push_back(shared_ptr<Model>(model));
 	Object::Load();
 }
 
