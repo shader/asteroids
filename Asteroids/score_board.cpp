@@ -33,9 +33,9 @@ int ScoreBoard::Points() {
 }
 
 void ScoreBoard::Draw(mat4 model, mat4 projection) {
-	projection = ortho(0.0f, (float)scene->width, (float)scene->height, 0.0f, 0.0f, (float)1);
+	projection = ortho(0.0f, (float)scene->width, 0.0f, (float)scene->height, 0.0f, (float)1);
 	string s = to_string((long long)score);
-	model = translation(vec3(scene->width - 20 - s.length() * 16,20,0));
+	model = translation(vec3(scene->width - 12 - s.length() * 16,scene->height - 40,0));
 
 	vector<int> indices;
 	vector<vec3> vertices;
@@ -49,10 +49,10 @@ void ScoreBoard::Draw(mat4 model, mat4 projection) {
 		vertices.push_back(vec3(i*16 + 16, 0, 0));
 
 		vec2 offset = glyphs[s[i] - 32];
-		offset.y = 256 - offset.y - ((int)offset.y % 32);
+		offset.y = 256 - offset.y - ((int)offset.y % 32) - 32;
 		texcoords.push_back(offset/256.0f);
-		texcoords.push_back((offset + vec2(0,-32))/256.0f);
-		texcoords.push_back((offset + vec2(16,-32))/256.0f);
+		texcoords.push_back((offset + vec2(0,32))/256.0f);
+		texcoords.push_back((offset + vec2(16,32))/256.0f);
 		texcoords.push_back((offset + vec2(16,0))/256.0f);
 
 		indices.push_back(i*4);
