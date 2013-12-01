@@ -98,6 +98,7 @@ public:
 	vector<Edge> edges;
 	vector<Face> faces;
 	Box box;
+	vector<int> kd_tree;
 	float radius;
 
 	Mesh& operator=(const Mesh& mesh);
@@ -109,6 +110,7 @@ public:
 	void Normalize();
 	void Subdivide(int times=1, bool spike=false);
 	Box BoundingBox();
+	void KdTree();
 	void LoadTriangles(uint* triangles, int triangle_count);
 };
 

@@ -1,5 +1,6 @@
 #include "geometry.h"
 #include "utils.h"
+#include "kd-tree.h"
 using namespace glm;
 
 Mesh::Mesh() {
@@ -120,6 +121,19 @@ Box Mesh::BoundingBox() {
 		box.upper = max(box.upper, v->position);
 	}
 	return box;
+}
+
+void Mesh::KdTree() {
+	kd_tree.resize(vertices.size());
+	for (unsigned int i=0; i<vertices.size(); i++) {
+		kd_tree[i]=i;
+	}
+	make_kdtree<int>(kd_tree.begin(), kd_tree.end(), [this](int depth)->function<bool(const int&, const int&)>{
+		auto mesh = this;
+		return [=](const int& a, const int& b) {
+			return mesh->vertices[a].position[depth] < mesh->vertices[b].position[depth];
+		};
+	}, 0);
 }
 
 int add_edge(int a, int b, Mesh* mesh) {

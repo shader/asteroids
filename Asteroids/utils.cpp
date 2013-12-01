@@ -6,6 +6,18 @@ bool operator<(const vec3 &lhs, const vec3 &rhs) {
 	return lhs.x < rhs.x && lhs.y < rhs.y && lhs.z < rhs.z;
 }
 
+bool operator<=(const vec3 &lhs, const vec3 &rhs) {
+	return lhs < rhs || lhs == rhs;
+}
+
+bool operator>(const vec3 &lhs, const vec3 &rhs) {
+	return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+bool operator>=(const vec3 &lhs, const vec3 &rhs) {
+	return lhs > rhs || lhs == rhs;
+}
+
 vec3 operator*(const vec3 &lhs, const float &rhs) {
 	return vec3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
