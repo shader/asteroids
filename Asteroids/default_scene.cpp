@@ -2,6 +2,7 @@
 #include "object.h"
 #include "utils.h"
 #include "content.h"
+#include "kd-tree.h"
 
 DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {
 	level = 1;
@@ -98,7 +99,29 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 	asteroid->destroyed += [&](Object* obj){ asteroid_count--; };
 }
 
+struct KDObj {
+	Object * obj;
+	Box box;
+};
+
 void DefaultScene::process_collisions() {
+	vector<KDObj> kd_tree;
+	kd_tree.resize(objects.size());
+	int i=0;
+	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
+		kd_tree[i].obj = obj->get();
+		kd_tree[i].box = (*obj)->WorldBox();
+	}
+	make_kdtree<KDObj>(kd_tree.begin(), kd_tree.end(), [](int depth)->function<bool(const KDObj&, const KDObj&)>{
+		return [=](const KDObj& a, const KDObj& b)->bool{
+			if (depth < 3) {
+				return a.box.lower[depth] < b.box.lower[depth];
+			} else {				
+				return a.box.upper[depth % 3] < b.box.upper[depth % 3];
+			}
+		};
+	}, 0);
+
 	queue<function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
@@ -203,7 +226,7 @@ void DefaultScene::Draw() {
 					box.lower = b.lower;
 					box.upper = b.upper;
 					box.Bind();
-					box.Draw(View*translation((*o)->position), Projection);
+					box.Draw(View, Projection);
 				}
 			}
 		}

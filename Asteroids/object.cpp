@@ -57,7 +57,7 @@ Box Object::WorldBox() {
 	auto vertices = BoxVertices(b);
 
 	for (auto v=vertices.begin(); v!=vertices.end(); v++) {
-		vec3 vec = orientation * (*v);
+		vec3 vec = orientation * (*v) + position;
 		b.lower = min(b.lower, vec);
 		b.upper = max(b.upper, vec);
 	}
