@@ -10,6 +10,6 @@ uniform vec4 explosion_color;
 void main()
 {
    gl_Position = MVP*vec4(vertex,1);
-   gl_PointSize = 2;
-   color = (explosion_color - vec4(0.5) * vertex.z) / age;
+   gl_PointSize = -vertex.z;
+   color = (explosion_color - (explosion_color * vertex.z / 3)) / pow(age,2);
 }

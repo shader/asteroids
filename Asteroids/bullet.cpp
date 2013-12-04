@@ -24,6 +24,16 @@ void Bullet::Update(Time time, InputState const &input) {
 }
 
 function<void()> Bullet::Collision(Object &other) {
+	if (typeid(other) != typeid(Destroyer)) {
+		Explosion* explosion = new Explosion(scene, vec4(0.75,0.75,0.75,1));
+		explosion->position = position;
+		explosion->velocity = velocity/2.0f;
+		explosion->system.duration = 1;
+		explosion->size = size;
+		explosion->Initialize();
+		scene->Add(explosion);
+	}
+
 	auto s = scene;
 	return [=](){ s->Remove(this); };
 }

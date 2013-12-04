@@ -13,7 +13,7 @@ void DefaultScene::Load() {
 	light_color = vec3(1);	
 
 	Content::Load(basic, "shader.vert", "shader.frag");
-	Content::Load(explosion, "explosion.vert", "color.frag");
+	Content::Load(explosion, "particle.vert", "color.frag");
 	Content::Load(polygon, "polygon.vert", "color.frag");
 	Content::Load(textured, "texture.vert", "texture.frag");
 
@@ -85,7 +85,7 @@ void DefaultScene::Initialize() {
 Asteroid* DefaultScene::spawn_asteroid() {
 	auto asteroid = new Asteroid(this);
 	asteroid->position = vec3(rand_vec2() * 20.0f, 0);
-	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -4.0f;
+	asteroid->velocity = normalize(asteroid->position + vec3(rand_vec2(), 0)) * -5.0f;
 	asteroid->angular_vel = rand_vec3() * 2.0f;
 	asteroid->Load();
 	add_asteroid(asteroid);

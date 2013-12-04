@@ -196,5 +196,8 @@
     <None Include="resources\polygon.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\particle.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

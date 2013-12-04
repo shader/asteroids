@@ -128,6 +128,7 @@
   <ItemGroup>
     <None Include="resources\color.frag" />
     <None Include="resources\explosion.vert" />
+    <None Include="resources\particle.vert" />
     <None Include="resources\polygon.vert" />
     <None Include="resources\shader.frag" />
     <None Include="resources\shader.vert" />

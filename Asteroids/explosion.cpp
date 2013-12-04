@@ -4,30 +4,36 @@
 #include "content.h"
 using namespace std;
 
-Explosion::Explosion(Scene *scene, vec4 color) : Object(scene) {
+Explosion::Explosion(Scene *scene, vec4 start_color, vec4 end_color) : Object(scene) {
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &indicesID);
+	glGenBuffers (1, &systemID);
 
-	this->color = color;
-	age=0.0f;
-	particles.resize(100, Particle());
-	vertices.resize(100, vec3(0));
-	indices.resize(100,0);
+	system.start_color = start_color;
+	system.end_color = end_color;
+	system.age = 0.0f;
+	system.duration = 3;
+
+	particles.resize(500, Particle());
+	vertices.resize(500, vec3(0));
+	indices.resize(500,0);
 	flags[ObjectFlags::Collide] = false;
 }
 
 Explosion::~Explosion() {
 	glDeleteBuffers(1, &verticesID);
 	glDeleteBuffers(1, &indicesID);
+	glDeleteBuffers(1, &systemID);
 	glDeleteVertexArrays(1, &vertex_array);
 }
 
 void Explosion::Initialize() {
 	for (uint i=0; i<particles.size(); i++) {
 		particles[i].age = 0;
-		particles[i].position = vec3(0);
+		particles[i].position = rand_ball() * size;
 		particles[i].velocity = rand_ball() * 2.0f;
+		particles[i].velocity += normalize(particles[i].velocity) * 1.0;
 	}
 	
 	Object::Initialize();
@@ -35,8 +41,8 @@ void Explosion::Initialize() {
 
 void Explosion::Update(Time time, InputState const &input) {
 	velocity -= velocity * .5 * time.ElapsedSeconds; //'friction' decay
-	age += time.ElapsedSeconds;
-	if (age > 3) {
+	system.age += time.ElapsedSeconds;
+	if (system.age > system.duration) {
 		scene->Remove(this);
 	} else {		
 		for (auto p = particles.begin(); p!=particles.end(); p++) {
@@ -67,8 +73,10 @@ void Explosion::Draw(mat4 view, mat4 projection) {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*indices.size(), &indices[0], GL_STATIC_DRAW);
 
 		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &mvp[0][0]);
-		glUniform1f((*shader)("age"), age);
-		glUniform4fv((*shader)("explosion_color"), 1, &color[0]);
+		glBindBuffer(GL_UNIFORM_BUFFER, systemID);
+		glBufferData(GL_UNIFORM_BUFFER, sizeof(System), &system, GL_STATIC_DRAW);
+		glBindBufferBase(GL_UNIFORM_BUFFER, shader->UniformBlockIndex("ParticleSystem"), systemID);
+		
 		glDrawElements(GL_POINTS, particles.size(), GL_UNSIGNED_INT, 0);
 	shader->End();
 	glBindVertexArray(0);

@@ -125,7 +125,9 @@ private:
 
 class Explosion : public Object {
 public:
-	Explosion(Scene *scene, vec4 color);
+	System system;
+
+	Explosion(Scene *scene, vec4 start_color, vec4 end_color = vec4(0));
 	~Explosion();
 	vector<Particle> particles;
 	void Initialize();
@@ -133,11 +135,9 @@ public:
 	void Draw(mat4 view, mat4 projection);
 
 private:
-	GLuint verticesID, indicesID, vertex_array;
+	GLuint vertex_array, verticesID, indicesID, systemID;
 	vector<vec3> vertices;
 	vector<GLuint> indices;
-	double age;
-	vec4 color;
 };
 
 class LifeCounter : public Object {
