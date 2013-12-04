@@ -25,6 +25,15 @@ LineBox::LineBox() {
 	glGenBuffers(1, &indicesID);
 }
 
+LineBox::LineBox(Box box) {
+	glGenVertexArrays(1, &vertex_array);
+	glGenBuffers(1, &verticesID);
+	glGenBuffers(1, &indicesID);
+
+	lower = box.lower;
+	upper = box.upper;
+}
+
 LineBox::~LineBox() {
 	glDeleteBuffers(1, &verticesID);
 	glDeleteBuffers(1, &indicesID);

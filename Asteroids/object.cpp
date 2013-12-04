@@ -53,15 +53,19 @@ Box Object::BoundingBox() {
 }
 
 Box Object::WorldBox() {
+	return world_box;
+}
+
+void Object::UpdateWorldBox() {
 	Box b = {box.lower, box.upper};
 	auto vertices = BoxVertices(b);
+	world_box.lower = world_box.upper = position;
 
 	for (auto v=vertices.begin(); v!=vertices.end(); v++) {
 		vec3 vec = orientation * (*v) + position;
-		b.lower = min(b.lower, vec);
-		b.upper = max(b.upper, vec);
+		world_box.lower = min(world_box.lower, vec);
+		world_box.upper = max(world_box.upper, vec);
 	}
-	return b;
 }
 
 void Object::Initialize() {}
@@ -96,6 +100,7 @@ void Object::Update(Time time, InputState const &input) {
 	double t = time.Elapsed().Seconds();
 	position += velocity * t;
 	orientation *= quat(angular_vel * t);
+	UpdateWorldBox();
 }
 
 function<void()> Object::Collision(Object &other) { return [](){}; };

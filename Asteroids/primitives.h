@@ -34,6 +34,7 @@ public:
 class LineBox {
 public:
 	LineBox();
+	LineBox(Box box);
 	~LineBox();
 	vec3 lower, upper;
 	void Bind();

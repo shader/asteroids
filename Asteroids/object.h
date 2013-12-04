@@ -48,8 +48,11 @@ public:
 
 	virtual void Update(Time time, InputState const &input);
 	virtual function<void()> Collision(Object &other);
+
 private:
+	void UpdateWorldBox();
 	LineBox box;
+	Box world_box;
 };
 
 class Destroyer : public Object {

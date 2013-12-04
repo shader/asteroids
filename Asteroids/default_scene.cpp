@@ -221,10 +221,7 @@ void DefaultScene::Draw() {
 				if (draw_spheres)
 					(*o)->DrawSphere(View, Projection);
 				if (draw_boxes) {
-					LineBox box = LineBox();
-					Box b = (*o)->WorldBox();
-					box.lower = b.lower;
-					box.upper = b.upper;
+					LineBox box = LineBox((*o)->WorldBox());
 					box.Bind();
 					box.Draw(View, Projection);
 				}

@@ -73,7 +73,7 @@ void LoadMenu() {
 }
 
 void Initialize() {
-	srand(time(0));
+	srand((unsigned int)time(0));
 	//Initialize GLUT
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);		
 	glutInitContextVersion (4, 0);
@@ -88,7 +88,7 @@ void Initialize() {
 	}	
 	
 	glEnable(GL_CULL_FACE);
-	glEnable( GL_DEPTH_TEST );
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

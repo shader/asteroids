@@ -37,10 +37,6 @@ function<bool(const Box&, const Box&)> less_than(int axis) {
 	};
 }
 
-template<typename Iter> Iter midpoint(Iter start, Iter end) {
-  return start + std::distance(start, end) / 2;
-}
-
 template<typename T>
 vector<T> search_kdtree(typename vector<T>::iterator start, typename vector<T>::iterator end, Box range, vector<T> &matches, Box bounds, int depth) {
 	//check if tree is completely in range, and return it
