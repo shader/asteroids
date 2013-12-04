@@ -114,7 +114,7 @@ function<void()> Alien::Collision(Object &other) {
 		int points = (typeid(other) == typeid(Bullet)) ? value : 0;
 		s->event_queue.push([=](){ s->Remove(this); });
 		return [=](){ 
-			Explosion* explosion = new Explosion(s);
+			Explosion* explosion = new Explosion(s, vec4(0,0,1,1));
 			explosion->position = p;
 			explosion->velocity = v;
 			explosion->Initialize();

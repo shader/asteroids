@@ -54,6 +54,7 @@ public:
 	void Resize(int w, int h);
 	void Restart();
 	void Push(Scene * scene);
+	void Pop();
 private:
 	queue<function<void()>> event_queue;
 };

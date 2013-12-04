@@ -4,11 +4,12 @@
 #include "content.h"
 using namespace std;
 
-Explosion::Explosion(Scene *scene) : Object(scene) {
+Explosion::Explosion(Scene *scene, vec4 color) : Object(scene) {
 	glGenVertexArrays(1, &vertex_array);
 	glGenBuffers (1, &verticesID);
 	glGenBuffers (1, &indicesID);
 
+	this->color = color;
 	age=0.0f;
 	particles.resize(100, Particle());
 	vertices.resize(100, vec3(0));
@@ -67,7 +68,7 @@ void Explosion::Draw(mat4 view, mat4 projection) {
 
 		glUniformMatrix4fv((*shader)("MVP"), 1, GL_FALSE, &mvp[0][0]);
 		glUniform1f((*shader)("age"), age);
-
+		glUniform4fv((*shader)("explosion_color"), 1, &color[0]);
 		glDrawElements(GL_POINTS, particles.size(), GL_UNSIGNED_INT, 0);
 	shader->End();
 	glBindVertexArray(0);

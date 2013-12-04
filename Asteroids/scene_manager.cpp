@@ -45,3 +45,7 @@ void SceneManager::Push(Scene *scene) {
 	scene->Load();
 	scene->Initialize();
 }
+
+void SceneManager::Pop() {
+	event_queue.push([this](){ scenes.pop(); });
+}

@@ -65,7 +65,7 @@ function<void()> Destroyer::Collision(Object &other) {
 		return [=](){ 
 			auto destroyer = this;
 			flags[ObjectFlags::Enabled] = false;
-			Explosion* explosion = new Explosion(s);
+			Explosion* explosion = new Explosion(s, vec4(1,0,0,1));
 			explosion->position = p;
 			explosion->velocity = v;
 			explosion->Initialize();

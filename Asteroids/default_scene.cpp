@@ -181,6 +181,10 @@ void DefaultScene::Keyboard(const InputState &input, const InputState &prev) {
 	if (input.keyboard['5'] && !prev.keyboard['5']) {
 		draw_spheres ^= 1;
 	}
+
+	if (input.keyboard['a'] && !prev.keyboard['a']) {
+		manager->Push(new AsteroidScene(manager));
+	}
 }
 
 void DefaultScene::Draw() {

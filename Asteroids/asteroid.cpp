@@ -26,8 +26,8 @@ void Asteroid::Update(Time time, InputState const &input) {
 }
 
 function<void()> Asteroid::Collision(Object &other) {
-	if ((typeid(other) == typeid(Bullet) && scene->Get(((Bullet*)&other)->source) &&
-		typeid(*((Bullet*)&other)->source) == typeid(Destroyer)) || typeid(other) == typeid(Destroyer)) {
+	if (typeid(other) == typeid(Destroyer) ||
+		(typeid(other) == typeid(Bullet) && typeid(((Bullet*)&other)->source) == typeid(Destroyer*))) {
 		//add points if killed by player
 		return [=](){
 			if (scene->Get(this)) {
@@ -49,6 +49,12 @@ function<void()> Asteroid::Collision(Object &other) {
 }
 
 void Asteroid::Split() {
+	Explosion* explosion = new Explosion(scene, vec4(0.5,0.5,0.5,1));
+	explosion->position = position;
+	explosion->velocity = velocity;
+	explosion->Initialize();
+	scene->Add(explosion);
+
 	if (size.x > .5) {
 		auto a = new Asteroid(scene), b = new Asteroid(scene);
 		a->value = b->value = (size.x == 2) ? 50 : 100;

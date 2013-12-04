@@ -125,7 +125,7 @@ private:
 
 class Explosion : public Object {
 public:
-	Explosion(Scene *scene);
+	Explosion(Scene *scene, vec4 color);
 	~Explosion();
 	vector<Particle> particles;
 	void Initialize();
@@ -137,6 +137,7 @@ private:
 	vector<vec3> vertices;
 	vector<GLuint> indices;
 	double age;
+	vec4 color;
 };
 
 class LifeCounter : public Object {
