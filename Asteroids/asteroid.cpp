@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "scene.h"
 #include "content.h"
+#include "particles.h"
 
 Asteroid::Asteroid(Scene *scene) : Object(scene) {
 	velocity = position = vec3(0);

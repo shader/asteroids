@@ -25,6 +25,9 @@
     <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{1a469e79-fe7e-4cdb-83f1-83701719a252}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\objects\particles">
+      <UniqueIdentifier>{4706df38-3dbe-4093-8e4e-28e943b8f025}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Asteroids\main.cpp">
@@ -84,9 +87,6 @@
     <ClCompile Include="Asteroids\texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Asteroids\explosion.cpp">
-      <Filter>Source Files\objects</Filter>
-    </ClCompile>
     <ClCompile Include="Asteroids\scene_manager.cpp">
       <Filter>Source Files\scenes</Filter>
     </ClCompile>
@@ -122,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="Asteroids\kd-tree.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\explosion.cpp">
+      <Filter>Source Files\objects\particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Asteroids\particle_system.cpp">
+      <Filter>Source Files\objects\particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

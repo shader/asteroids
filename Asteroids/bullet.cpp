@@ -1,6 +1,7 @@
 #include "object.h"
 #include "scene.h"
 #include "content.h"
+#include "particles.h"
 
 Bullet::Bullet(Scene *scene, Object* source) : Object(scene) {
 	this->source = source;

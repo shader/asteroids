@@ -41,7 +41,7 @@ void ScoreBoard::Draw(mat4 model, mat4 projection) {
 	vector<vec3> vertices;
 	vector<vec2> texcoords;
 
-	for (int i = 0; i < s.length(); i++) {
+	for (unsigned int i = 0; i < s.length(); i++) {
 		//quad
 		vertices.push_back(vec3(i*16, 0, 0));
 		vertices.push_back(vec3(i*16, 32, 0));

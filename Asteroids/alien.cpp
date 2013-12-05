@@ -3,6 +3,7 @@
 #include "model.h"
 #include "scene.h"
 #include "content.h"
+#include "particles.h"
 
 Alien::Alien(Scene *scene) : Object(scene) {
 	Model* model = new Model(Content::mesh(alien));
@@ -92,7 +93,7 @@ void Alien::Fire() {
 void Alien::Update(Time time, InputState const &input) {
 	Object::Update(time, input);
 	
-	double t = time.ElapsedSeconds;
+	float t = (float)time.ElapsedSeconds;
 	float speed = length(velocity);
 	age += t;
 	orientation = quat(vec3(0, 0, time.TotalSeconds));

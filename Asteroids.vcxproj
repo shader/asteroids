@@ -93,6 +93,7 @@
     <ClCompile Include="Asteroids\Mesh.cpp" />
     <ClCompile Include="Asteroids\model.cpp" />
     <ClCompile Include="Asteroids\object.cpp" />
+    <ClCompile Include="Asteroids\particle_system.cpp" />
     <ClCompile Include="Asteroids\quad.cpp" />
     <ClCompile Include="Asteroids\rock.cpp" />
     <ClCompile Include="Asteroids\scene.cpp" />

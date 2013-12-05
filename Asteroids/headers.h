@@ -1,6 +1,8 @@
 //Master include file to collect all headers for main/others
 
+
 #ifdef _M_IX86
+#define NOMINMAX
 #include <windows.h>
 #else
 #include <stream.h>

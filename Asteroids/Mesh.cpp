@@ -1,6 +1,6 @@
-#include "geometry.h"
 #include "utils.h"
 #include "kd-tree.h"
+#include "geometry.h"
 using namespace glm;
 
 Mesh::Mesh() {

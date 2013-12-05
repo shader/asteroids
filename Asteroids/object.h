@@ -4,7 +4,6 @@
 #include "event.h"
 #include "GL\freeglut.h"
 #include "memory"
-#include "particles.h"
 #include "input.h"
 #include "texture.h"
 #include <random>
@@ -102,7 +101,7 @@ public:
 
 class Asteroid : public Object {
 public:
-	float value;
+	int value;
 
 	Asteroid(Scene *scene);
 	void Load();
@@ -124,23 +123,6 @@ public:
 
 private:
 	double age;
-};
-
-class Explosion : public Object {
-public:
-	System system;
-
-	Explosion(Scene *scene, vec4 start_color, vec4 end_color = vec4(0));
-	~Explosion();
-	vector<Particle> particles;
-	void Initialize();
-	void Update(Time time, InputState const &input);
-	void Draw(mat4 view, mat4 projection);
-
-private:
-	GLuint vertex_array, verticesID, indicesID, systemID;
-	vector<vec3> vertices;
-	vector<GLuint> indices;
 };
 
 class LifeCounter : public Object {

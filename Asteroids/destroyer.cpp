@@ -2,6 +2,7 @@
 #include "utils.h"
 #include "scene.h"
 #include "content.h"
+#include "particles.h"
 
 Destroyer::Destroyer(Scene *scene) : Object(scene) {
 	Model* model = new Model(Content::mesh(ship));
