@@ -55,6 +55,12 @@ void AsteroidScene::Keyboard(const InputState &input, const InputState &prev) {
 		asteroid_model->material = (lit ^= 1) ? shaded : ambient;
 		asteroid_model->Bind(mode);
 	}
+	if (input.keyboard['s'] && !prev.keyboard['s']) {
+		Mesh a, b;
+		asteroid_model->mesh.Slice(Plane(1,0,0), a, b);
+		asteroid_model->mesh = a;
+		asteroid_model->Bind(mode);
+	}
 	if (input.keyboard['r']) {
 		manager->Restart();
 	}	

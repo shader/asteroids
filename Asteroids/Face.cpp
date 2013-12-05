@@ -34,8 +34,7 @@ Face::Face(int first, Mesh *mesh) {
 	Edge *e = &this->first();
 	do {
 		e->left_face = index;
-		if (e->twin_edge != -1) e->twin().right_face = index;
-		else e->twin_edge = create_twin(*e).index;
+		if (e->twin_edge > -1) create_twin(*e).index;
 		e = &e->next();
 	} while (e->index != first);
 }

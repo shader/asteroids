@@ -4,7 +4,7 @@ using namespace glm;
 
 bool intersect(Edge &e, Plane &plane) {
 	//return true if vertices are on opposite sides of the plane. Doesn't count as intersect if a vertex is on the plane.
-	return dot(e.head().position, plane.normal) * dot(e.tail().position, plane.normal) < 0;
+	return dot(e.head().position, plane) * dot(e.tail().position, plane) < 0;
 }
 
 bool operator<(const Edge &lhs, const Edge &rhs) {
@@ -26,7 +26,7 @@ Edge &Edge::next() const { return mesh->edges[next_edge]; }
 Edge &Edge::prev() const { return mesh->edges[prev_edge]; }
 Edge &Edge::twin() const { return mesh->edges[twin_edge]; }
 Face &Edge::left() const { return mesh->faces[left_face]; }
-Face &Edge::right() const { return mesh->faces[right_face]; }
+Face &Edge::right() const { return mesh->faces[twin().left_face]; }
 
 Edge::Edge(int tail, int head, Mesh* mesh) {
 	this->tail_vertex = tail;
@@ -40,19 +40,13 @@ Edge::Edge(int tail, int head, Mesh* mesh) {
 void Edge::attach(int edge) {
 	next_edge = edge;
 	next().left_face = left_face;
-	next().right_face = right_face;
 	next().prev_edge = index;
-	if (next().twin_edge != -1)
-		next().twin().right_face = left_face;
 }
 
 void Edge::attach(Edge &edge) {
 	next_edge = edge.index;
 	next().left_face = left_face;
-	next().right_face = right_face;
-	edge.prev_edge = index;	
-	if (next().twin_edge != -1)
-		next().twin().right_face = left_face;
+	edge.prev_edge = index;
 }
 
 vec3 Edge::midpoint() const {
@@ -83,8 +77,6 @@ void Edge::split() {
 void tie(Edge &edge, Edge &twin) {
 	edge.twin_edge = twin.index;
 	twin.twin_edge = edge.index;
-	edge.right_face = twin.left_face;
-	twin.right_face = edge.left_face;
 }
 
 Edge& create_twin(Edge &edge) {

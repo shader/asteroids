@@ -68,11 +68,12 @@ vec3 Vertex::average(bool spike) {
 vec3 Vertex::normal() const {
 	vec3 normal(0);
 	for (auto e = edges.begin(); e!=edges.end(); e++) {
-		normal += mesh->faces[mesh->edges[*e].left_face].normal();
+		if (mesh->edges[*e].left_face != -1)
+			normal += mesh->faces[mesh->edges[*e].left_face].normal();
 	}
 	return normal / (float)edges.size();
 }
 
 bool intersect(Vertex &v, Plane &plane) {
-	return dot(v.position, plane.normal) == 0;
+	return dot(v.position, plane) == 0;
 }

@@ -170,10 +170,72 @@ void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
 	}
 }
 
-Mesh Mesh::Slice(Plane plane) {
+void Mesh::Slice(Plane plane, Mesh &a, Mesh &b) {
 	Vertex* cur = &vertices[0];
+	
+	vector<int> a_vertices(vertices.size(), -1), a_edges(edges.size(), -1), a_faces(faces.size(), -1);
+	vector<int> b_vertices(vertices.size(), -1), b_edges(edges.size(), -1), b_faces(faces.size(), -1);
 
-	if (dot(cur->position, plane.normal) == 0) {}
+	//separate vertices
+	for (int i=0; i<vertices.size(); i++) {
+		vertices[i].edges.clear();
+		if (dot(vertices[i].position, plane) > 0) {
+			b_vertices[i] = b.vertices.size();
+			b.vertices.push_back(vertices[i]);
+		} else {
+			a_vertices[i] = a.vertices.size();
+			a.vertices.push_back(vertices[i]);
+		}
+	}
 
-	return Mesh();
+	for (int i=0; i<edges.size(); i++) {
+		if (intersect(edges[i], plane)) {
+
+		} else if (a_vertices[edges[i].head_vertex] != -1 && a_vertices[edges[i].tail_vertex] != -1) {
+			a_edges[i] = a.edges.size();
+			a.edges.push_back(edges[i]);
+			auto e = &a.edges.back();
+			e->mesh = &a;
+			e->head_vertex = a_vertices[e->head_vertex];
+			e->tail_vertex = a_vertices[e->tail_vertex];
+			e->tail().edges.insert(a.edges.size()-1);
+		} else if (b_vertices[edges[i].head_vertex] != -1 && b_vertices[edges[i].tail_vertex] != -1) {
+			b_edges[i] = b.edges.size();
+			b.edges.push_back(edges[i]);
+			auto e = &b.edges.back();
+			e->mesh = &b;
+			e->head_vertex = b_vertices[e->head_vertex];
+			e->tail_vertex = b_vertices[e->tail_vertex];
+			e->tail().edges.insert(b.edges.size()-1);
+		}
+	}
+	
+	for (int i=0; i<faces.size(); i++) {
+		if (intersect(edges[i], plane)) {
+			//nothing
+		} else if (a_edges[faces[i].first_edge] != -1 && a_edges[faces[i].first().next_edge] != -1 && a_edges[faces[i].first().next().next_edge] != -1) {
+			a_faces[i] = a.faces.size();
+			a.faces.push_back(faces[i]);
+			auto f = &a.faces.back();
+			f->mesh = &a;
+			f->first_edge = a_edges[f->first_edge];
+		} else {
+			b_faces[i] = b.faces.size();
+			b.faces.push_back(faces[i]);
+			auto f = &b.faces.back();
+			f->mesh = &a;
+			f->first_edge = b_edges[f->first_edge];
+		}
+	}
+
+	for (int i=0; i<a.edges.size(); i++) {
+		a.edges[i].next_edge = a_edges[a.edges[i].next_edge];
+		a.edges[i].twin_edge = a_edges[a.edges[i].twin_edge];
+		a.edges[i].left_face = a_faces[a.edges[i].left_face];
+	}
+	for (int i=0; i<b.edges.size(); i++) {
+		b.edges[i].next_edge = b_edges[b.edges[i].next_edge];
+		b.edges[i].twin_edge = b_edges[b.edges[i].twin_edge];
+		b.edges[i].left_face = b_faces[b.edges[i].left_face];
+	}
 }

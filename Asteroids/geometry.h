@@ -15,9 +15,7 @@ struct Box {
 	vec3 lower, upper;
 };
 
-struct Plane {
-	vec3 normal;
-};
+typedef vec3 Plane;
 
 vector<vec3> BoxVertices(Box box);
 vector<vec3> BoxVertices(vec3 lower, vec3 upper);
@@ -50,7 +48,7 @@ public:
 	Edge(int tail, int head, Mesh* mesh);
 	int index, head_vertex, tail_vertex;
 	int next_edge, prev_edge, twin_edge;
-	int left_face, right_face;
+	int left_face;
 	Mesh* mesh;
 	
 	friend bool intersect(Edge &e, Plane &plane);
@@ -110,7 +108,7 @@ public:
 
 	Mesh& operator=(const Mesh& mesh);
 
-	Mesh Slice(Plane plane);
+	void Slice(Plane plane, Mesh &a, Mesh &b);
 	void Split();
 	void Average(bool spike = false);
 	void Perturb(float max_radius);

@@ -70,6 +70,7 @@ void Asteroid::Split() {
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(a);
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
 		
+		//duplicate model
 		a->models.push_back(models[0]); b->models.push_back(models[0]);
 		a->BoundingVolumes(); b->BoundingVolumes();
 		a->Initialize(); b->Initialize();
