@@ -72,3 +72,7 @@ vec3 Vertex::normal() const {
 	}
 	return normal / (float)edges.size();
 }
+
+bool intersect(Vertex &v, Plane &plane) {
+	return dot(v.position, plane.normal) == 0;
+}

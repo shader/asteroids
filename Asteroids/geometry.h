@@ -15,6 +15,10 @@ struct Box {
 	vec3 lower, upper;
 };
 
+struct Plane {
+	vec3 normal;
+};
+
 vector<vec3> BoxVertices(Box box);
 vector<vec3> BoxVertices(vec3 lower, vec3 upper);
 
@@ -35,6 +39,7 @@ public:
 	vec3 normal() const;
 	vec3 average(bool spike = false);
 
+	friend bool intersect(Vertex &v, Plane &plane);
 	friend bool operator<(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator==(const Vertex &lhs, const Vertex &rhs);
 	friend bool operator!=(const Vertex &lhs, const Vertex &rhs);
@@ -48,6 +53,7 @@ public:
 	int left_face, right_face;
 	Mesh* mesh;
 	
+	friend bool intersect(Edge &e, Plane &plane);
 	friend bool operator<(const Edge &lhs, const Edge &rhs);
 	friend bool operator==(const Edge &lhs, const Edge &rhs);
 	friend bool operator!=(const Edge &lhs, const Edge &rhs);
@@ -78,6 +84,7 @@ public:
 	vector<int> neighbors();
 	Edge &first() const;
 
+	friend bool intersect(Face &face, Plane &plane);
 	friend bool operator<(const Face &lhs, const Face &rhs);
 	friend bool operator==(const Face &lhs, const Face &rhs);
 	friend bool operator!=(const Face &lhs, const Face &rhs);
@@ -103,6 +110,7 @@ public:
 
 	Mesh& operator=(const Mesh& mesh);
 
+	Mesh Slice(Plane plane);
 	void Split();
 	void Average(bool spike = false);
 	void Perturb(float max_radius);

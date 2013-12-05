@@ -2,6 +2,11 @@
 #include "utils.h"
 using namespace glm;
 
+bool intersect(Edge &e, Plane &plane) {
+	//return true if vertices are on opposite sides of the plane. Doesn't count as intersect if a vertex is on the plane.
+	return dot(e.head().position, plane.normal) * dot(e.tail().position, plane.normal) < 0;
+}
+
 bool operator<(const Edge &lhs, const Edge &rhs) {
 	return lhs.midpoint() < rhs.midpoint() || (lhs.midpoint() < rhs.midpoint() &&
 		(lhs.head() < rhs.head() &&

@@ -98,6 +98,6 @@ void destructive_perturb(vec3* out_point, float max_radius) {
 }
 
 quat axis_angle(vec3 axis, float angle) {
-	double s = sin(angle/2);
+	float s = (float)sin(angle/2);
 	return quat(axis.x * s, axis.y * s, axis.z * s, cos(angle/2));
 }

@@ -169,3 +169,11 @@ void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
 		faces.push_back(Face(e1, e2, e3, this));
 	}
 }
+
+Mesh Mesh::Slice(Plane plane) {
+	Vertex* cur = &vertices[0];
+
+	if (dot(cur->position, plane.normal) == 0) {}
+
+	return Mesh();
+}

@@ -2,6 +2,13 @@
 #include "utils.h"
 using namespace glm;
 
+
+bool intersect(Face &face, Plane &plane) {
+	return intersect(face.first(), plane) ||
+		intersect(face.first().next(), plane) ||
+		intersect(face.first().next().next(), plane);
+}
+
 bool operator<(const Face &lhs, const Face &rhs) {
 	return lhs.midpoint() < rhs.midpoint() ||
 		(lhs.midpoint() == rhs.midpoint() && (lhs.first() < rhs.first() ||
