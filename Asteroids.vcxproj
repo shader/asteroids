@@ -117,7 +117,6 @@
     <ClInclude Include="Asteroids\particles.h" />
     <ClInclude Include="Asteroids\primitives.h" />
     <ClInclude Include="Asteroids\input.h" />
-    <ClInclude Include="Asteroids\menu.h" />
     <ClInclude Include="Asteroids\model.h" />
     <ClInclude Include="Asteroids\object.h" />
     <ClInclude Include="Asteroids\scene.h" />

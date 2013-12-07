@@ -155,9 +155,6 @@
     <ClInclude Include="Asteroids\model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Asteroids\menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Asteroids\texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>

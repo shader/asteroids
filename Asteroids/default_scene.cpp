@@ -70,7 +70,7 @@ void DefaultScene::Load() {
 }
 
 void DefaultScene::Initialize() {
-	objects.remove_if([](unique_ptr<Object> const &p){
+	objects.remove_if([](shared_ptr<Object> const &p){
 		return (typeid(*p) == typeid(Asteroid) ||
 			typeid(*p) == typeid(Alien)); 
 	});
@@ -99,25 +99,19 @@ void DefaultScene::add_asteroid(Asteroid* asteroid) {
 	asteroid->destroyed += [&](Object* obj){ asteroid_count--; };
 }
 
-struct KDObj {
-	Object * obj;
-	Box box;
-};
+vector<Object*> heuristic(Object &obj, vector<Object*> &objects) {
+	return vector<Object*>();
+}
 
 void DefaultScene::process_collisions() {
-	vector<KDObj> kd_tree;
-	kd_tree.resize(objects.size());
-	int i=0;
-	for (auto obj = objects.begin(); obj!=objects.end(); obj++) {
-		kd_tree[i].obj = obj->get();
-		kd_tree[i].box = (*obj)->WorldBox();
-	}
-	make_kdtree<KDObj>(kd_tree.begin(), kd_tree.end(), [](int depth)->function<bool(const KDObj&, const KDObj&)>{
-		return [=](const KDObj& a, const KDObj& b)->bool{
+	vector<shared_ptr<Object>> kd_tree(objects.begin(), objects.end());
+	make_kdtree<shared_ptr<Object>>(kd_tree.begin(), kd_tree.end(), [](int depth)->function<bool(const shared_ptr<Object>&, const shared_ptr<Object>&)>{
+		return [=](const shared_ptr<Object> &a, const shared_ptr<Object> &b)->bool{
 			if (depth < 3) {
-				return a.box.lower[depth] < b.box.lower[depth];
-			} else {				
-				return a.box.upper[depth % 3] < b.box.upper[depth % 3];
+				auto test = a;
+				return a->WorldBox().lower[depth] < b->WorldBox().lower[depth];
+			} else {		
+				return a->WorldBox().upper[depth % 3] < b->WorldBox().upper[depth % 3];
 			}
 		};
 	}, 0);

@@ -14,7 +14,7 @@ public:
 	
 	SceneManager *manager;
 	mat4 Projection, View, InvView;
-	list<unique_ptr<Object>> objects;
+	list<shared_ptr<Object>> objects;
 	queue<function<void()>> event_queue;
 	int width, height;
 

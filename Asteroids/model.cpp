@@ -64,7 +64,7 @@ void Model::Bind(Shader& shader, GLenum mode) {
 	indices.clear();
 	radius = 0;
 	mesh.BoundingBox();
-	mesh.KdTree();
+	//mesh.KdTree();
 	
 	vector<vec3> vertices(mesh.vertices.size());
 	vector<vec2> texcoords(mesh.vertices.size());
