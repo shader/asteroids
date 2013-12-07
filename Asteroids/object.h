@@ -101,7 +101,7 @@ public:
 
 class Asteroid : public Object {
 public:
-	int value;
+	int value, generation;
 
 	Asteroid(Scene *scene);
 	void Load();

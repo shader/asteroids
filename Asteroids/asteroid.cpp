@@ -8,6 +8,7 @@ Asteroid::Asteroid(Scene *scene) : Object(scene) {
 	velocity = position = vec3(0);
 	size = vec3(2);
 	value = 20;
+	generation = 0;
 }
 
 void Asteroid::Load() {
@@ -54,14 +55,13 @@ void Asteroid::Split() {
 	Explosion* explosion = new Explosion(scene, vec4(0.5,0.5,0.5,1));
 	explosion->position = position;
 	explosion->velocity = velocity;
-	explosion->size = size/2.0f;
 	explosion->Initialize();
 	scene->Add(explosion);
-	if (size.x > .5) {
+	if (generation < 2) {
 		auto a = new Asteroid(scene), b = new Asteroid(scene);
-		a->value = b->value = (size.x == 2) ? 50 : 100;
+		a->generation = b->generation = generation+1;
+		a->value = b->value = (generation == 0) ? 50 : 100;
 		a->position = b->position = position;
-		a->size = b->size = size / 2.0f;
 		float angle = rand(0,TAU/8);
 		a->velocity = velocity * quat(vec3(0,0,angle));
 		b->velocity = velocity * quat(vec3(0,0,-angle));
@@ -71,7 +71,15 @@ void Asteroid::Split() {
 		dynamic_cast<DefaultScene*>(scene)->add_asteroid(b);
 		
 		//duplicate model
-		a->models.push_back(models[0]); b->models.push_back(models[0]);
+		Mesh m1, m2;
+		Plane plane(0);
+		plane[generation]=1;
+		models[0]->mesh.Slice(Plane(rand_vec3()), m1, m2);
+		auto a_model = shared_ptr<Model>(new Model(m1));
+		auto b_model = shared_ptr<Model>(new Model(m2));
+		a_model->Bind();
+		b_model->Bind();
+		a->models.push_back(a_model); b->models.push_back(b_model);
 		a->BoundingVolumes(); b->BoundingVolumes();
 		a->Initialize(); b->Initialize();
 	}

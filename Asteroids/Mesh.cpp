@@ -170,6 +170,36 @@ void Mesh::LoadTriangles(uint* triangles, int triangle_count) {
 	}
 }
 
+void add_face(Mesh &mesh, int edge, Vertex *vertex) {
+	vertex->position += mesh.edges[edge].tail().position;
+	mesh.edges[edge].left_face = mesh.faces.size();
+	mesh.faces.push_back(Face());
+	mesh.faces.back().mesh = &mesh;
+	mesh.faces.back().first_edge = edge;
+	auto e1 = mesh.edges.size();
+	mesh.edges.push_back(Edge(mesh.edges[edge].head_vertex, mesh.vertices.size()-1, &mesh));
+	for (auto i=vertex->edges.begin(); i!=vertex->edges.end(); i++) {
+		if (mesh.edges[*i].head_vertex == mesh.edges[edge].head_vertex) {
+			tie(mesh.edges[*i], mesh.edges[e1]);
+			break;
+		}
+	}
+	
+	auto e2 = mesh.edges.size();
+	mesh.edges.push_back(Edge(mesh.vertices.size()-1, mesh.edges[edge].tail_vertex, &mesh));
+	auto v = &mesh.vertices[mesh.edges[edge].tail_vertex];
+	for (auto i=v->edges.begin(); i!=v->edges.end(); i++) {
+		if (mesh.edges[*i].head_vertex == mesh.vertices.size()-1) {
+			tie(mesh.edges[*i], mesh.edges[e2]);
+			break;
+		}
+	}
+	
+	mesh.edges[edge].attach(e1);
+	mesh.edges[e1].attach(e2);
+	mesh.edges[e2].attach(edge);
+}
+
 void Mesh::Slice(Plane plane, Mesh &a, Mesh &b) {
 	Vertex* cur = &vertices[0];
 	
@@ -211,8 +241,7 @@ void Mesh::Slice(Plane plane, Mesh &a, Mesh &b) {
 	}
 	
 	for (int i=0; i<faces.size(); i++) {
-		if (intersect(edges[i], plane)) {
-			//nothing
+		if (intersect(faces[i], plane)) {
 		} else if (a_edges[faces[i].first_edge] != -1 && a_edges[faces[i].first().next_edge] != -1 && a_edges[faces[i].first().next().next_edge] != -1) {
 			a_faces[i] = a.faces.size();
 			a.faces.push_back(faces[i]);
@@ -223,19 +252,41 @@ void Mesh::Slice(Plane plane, Mesh &a, Mesh &b) {
 			b_faces[i] = b.faces.size();
 			b.faces.push_back(faces[i]);
 			auto f = &b.faces.back();
-			f->mesh = &a;
+			f->mesh = &b;
 			f->first_edge = b_edges[f->first_edge];
 		}
 	}
 
-	for (int i=0; i<a.edges.size(); i++) {
+	Vertex *a_center, *b_center;
+	a.vertices.push_back(Vertex(0,0,0, this));
+	b.vertices.push_back(Vertex(0,0,0, this));
+	a_center = &a.vertices.back();
+	b_center = &b.vertices.back();
+	int a_count=0, b_count=0;
+
+	auto a_size = a.edges.size();
+	for (int i=0; i<a_size; i++) {
 		a.edges[i].next_edge = a_edges[a.edges[i].next_edge];
 		a.edges[i].twin_edge = a_edges[a.edges[i].twin_edge];
 		a.edges[i].left_face = a_faces[a.edges[i].left_face];
+				
+		if (a.edges[i].left_face == -1) {
+			add_face(a, i, a_center);
+			a_count++;
+		}
 	}
-	for (int i=0; i<b.edges.size(); i++) {
+	auto b_size = b.edges.size();
+	for (int i=0; i<b_size; i++) {
 		b.edges[i].next_edge = b_edges[b.edges[i].next_edge];
 		b.edges[i].twin_edge = b_edges[b.edges[i].twin_edge];
 		b.edges[i].left_face = b_faces[b.edges[i].left_face];
+
+		if (b.edges[i].left_face == -1) {
+			add_face(b, i, b_center);
+			b_count++;
+		}
 	}
+
+	a_center->position /= (float)a_count;
+	b_center->position /= (float)b_count;
 }
