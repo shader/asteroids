@@ -161,3 +161,10 @@ void Model::Draw(Shader& shader, mat4 view, mat4 projection) {
 void Model::Draw(mat4 view, mat4 projection) {
 	Draw(Content::shader(shader_type), view, projection, draw_mode);
 }
+
+void Model::Draw(mat4 view, mat4 projection, vec4 color) {
+	vec4 tmp = material.color;
+	material.color = color;
+	Draw(Content::shader(shader_type), view, projection, draw_mode);
+	material.color = tmp;
+}

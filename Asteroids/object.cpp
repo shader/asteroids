@@ -89,12 +89,12 @@ void Object::DrawBox(mat4 view, mat4 projection) {
 	box.Draw(mv, projection);
 }
 
-void Object::DrawSphere(mat4 view, mat4 projection) {	
+void Object::DrawSphere(mat4 view, mat4 projection, vec4 color) {	
 	mat4 model = translation(position) * mat4_cast(orientation) * scale(size);
 
 	mat4 mv = view * model;
 
-	Content::model(ModelType::sphere)->Draw(mv, projection);
+	Content::model(ModelType::sphere)->Draw(mv, projection, color);
 }
 
 void Object::Update(Time time, InputState const &input) {

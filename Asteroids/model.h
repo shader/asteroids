@@ -43,6 +43,7 @@ public:
 	void Bind(Shader& shader, GLenum mode);
 
 	void Draw(mat4 view, mat4 projection);
+	void Draw(mat4 view, mat4 projection, vec4 color);
 	void Draw(Shader& shader, mat4 view, mat4 projection);
 	void Draw(Shader& shader, mat4 view, mat4 projection, GLenum mode);
 

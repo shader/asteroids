@@ -44,7 +44,7 @@ public:
 
 	virtual void Draw(mat4 view, mat4 projection);
 	virtual void DrawBox(mat4 view, mat4 projection);
-	virtual void DrawSphere(mat4 view, mat4 projection);
+	virtual void DrawSphere(mat4 view, mat4 projection, vec4 color=vec4(0,0,1,0.5));
 
 	virtual void Update(Time time, InputState const &input);
 	virtual function<void()> Collision(Object &other);

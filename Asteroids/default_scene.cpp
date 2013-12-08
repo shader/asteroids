@@ -34,10 +34,10 @@ void DefaultScene::Load() {
 	auto sphere = new Model(Sphere());
 	sphere->Bind();
 	sphere->material.shininess = 32.0f;
-	sphere->material.specular = vec4(1,1,1,1);
-	sphere->material.diffuse = vec4(0,0,0.5,0.3);
+	sphere->material.specular = vec4(1);
+	sphere->material.diffuse = vec4(0.5,0.5,0.5,0.3);
 	sphere->material.color = vec4(0,0,1,0.5);
-	sphere->material.emission = vec4(0,0,0.1,0.1);
+	sphere->material.emission = vec4(.01);
 	Content::Load(ModelType::sphere, sphere);
 	
 	lives = new LifeCounter(this, 3);
@@ -76,6 +76,7 @@ void DefaultScene::Initialize() {
 			typeid(*p) == typeid(Alien)); 
 	});
 
+	kd_tree.tree.clear();
 	asteroid_count = 0;
 	level = 1;
 
@@ -211,27 +212,23 @@ void DefaultScene::Draw() {
 		if ((*o)->flags[ObjectFlags::Enabled] && (*o)->flags[ObjectFlags::Draw]) {
 			(*o)->Draw(View, Projection);
 			if ((*o)->flags[ObjectFlags::Collide]) {
-				if (draw_spheres)
-					(*o)->DrawSphere(View, Projection);
+				bool colliding = false;
+				if (draw_spheres) {
+					for (auto other = objects.begin(); other!=objects.end(); other++) {
+						if (other->get() != o->get() && (*other)->flags[ObjectFlags::Collide] &&
+							length((*o)->position - (*other)->position) < (*other)->radius + (*o)->radius)
+						{ colliding = true; break; }
+					}
+					if (colliding) {
+						(*o)->DrawSphere(View, Projection, vec4(0,1,0,0.5));
+					} else {
+						(*o)->DrawSphere(View, Projection);
+					}
+				}
 				if (draw_boxes) {
 					LineBox box = LineBox((*o)->WorldBox());
 					box.Bind();
-
-					Timer timer;
-					timer.Start();
-					bool colliding = false;
-					for (auto other = objects.begin(); other!=objects.end(); other++) {
-						if (other->get() != o->get() && (*other)->flags[ObjectFlags::Collide] && intersecting((*other)->WorldBox(), (*o)->WorldBox()))
-							colliding = true;
-					}
-					timer.Stop();
-					auto test1 = timer.ElapsedTime().Seconds();	
-
-					timer.Start();
-					kd_tree.Search(*o).size();
-					timer.Stop();
-					auto test2 = timer.ElapsedTime().Seconds();
-
+					
 					if (kd_tree.Search(*o).size() > 1) {
 						box.Draw(View, Projection, vec4(0,1,0,1));
 					} else {
