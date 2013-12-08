@@ -21,12 +21,12 @@ void Object::Load() {
 		(*m)->Bind();
 	}
 	BoundingVolumes();
-	UpdateWorldBox();
 }
 
 void Object::BoundingVolumes() {
 	BoundingSphere();
 	BoundingBox();
+	UpdateWorldBox();
 }
 
 float Object::BoundingSphere() {

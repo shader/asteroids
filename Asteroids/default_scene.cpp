@@ -217,13 +217,22 @@ void DefaultScene::Draw() {
 					LineBox box = LineBox((*o)->WorldBox());
 					box.Bind();
 
+					Timer timer;
+					timer.Start();
 					bool colliding = false;
 					for (auto other = objects.begin(); other!=objects.end(); other++) {
 						if (other->get() != o->get() && (*other)->flags[ObjectFlags::Collide] && intersecting((*other)->WorldBox(), (*o)->WorldBox()))
 							colliding = true;
 					}
+					timer.Stop();
+					auto test1 = timer.ElapsedTime().Seconds();	
 
-					if (colliding) {
+					timer.Start();
+					kd_tree.Search(*o).size();
+					timer.Stop();
+					auto test2 = timer.ElapsedTime().Seconds();
+
+					if (kd_tree.Search(*o).size() > 1) {
 						box.Draw(View, Projection, vec4(0,1,0,1));
 					} else {
 						box.Draw(View, Projection, vec4(1,0,0,1));

@@ -32,8 +32,10 @@ function<void()> Bullet::Collision(Object &other) {
 		explosion->size = size;
 		explosion->Initialize();
 		scene->Add(explosion);
+		auto s = scene;
+		return [=](){ s->Remove(this); };
+	} else {
+		return [](){};
 	}
 
-	auto s = scene;
-	return [=](){ s->Remove(this); };
 }
