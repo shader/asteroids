@@ -11,7 +11,7 @@ bool operator<=(const vec3 &lhs, const vec3 &rhs) {
 }
 
 bool operator>(const vec3 &lhs, const vec3 &rhs) {
-	return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+	return lhs.x > rhs.x && lhs.y > rhs.y && lhs.z > rhs.z;
 }
 
 bool operator>=(const vec3 &lhs, const vec3 &rhs) {

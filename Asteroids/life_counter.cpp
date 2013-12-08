@@ -11,6 +11,8 @@ LifeCounter::LifeCounter(Scene* scene, int max_lives) : Object(scene) {
 	icon.mesh = Content::mesh(ship);
 	icon.Bind();
 	rotation = quat(vec3(0));
+
+	flags[ObjectFlags::Collide] = false;
 }
 
 void LifeCounter::Initialize() {

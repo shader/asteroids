@@ -10,7 +10,6 @@ Object::Object(Scene *scene) {
 	radius=0;
 	this->scene = scene;
 	flags.set();
-	world_box.lower = world_box.upper = vec3(0);
 }
 
 Object::~Object() {
@@ -22,6 +21,7 @@ void Object::Load() {
 		(*m)->Bind();
 	}
 	BoundingVolumes();
+	UpdateWorldBox();
 }
 
 void Object::BoundingVolumes() {

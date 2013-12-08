@@ -2,11 +2,12 @@
 #include "object.h"
 #include "utils.h"
 #include "content.h"
-#include "kd-tree.h"
+#include "box_tree.h"
 
 DefaultScene::DefaultScene(SceneManager *manager) : Scene(manager) {
 	level = 1;
-	draw_spheres = draw_boxes = false;
+	draw_spheres = draw_boxes = false;	
+	kd_tree.box = [](const shared_ptr<Object>& obj){ return obj->WorldBox();};
 }
 
 void DefaultScene::Load() {
@@ -96,7 +97,9 @@ Asteroid* DefaultScene::spawn_asteroid() {
 void DefaultScene::add_asteroid(Asteroid* asteroid) {
 	Add(asteroid);
 	asteroid_count++;
-	asteroid->destroyed += [&](Object* obj){ asteroid_count--; };
+	asteroid->destroyed += [&](Object* obj){
+		asteroid_count--;
+	};
 }
 
 vector<Object*> heuristic(Object &obj, vector<Object*> &objects) {
@@ -104,28 +107,24 @@ vector<Object*> heuristic(Object &obj, vector<Object*> &objects) {
 }
 
 void DefaultScene::process_collisions() {
-	vector<shared_ptr<Object>> kd_tree(objects.begin(), objects.end());
-	make_kdtree<shared_ptr<Object>>(kd_tree.begin(), kd_tree.end(), [](int depth)->function<bool(const shared_ptr<Object>&, const shared_ptr<Object>&)>{
-		return [=](const shared_ptr<Object> &a, const shared_ptr<Object> &b)->bool{
-			if (depth < 3) {
-				auto test = a;
-				return a->WorldBox().lower[depth] < b->WorldBox().lower[depth];
-			} else {		
-				return a->WorldBox().upper[depth % 3] < b->WorldBox().upper[depth % 3];
-			}
-		};
-	}, 0);
+	kd_tree.tree.clear();
+	for (auto obj=objects.begin(); obj!=objects.end(); obj++) {
+		if ((*obj)->flags[ObjectFlags::Enabled] && (*obj)->flags[ObjectFlags::Collide]) {
+			kd_tree.tree.push_back(*obj);
+		}
+	}
+	kd_tree.Sort();
 
 	queue<function<void()>> callbacks;
 	int collisions = 0;
 	for (auto a = objects.begin(); a!= objects.end(); a++) {
-		if ((*a)->flags[ObjectFlags::Enabled] && (*a)->flags[ObjectFlags::Collide])
-		for (auto b = objects.begin(); b!=a; b++) {
-			if ((*b)->flags[ObjectFlags::Enabled] && (*b)->flags[ObjectFlags::Collide])
-			if (length((*a)->position - (*b)->position) < (*a)->radius + (*b)->radius) {
-				callbacks.push((*a)->Collision(**b));
-				callbacks.push((*b)->Collision(**a));
-				collisions++;
+		if ((*a)->flags[ObjectFlags::Enabled] && (*a)->flags[ObjectFlags::Collide]) {
+			auto impactors = kd_tree.Search(*a);
+			for (auto b = impactors.begin(); b!=impactors.end(); b++) {
+				if (b->get() != a->get()) {
+					callbacks.push((*a)->Collision(**b));
+					collisions++;
+				}
 			}
 		}
 	}
@@ -217,7 +216,18 @@ void DefaultScene::Draw() {
 				if (draw_boxes) {
 					LineBox box = LineBox((*o)->WorldBox());
 					box.Bind();
-					box.Draw(View, Projection);
+
+					bool colliding = false;
+					for (auto other = objects.begin(); other!=objects.end(); other++) {
+						if (other->get() != o->get() && (*other)->flags[ObjectFlags::Collide] && intersecting((*other)->WorldBox(), (*o)->WorldBox()))
+							colliding = true;
+					}
+
+					if (colliding) {
+						box.Draw(View, Projection, vec4(0,1,0,1));
+					} else {
+						box.Draw(View, Projection, vec4(1,0,0,1));
+					}
 				}
 			}
 		}

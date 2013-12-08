@@ -39,6 +39,7 @@ public:
 	vec3 lower, upper;
 	void Bind();
 	void Draw(mat4 model, mat4 projection);
+	void Draw(mat4 model, mat4 projection, vec4 color);
 private:
 	GLuint verticesID, indicesID, vertex_array;
 };

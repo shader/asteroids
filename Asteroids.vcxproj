@@ -79,6 +79,7 @@
     <ClCompile Include="Asteroids\asteroid_scene.cpp" />
     <ClCompile Include="Asteroids\background.cpp" />
     <ClCompile Include="Asteroids\box.cpp" />
+    <ClCompile Include="Asteroids\box_tree.cpp" />
     <ClCompile Include="Asteroids\bullet.cpp" />
     <ClCompile Include="Asteroids\content.cpp" />
     <ClCompile Include="Asteroids\default_scene.cpp" />
@@ -108,6 +109,7 @@
     <ClCompile Include="Asteroids\Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Asteroids\box_tree.h" />
     <ClInclude Include="Asteroids\content.h" />
     <ClInclude Include="Asteroids\event.h" />
     <ClInclude Include="Asteroids\geometry.h" />

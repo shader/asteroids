@@ -65,6 +65,11 @@ void LineBox::Bind() {
 }
 
 void LineBox::Draw(mat4 view, mat4 projection) {
+	Draw(view, projection, vec4(1,0,0,1));
+}
+
+
+void LineBox::Draw(mat4 view, mat4 projection, vec4 color) {
 	Shader &shader = Content::shader(polygon);
 	mat4 MVP = projection * view;
 	
@@ -72,7 +77,7 @@ void LineBox::Draw(mat4 view, mat4 projection) {
 	shader.Begin();
 		glUniformMatrix4fv(shader("MVP"), 1, GL_FALSE, &MVP[0][0]);
 		glUniform1i(shader("point_size"), 2);
-		glUniform4f(shader("uni_color"), 1.0f, 0.0f, 0.0f, 0.5f); // red
+		glUniform4fv(shader("uni_color"), 1, &color[0]); // red
 		glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
 	shader.End();
 	glBindVertexArray(0);

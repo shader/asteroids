@@ -8,6 +8,8 @@ Background::Background(Scene *scene) : Object(scene) {
 	quad.shader_type = textured;
 	quad.Bind();
 	position = vec3(0,0,-99);
+
+	flags[ObjectFlags::Collide] = false;
 }
 
 void Background::Draw(mat4 view, mat4 projection) {

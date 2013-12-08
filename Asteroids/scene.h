@@ -4,6 +4,7 @@
 #include "input.h"
 #include <stack>
 #include <queue>
+#include "box_tree.h"
 
 class Scene {
 	function<void(Object*)> remover;
@@ -71,6 +72,7 @@ public:
 	void add_asteroid(Asteroid *asteroid);
 
 private:
+	BoxTree<shared_ptr<Object>, list<shared_ptr<Object>>::iterator> kd_tree;
 	shared_ptr<Model> bullet_model;
 	int asteroid_count, level;
 	void process_collisions();
